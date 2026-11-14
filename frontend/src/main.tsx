@@ -1,6 +1,6 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
+import { HashRouter, Link, Route, Routes } from 'react-router-dom';
 import { Layout } from './components/Layout';
 import { MedListProvider } from './context/MedListContext';
 import { DrugDetailPage } from './pages/DrugDetailPage';
@@ -20,7 +20,7 @@ function NotFound() {
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <MedListProvider>
-      <BrowserRouter>
+      <HashRouter>
         <Routes>
           <Route element={<Layout />}>
             <Route index element={<SearchPage />} />
@@ -29,7 +29,7 @@ createRoot(document.getElementById('root')!).render(
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </MedListProvider>
   </StrictMode>,
 );
