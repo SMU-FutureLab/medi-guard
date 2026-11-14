@@ -15,7 +15,7 @@ TIMEOUT = 20
 PAGE_NO = 1
 NUM_OF_ROWS = 10
 SEARCH_NAME = "타이레놀"
-SUCCESS_CODES = {"00", "0000"}
+SUCCESS_CODES = {"00"}
 
 FIELDS = {
     "itemName": "의약품명",
@@ -91,22 +91,26 @@ def fetch_medicines(item_name: str) -> list[dict[str, Any]]:
 
     try:
         data = response.json()
-    except requests.exceptions.JSONDecodeError as exc:
-        raise MedicineAPIError("API 응답이 올바른 JSON 형식이 아닙니다.") from exc
+    except ValueError as exc:
+        raise MedicineAPIError(
+            "API 응답이 올바른 JSON 형식이 아닙니다."
+        ) from exc
 
     if not isinstance(data, dict):
         raise MedicineAPIError("API 응답 데이터 형식이 올바르지 않습니다.")
 
-    header = data.get("header", {})
+    header = data.get("header")
 
-    if isinstance(header, dict):
-        result_code = header.get("resultCode")
+    if not isinstance(header, dict):
+        raise MedicineAPIError("API 응답에 상태 정보가 없습니다.")
 
-        if result_code is not None and str(result_code) not in SUCCESS_CODES:
-            result_msg = header.get("resultMsg", "알 수 없는 API 오류")
-            raise MedicineAPIError(
-                f"API 오류 ({result_code}): {result_msg}"
-            )
+    result_code = str(header.get("resultCode", ""))
+
+    if result_code not in SUCCESS_CODES:
+        result_msg = header.get("resultMsg", "알 수 없는 API 오류")
+        raise MedicineAPIError(
+            f"API 오류 ({result_code}): {result_msg}"
+        )
 
     medicines = get_items(data)
 
