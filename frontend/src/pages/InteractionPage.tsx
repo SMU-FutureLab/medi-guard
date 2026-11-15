@@ -5,12 +5,12 @@ import { Disclaimer } from '../components/Disclaimer';
 import { SearchBar } from '../components/SearchBar';
 import { SourceInfo } from '../components/SourceInfo';
 import { ErrorBox, Spinner } from '../components/Status';
-import { useMedList } from '../context/MedListContext';
+import { useAppStore } from '../context/AppStore';
 import { useAsync } from '../hooks/useAsync';
 import type { InteractionResult } from '../types';
 
 export function InteractionPage() {
-  const medList = useMedList();
+  const { medList } = useAppStore();
   const [query, setQuery] = useState('');
   const search = useAsync(() => api.searchDrugs(query), [query], !!query);
 

@@ -7,10 +7,10 @@ import type { DrugDetail, InteractionPair, SectionExplanation, SectionKey, Sourc
 export const SECTION_TITLES: Record<SectionKey, string> = {
   efficacy: '효능·효과',
   usage: '용법·용량',
-  warning: '사용상 주의사항',
-  interaction: '함께 먹으면 안 되는 약·음식',
+  warning: '사용상의 주의사항',
+  interaction: '상호작용',
   sideEffect: '부작용',
-  storage: '보관법',
+  storage: '보관방법',
 };
 
 const E_DRUG_SOURCE: Source = {
@@ -37,6 +37,9 @@ const RAW: RawDrug[] = [
     company: '한국존슨앤드존슨판매',
     ingredients: ['아세트아미노펜'],
     category: '일반의약품',
+    form: '정제',
+    classification: '해열·진통제',
+    strength: '500mg',
     sections: {
       efficacy:
         '이 약은 감기로 인한 발열 및 동통(통증), 두통, 신경통, 근육통, 월경통, 염좌통(삔 통증), 치통, 관절통, 류마티양 동통(통증)에 사용합니다.',
@@ -83,6 +86,8 @@ const RAW: RawDrug[] = [
     company: '삼진제약',
     ingredients: ['아세트아미노펜', '이소프로필안티피린', '카페인무수물'],
     category: '일반의약품',
+    form: '정제',
+    classification: '해열·진통제',
     sections: {
       efficacy:
         '두통, 치통, 발치(이를 뽑음)후 동통(통증), 인후(목구멍)통, 귀의 통증, 관절통, 신경통, 요(허리)통, 근육통, 견통(어깨결림), 타박통, 골절통, 염좌통(삔 통증), 월경통(생리통), 외상(상처)통의 진통과 오한(춥고 떨리는 증상), 발열시의 해열에 사용합니다.',
@@ -128,6 +133,9 @@ const RAW: RawDrug[] = [
     company: '한국얀센',
     ingredients: ['이트라코나졸'],
     category: '전문의약품',
+    form: '캡슐제',
+    classification: '항진균제',
+    strength: '100mg',
     sections: {
       efficacy: '칸디다증(외음질, 구강), 피부사상균증, 손발톱 진균증 등 진균(곰팡이) 감염증의 치료에 사용합니다.',
       usage: '질환에 따라 용량이 다르며, 의사의 처방에 따라 식사 직후 복용합니다.',
@@ -172,6 +180,9 @@ const RAW: RawDrug[] = [
     company: '한국엠에스디',
     ingredients: ['심바스타틴'],
     category: '전문의약품',
+    form: '정제',
+    classification: '고지혈증치료제',
+    strength: '20mg',
     sections: {
       efficacy: '고콜레스테롤혈증 등 이상지질혈증의 치료에 식이요법의 보조제로 사용합니다.',
       usage: '의사의 처방에 따라 1일 1회 저녁에 복용합니다.',
@@ -219,6 +230,9 @@ export const MOCK_DRUGS: DrugDetail[] = RAW.map((d) => ({
   company: d.company,
   ingredients: d.ingredients,
   category: d.category,
+  form: d.form,
+  classification: d.classification,
+  strength: d.strength,
   source: E_DRUG_SOURCE,
   sections: ORDER.map((key) => ({ key, title: SECTION_TITLES[key], original: d.sections[key] })),
 }));

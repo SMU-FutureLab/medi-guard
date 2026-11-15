@@ -1,13 +1,25 @@
 import { useEffect, useState, type FormEvent } from 'react';
+import { Icon } from './Icon';
 
 interface Props {
   initialValue?: string;
   onSearch: (query: string) => void;
+  /** 지우기(X) 버튼을 눌렀을 때 */
+  onClear?: () => void;
   placeholder?: string;
   autoFocus?: boolean;
+  /** hero: 홈 화면의 큰 검색창(오른쪽 원형 버튼) / plain: 검색 결과 화면의 검색창(X 버튼) */
+  variant?: 'hero' | 'plain';
 }
 
-export function SearchBar({ initialValue = '', onSearch, placeholder = '약 이름 또는 성분명 (예: 타이레놀)', autoFocus }: Props) {
+export function SearchBar({
+  initialValue = '',
+  onSearch,
+  onClear,
+  placeholder = '의약품명을 검색해 보세요. (예: 타이레놀)',
+  autoFocus,
+  variant = 'plain',
+}: Props) {
   const [value, setValue] = useState(initialValue);
   useEffect(() => setValue(initialValue), [initialValue]);
 
@@ -17,22 +29,36 @@ export function SearchBar({ initialValue = '', onSearch, placeholder = '약 이�
   };
 
   return (
-    <form className="search-bar" role="search" onSubmit={submit}>
-      <svg className="search-icon" viewBox="0 0 24 24" width="22" height="22" aria-hidden>
-        <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" strokeWidth="2" />
-        <path d="m20 20-3.5-3.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-      </svg>
+    <form className={`search-bar search-${variant}`} role="search" onSubmit={submit}>
+      <Icon name="search" className="search-icon" />
       <input
+        id={`search-${variant}`}
         type="search"
         value={value}
         onChange={(e) => setValue(e.target.value)}
         placeholder={placeholder}
         aria-label="의약품 검색"
         autoFocus={autoFocus}
+        enterKeyHint="search"
       />
-      <button type="submit" className="btn btn-primary">
-        검색
-      </button>
+      {variant === 'plain' && value && (
+        <button
+          type="button"
+          className="icon-btn"
+          aria-label="검색어 지우기"
+          onClick={() => {
+            setValue('');
+            onClear?.();
+          }}
+        >
+          <Icon name="close" />
+        </button>
+      )}
+      {variant === 'hero' && (
+        <button type="submit" className="search-submit" aria-label="검색">
+          <Icon name="search" size={22} />
+        </button>
+      )}
     </form>
   );
 }

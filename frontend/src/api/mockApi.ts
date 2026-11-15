@@ -1,17 +1,11 @@
-import type { AskResponse, DrugSummary, SectionKey } from '../types';
+import type { AskResponse, SectionKey } from '../types';
 import type { MediGuardApi } from './client';
+import { toSummary } from '../context/AppStore';
 import { ApiError } from './errors';
 import { DUR_SOURCE, MOCK_DRUGS, MOCK_EXPLANATIONS, MOCK_INTERACTIONS } from './mockData';
 
 const delay = (ms = 400 + Math.random() * 400) => new Promise((r) => setTimeout(r, ms));
 
-const toSummary = ({ id, name, company, ingredients, category }: DrugSummary): DrugSummary => ({
-  id,
-  name,
-  company,
-  ingredients,
-  category,
-});
 
 function findDrug(id: string) {
   const drug = MOCK_DRUGS.find((d) => d.id === id);
@@ -21,7 +15,7 @@ function findDrug(id: string) {
 
 // 질문 키워드 → 관련 항목 (실제 서비스에서는 백엔드 RAG 검색이 이 역할을 함)
 const KEYWORDS: [RegExp, SectionKey][] = [
-  [/술|알코올|음주|간 ?질환|간에/, 'warning'],
+  [/주의|조심|술|알코올|음주|간 ?질환|간에/, 'warning'],
   [/같이|함께|병용|커피|자몽|주스|다른 약/, 'interaction'],
   [/몇 ?알|몇 ?번|하루|용량|얼마나|언제|간격|식후|식전/, 'usage'],
   [/부작용|증상|메스|구토|두드러기/, 'sideEffect'],

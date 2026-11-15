@@ -26,6 +26,12 @@ export interface DrugSummary {
   ingredients: string[];
   /** 일반의약품 / 전문의약품 */
   category: '일반의약품' | '전문의약품';
+  /** 제형 (예: 정제, 캡슐제) */
+  form?: string;
+  /** 약효 분류 (예: 해열·진통제) — 검색 결과 태그로 표시 */
+  classification?: string;
+  /** 함량 (예: 500mg) */
+  strength?: string;
 }
 
 export interface DrugSection {
