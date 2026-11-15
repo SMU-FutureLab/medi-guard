@@ -3,7 +3,8 @@ from fastapi import APIRouter, HTTPException, Query
 
 from services.medicine_service import (
     search_medicines,
-    get_medicine_detail
+    get_medicine_detail,
+    get_medicine_contents
 )
 
 
@@ -53,4 +54,26 @@ def get_medicine(item_seq: str):
         raise HTTPException(
             status_code=500,
             detail="의약품 상세 정보 조회 중 오류가 발생했습니다."
+        )
+
+@router.get("/{item_seq}/contents")
+def get_medicine_original_contents(item_seq: str):
+    try:
+        result = get_medicine_contents(item_seq)
+
+        if result is None:
+            raise HTTPException(
+                status_code=404,
+                detail="해당 의약품을 찾을 수 없습니다."
+            )
+
+        return result
+
+    except HTTPException:
+        raise
+
+    except Exception:
+        raise HTTPException(
+            status_code=500,
+            detail="의약품 공식 원문 조회 중 오류가 발생했습니다."
         )
