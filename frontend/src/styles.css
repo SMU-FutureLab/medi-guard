@@ -1,7 +1,7 @@
 /* MEDI GUARD — 와이어프레임 기반 UI. 메인 포인트 컬러: 그린
    색상은 모두 토큰: 라이트 기본값 → 다크 모드에서 같은 토큰을 재정의 */
 :root {
-  --bg: #f4f8f5;
+  --bg: #ffffff;
   --surface: #ffffff;
   --surface-2: #ecf3ee;
   --surface-3: #f6faf7;
