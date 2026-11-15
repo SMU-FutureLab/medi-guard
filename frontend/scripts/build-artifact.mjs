@@ -11,7 +11,7 @@ if (/<\/script/i.test(js)) throw new Error('JS 안에 </script 문자열이 있�
 
 const html = `<title>MEDI GUARD</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet" />
 <style>
 ${css}
 </style>

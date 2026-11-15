@@ -124,12 +124,12 @@ export function Icon({ name, size = 20, className }: { name: IconName; size?: nu
   );
 }
 
-/** 로고 마크: 초록 십자 */
-export function LogoMark({ size = 28 }: { size?: number }) {
+/** 로고 마크: 초록·라임 두 색이 겹친 십자 */
+export function LogoMark({ size = 28, inverse = false }: { size?: number; inverse?: boolean }) {
   return (
     <svg viewBox="0 0 28 28" width={size} height={size} aria-hidden>
-      <rect width="28" height="28" rx="8" fill="var(--primary)" />
-      <path d="M14 7.5v13M7.5 14h13" stroke="var(--on-primary)" strokeWidth="3.2" strokeLinecap="round" />
+      <rect x="2" y="10" width="24" height="8.5" rx="4.25" fill="var(--lime)" />
+      <rect x="9.75" y="2" width="8.5" height="24" rx="4.25" fill={inverse ? 'var(--on-block)' : 'var(--primary)'} />
     </svg>
   );
 }
