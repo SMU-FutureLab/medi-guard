@@ -2,7 +2,7 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import type { ReactNode } from 'react';
 import { Pressable, View, type StyleProp, type ViewStyle } from 'react-native';
-import Svg, { Circle, Defs, Ellipse, Line, Path, Pattern, RadialGradient, Rect, Stop } from 'react-native-svg';
+import Svg, { Circle, Defs, Ellipse, Path, RadialGradient, Rect, Stop } from 'react-native-svg';
 import { glass, radius, shadow, useTheme } from '../theme/theme';
 import { Icon, type IconName } from './Icon';
 
@@ -75,21 +75,6 @@ export function GradientPanel({ children, style }: { children: ReactNode; style?
       <View pointerEvents="none" style={{ position: 'absolute', width: 140, height: 140, borderRadius: 70, backgroundColor: c.glass, bottom: -70, left: -40, opacity: 0.6 }} />
       {children}
     </LinearGradient>
-  );
-}
-
-/** 사선 무늬 배경 (레퍼런스의 'English Listening' 카드) */
-export function Hatch() {
-  const { c } = useTheme();
-  return (
-    <Svg style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} width="100%" height="100%">
-      <Defs>
-        <Pattern id="hatch" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-          <Line x1="0" y1="0" x2="0" y2="12" stroke={c.line} strokeWidth={4} />
-        </Pattern>
-      </Defs>
-      <Rect width="100%" height="100%" fill="url(#hatch)" />
-    </Svg>
   );
 }
 

@@ -1,7 +1,7 @@
 import { useRouter } from 'expo-router';
 import { Pressable, Text, View } from 'react-native';
 import { USE_MOCK } from '../../api/client';
-import { GradientPanel, Hatch, Mascot, RoundButton } from '../../components/art';
+import { GradientPanel, Mascot, RoundButton } from '../../components/art';
 import { SearchBar } from '../../components/drug';
 import { Icon, LogoMark, type IconName } from '../../components/Icon';
 import { Row, Screen, T } from '../../components/ui';
@@ -93,9 +93,8 @@ export default function HomeScreen() {
         <StatCard tone="plain" icon="bookmark" value={favorites.items.length} unit="개" label="관심 의약품" onPress={() => router.push('/favorites')} />
       </Row>
 
-      {/* 사선 무늬 카드: 함께 먹는 약 */}
+      {/* 함께 먹는 약 카드 */}
       <Pressable onPress={() => router.push('/interactions')} style={({ pressed }) => [{ ...glass(c), borderRadius: radius.xl, overflow: 'hidden', padding: 20, minHeight: 150, opacity: pressed ? 0.9 : 1 }, shadow(c, 0.6)]}>
-        <Hatch />
         <T v="h2" style={{ fontSize: 21 }}>
           {'함께 먹는 약,\n같이 확인해요'}
         </T>
