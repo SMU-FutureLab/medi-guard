@@ -32,9 +32,9 @@ export function Thumb({ large = false, uri }: { large?: boolean; uri?: string })
   return (
     <View
       style={{
-        width: large ? '100%' : 72,
-        height: large ? 150 : 72,
-        borderRadius: large ? radius.lg : radius.md,
+        width: large ? '100%' : 64,
+        height: large ? 150 : 64,
+        borderRadius: large ? radius.lg : 32,
         backgroundColor: large ? c.lime : c.mint,
         alignItems: 'center',
         justifyContent: 'center',
@@ -44,7 +44,7 @@ export function Thumb({ large = false, uri }: { large?: boolean; uri?: string })
       {uri ? (
         <Image source={{ uri }} resizeMode="contain" style={{ width: '86%', height: '86%' }} accessibilityIgnoresInvertColors />
       ) : (
-        <PillArt size={large ? 120 : 52} />
+        <PillArt size={large ? 120 : 46} />
       )}
     </View>
   );
@@ -64,7 +64,7 @@ export function DrugCard({ drug, sub, showTags = true }: { drug: DrugSummary; su
           alignItems: 'center',
           gap: 14,
           padding: 12,
-          paddingRight: 14,
+          paddingRight: 12,
           ...glass(c),
           borderRadius: radius.lg,
           borderWidth: 1.5,
@@ -83,7 +83,9 @@ export function DrugCard({ drug, sub, showTags = true }: { drug: DrugSummary; su
         </T>
         {showTags && <DrugTags drug={drug} />}
       </View>
-      <Icon name="chevronRight" color={c.muted} />
+      <View style={{ width: 38, height: 38, borderRadius: 19, alignItems: 'center', justifyContent: 'center', backgroundColor: c.surface2 }}>
+        <Icon name="chevronRight" size={18} color={c.text2} />
+      </View>
     </Pressable>
   );
 }
@@ -138,16 +140,16 @@ export function SearchBar({
         accessibilityLabel="의약품 검색"
         style={{ flex: 1, minWidth: 0, fontFamily: fonts.regular, fontSize: 16, color: c.text, paddingVertical: 10 }}
       />
-      {variant === 'plain' && value.length > 0 && (
+      {value.length > 0 && (variant === 'plain' || onClear) && (
         <Pressable
           accessibilityLabel="검색어 지우기"
           onPress={() => {
             setValue('');
             onClear?.();
           }}
-          style={{ width: 40, height: 40, alignItems: 'center', justifyContent: 'center' }}
+          style={{ width: 34, height: 34, borderRadius: 17, alignItems: 'center', justifyContent: 'center', backgroundColor: c.surface2 }}
         >
-          <Icon name="close" />
+          <Icon name="close" size={16} color={c.text2} />
         </Pressable>
       )}
       {variant === 'hero' && (
