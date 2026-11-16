@@ -32,10 +32,12 @@ def detect_question_intent(question: str) -> str:
         "INTERACTION": ["상호작용", "함께 복용", "같이 복용", "병용"],
         "SIDE_EFFECT": ["부작용", "이상반응", "피부발진", "알레르기"],
         "STORAGE": ["보관", "보관 방법", "보관 장소", "유통기한"],
-        "USAGE": ["복용 방법", "복용법", "용법", "용량", "몇 번", "복용 간격"],
+        "USAGE": ["복용 방법", "어떻게 복용", "복용해야", "복용법", "용법", "용량",
+                  "몇 번", "복용 간격", "투여 방법", "사용 방법", "먹는 방법",],
         "WARNING": ["복용 전", "경고", "음주", "임산부", "임신", "간손상"],
         "CAUTION": ["주의사항", "주의해야", "주의할 점", "주의"],
-        "EFFICACY": ["효능", "효과", "어디에 사용하는지"]
+        "EFFICACY": ["효능", "효과", "어디에 사용하는지", "어떤 증상",
+                     "어떤 증상에 사용하는", "사용하는 약", "치료하는"]
     }
 
     for intent, keywords in intent_keywords.items():
@@ -50,9 +52,9 @@ def get_field_priority(intent: str) -> list[str]:
         "EFFICACY": ["efcyQesitm"],
         "USAGE": ["useMethodQesitm"],
         "WARNING": ["atpnWarnQesitm"],
-        "CAUTION": ["atpnQesitm", "atpnWarnQesitm"],
+        "CAUTION": ["atpnQesitm"],
         "INTERACTION": ["intrcQesitm"],
-        "SIDE_EFFECT": ["seQesitm", "atpnQesitm"],
+        "SIDE_EFFECT": ["seQesitm"],
         "STORAGE": ["depositMethodQesitm"]
     }
 
@@ -121,6 +123,9 @@ def search_relevant_chunks(
         keywords = extract_keywords(question)
 
         if not keywords:
+            return []
+
+        if intent == "GENERAL":
             return []
 
         where_conditions = [
