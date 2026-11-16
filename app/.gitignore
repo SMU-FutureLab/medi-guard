@@ -42,3 +42,6 @@ yarn-error.*
 
 # 환경 변수
 .env
+
+# 아티팩트용 웹 빌드
+artifact-web/

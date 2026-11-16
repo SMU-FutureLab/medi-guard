@@ -68,3 +68,11 @@ npm run typecheck
 
 `assets/drugs/`의 사진은 **식품의약품안전처 의약품안전나라**(nedrug.mfds.go.kr) 의약품 상세정보의 낱알·포장 사진입니다. `*-thumb.jpg`는 낱알 사진에서 알약 하나를 정사각형으로 잘라낸 썸네일입니다. 발표나 배포 전에는 출처 표기와 이용 조건을 확인하세요.
 실제 API 연동 후에는 백엔드가 보내는 사진 주소(`images`, `imageUrl`)를 쓰며, 앱에 넣어 둔 사진은 목업에서만 사용합니다.
+
+## 공유 링크(claude.ai 아티팩트) 업데이트
+
+```bash
+npm run build:artifact
+```
+
+웹 빌드를 `artifact-web/`에 만든다. 이 폴더를 아티팩트로 올리면 링크로 앱을 볼 수 있다 (Claude에게 "아티팩트 업데이트해줘"라고 하면 된다).

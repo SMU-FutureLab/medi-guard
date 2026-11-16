@@ -1,5 +1,9 @@
-import { NotoSansKR_400Regular, NotoSansKR_500Medium, NotoSansKR_700Bold } from '@expo-google-fonts/noto-sans-kr';
-import { Sora_600SemiBold, Sora_700Bold } from '@expo-google-fonts/sora';
+// 쓰는 굵기만 하나씩 불러온다 (패키지 전체를 불러오면 모든 굵기가 앱에 들어가 용량이 커짐)
+import { NotoSansKR_400Regular } from '@expo-google-fonts/noto-sans-kr/400Regular';
+import { NotoSansKR_500Medium } from '@expo-google-fonts/noto-sans-kr/500Medium';
+import { NotoSansKR_700Bold } from '@expo-google-fonts/noto-sans-kr/700Bold';
+import { Sora_600SemiBold } from '@expo-google-fonts/sora/600SemiBold';
+import { Sora_700Bold } from '@expo-google-fonts/sora/700Bold';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
