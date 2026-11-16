@@ -28,6 +28,18 @@
 
 `id`는 품목기준코드(`itemSeq`)를 쓰는 것을 권장합니다.
 
+## 사진과 알약 모양 (선택 항목)
+
+상세 화면 위쪽 사진 칸은 **[패키지 | 알약 모양]** 두 장을 옆으로 넘겨 보는 구조입니다. 모두 선택 항목이라, 없으면 앱이 기본 알약 그림과 "사진 준비 중"을 보여줍니다.
+
+| 필드 | 위치 | 내용 | 참고할 데이터 |
+|---|---|---|---|
+| `images[]` | `DrugDetail` | `{ kind: 'package' \| 'pill', url, source? }` | 알약: 낱알식별 API `ITEM_IMAGE` 또는 e약은요 `itemImage` / 패키지: 팀에서 준비 |
+| `identification` | `DrugDetail` | `{ shape?, color?, markFront?, markBack?, size? }` | 의약품 낱알식별 API (`DRUG_SHAPE`, `COLOR_CLASS1`, `PRINT_FRONT`, `PRINT_BACK`, `LENG_LONG`) |
+| `imageUrl` | `DrugSummary` | 검색 결과·기록 목록의 작은 사진 (보통 알약 사진) | 위와 같음 |
+
+`source`에는 사진 출처(예: "식약처 의약품 낱알식별")를 넣어 주면 사진 오른쪽 아래에 표시됩니다. 사진 사용 조건은 데이터 제공처의 이용 약관을 확인해 주세요.
+
 ## 프론트가 기대하는 규칙 (중요)
 
 1. **`citations[].quote`는 원문(`sections[].original`)에 글자 그대로 들어 있는 구절이어야 합니다.**

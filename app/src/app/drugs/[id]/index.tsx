@@ -1,14 +1,16 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useRef, useState, type ComponentRef, type ReactNode } from 'react';
-import { Pressable, ScrollView, Text, View, useWindowDimensions } from 'react-native';
+import { Pressable, ScrollView, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { api } from '../../../api/client';
-import { DrugTags, Thumb, ingredientLine } from '../../../components/drug';
+import { DrugTags, ingredientLine } from '../../../components/drug';
+import { DrugGallery } from '../../../components/gallery';
 import { Icon, type IconName } from '../../../components/Icon';
 import { Button, Card, Disclaimer, ErrorBox, Highlight, PageTop, Skeleton, SourceInfo, Spinner, T } from '../../../components/ui';
 import { useAsync } from '../../../hooks/useAsync';
 import { useAppStore } from '../../../store/AppStore';
-import { fonts, radius, shadow, useTheme } from '../../../theme/theme';
+import { BackgroundGlow } from '../../../components/art';
+import { fonts, glass, radius, shadow, useTheme } from '../../../theme/theme';
 import type { SectionKey } from '../../../types';
 
 const SECTION_ICONS: Record<SectionKey, IconName> = {
@@ -27,7 +29,6 @@ export default function DrugDetailScreen() {
   const { c } = useTheme();
   const insets = useSafeAreaInsets();
   const router = useRouter();
-  const { width } = useWindowDimensions();
   const store = useAppStore();
   const drug = useAsync(() => api.getDrug(id), [id]);
   // 원문을 먼저 보여주고, AI 설명은 따로 불러와 준비되는 대로 채운다
@@ -56,7 +57,6 @@ export default function DrugDetailScreen() {
   const d = drug.data;
   const fav = store.favorites.has(d.id);
   const inMedList = store.medList.has(d.id);
-  const stacked = width < 480;
 
   const toggle = (key: SectionKey) =>
     setOpen((prev) => {
@@ -79,6 +79,7 @@ export default function DrugDetailScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: c.bg, paddingTop: insets.top }}>
+      <BackgroundGlow />
       <ScrollView ref={scrollRef} contentContainerStyle={{ paddingTop: 12, paddingBottom: 40 + insets.bottom }}>
         <View style={{ width: '100%', maxWidth: 720, alignSelf: 'center', paddingHorizontal: 16, gap: 16 }}>
           <PageTop
@@ -99,12 +100,12 @@ export default function DrugDetailScreen() {
             <DrugTags drug={d} />
           </View>
 
-          {/* 이미지 + 정보 표 */}
-          <Card style={{ padding: 10, flexDirection: stacked ? 'column' : 'row', gap: 12 }}>
-            <View style={{ width: stacked ? '100%' : 140 }}>
-              <Thumb large />
-            </View>
-            <View style={{ flex: stacked ? undefined : 1, justifyContent: 'center' }}>
+          {/* 사진 (패키지 · 알약 모양) */}
+          <DrugGallery drug={d} />
+
+          {/* 정보 표 */}
+          <Card style={{ paddingVertical: 6, paddingHorizontal: 10, gap: 0 }}>
+            <View>
               {[
                 ['주성분', d.ingredients.length === 1 ? ingredientLine(d) : d.ingredients.join(', ')],
                 ['제형', d.form ?? '정보 없음'],
@@ -139,7 +140,7 @@ export default function DrugDetailScreen() {
                   accessibilityState={{ selected: on }}
                   aria-selected={on}
                   onPress={() => setTab(k)}
-                  style={[{ flex: 1, paddingVertical: 12, borderRadius: radius.pill, alignItems: 'center', backgroundColor: on ? c.primaryStrong : c.surface }, !on && shadow(c, 0.4)]}
+                  style={[{ flex: 1, paddingVertical: 12, borderRadius: radius.pill, alignItems: 'center', backgroundColor: on ? c.primaryStrong : c.card }, !on && [glass(c), shadow(c, 0.4)]]}
                 >
                   <Text style={{ fontFamily: on ? fonts.bold : fonts.medium, fontSize: 15, color: on ? c.onPrimary : c.text2 }}>{label}</Text>
                 </Pressable>
@@ -160,7 +161,7 @@ export default function DrugDetailScreen() {
                 <View
                   key={s.key}
                   onLayout={(e) => (sectionY.current[s.key] = e.nativeEvent.layout.y)}
-                  style={[{ borderRadius: radius.lg, borderWidth: 1.5, borderColor: isOpen ? c.mintLine : 'transparent', backgroundColor: isOpen ? c.mint : c.surface, overflow: 'hidden' }, !isOpen && shadow(c, 0.5)]}
+                  style={[{ borderRadius: radius.lg, borderWidth: 1.5, borderColor: isOpen ? c.mintLine : 'transparent', backgroundColor: isOpen ? c.mint : c.card, overflow: 'hidden' }, !isOpen && [glass(c), shadow(c, 0.5)]]}
                 >
                   <Pressable
                     accessibilityRole="button"

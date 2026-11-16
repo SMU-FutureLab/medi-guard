@@ -1,8 +1,8 @@
 // 의약품 관련 조각: 검색창, 결과 카드, 태그, 썸네일
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Pressable, Text, TextInput, View } from 'react-native';
-import { fonts, radius, shadow, useTheme } from '../theme/theme';
+import { Image, Pressable, Text, TextInput, View } from 'react-native';
+import { fonts, glass, radius, shadow, useTheme } from '../theme/theme';
 import type { DrugSummary } from '../types';
 import { Icon, PillArt } from './Icon';
 import { T } from './ui';
@@ -27,7 +27,7 @@ export function DrugTags({ drug }: { drug: DrugSummary }) {
   );
 }
 
-export function Thumb({ large = false }: { large?: boolean }) {
+export function Thumb({ large = false, uri }: { large?: boolean; uri?: string }) {
   const { c } = useTheme();
   return (
     <View
@@ -35,13 +35,17 @@ export function Thumb({ large = false }: { large?: boolean }) {
         width: large ? '100%' : 72,
         height: large ? 150 : 72,
         borderRadius: large ? radius.lg : radius.md,
-        backgroundColor: large ? c.lime : c.surface2,
+        backgroundColor: large ? c.lime : c.mint,
         alignItems: 'center',
         justifyContent: 'center',
         overflow: 'hidden',
       }}
     >
-      <PillArt size={large ? 120 : 52} />
+      {uri ? (
+        <Image source={{ uri }} resizeMode="contain" style={{ width: '86%', height: '86%' }} accessibilityIgnoresInvertColors />
+      ) : (
+        <PillArt size={large ? 120 : 52} />
+      )}
     </View>
   );
 }
@@ -61,15 +65,15 @@ export function DrugCard({ drug, sub, showTags = true }: { drug: DrugSummary; su
           gap: 14,
           padding: 12,
           paddingRight: 14,
-          backgroundColor: c.surface,
+          ...glass(c),
           borderRadius: radius.lg,
           borderWidth: 1.5,
-          borderColor: pressed ? c.text : 'transparent',
+          borderColor: pressed ? c.primary : c.cardBorder,
         },
         shadow(c, 0.6),
       ]}
     >
-      <Thumb />
+      <Thumb uri={drug.imageUrl} />
       <View style={{ flex: 1, minWidth: 0, gap: 2 }}>
         <T v="h3" numberOfLines={2}>
           {drug.name}
@@ -112,10 +116,9 @@ export function SearchBar({
           flexDirection: 'row',
           alignItems: 'center',
           gap: 8,
-          backgroundColor: c.surface,
+          ...glass(c),
           borderRadius: radius.pill,
           borderWidth: 1.5,
-          borderColor: c.line,
           paddingLeft: 18,
           paddingRight: 6,
           paddingVertical: variant === 'hero' ? 6 : 2,

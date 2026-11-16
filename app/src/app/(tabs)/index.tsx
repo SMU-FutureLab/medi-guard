@@ -6,7 +6,7 @@ import { SearchBar } from '../../components/drug';
 import { Icon, LogoMark, type IconName } from '../../components/Icon';
 import { Row, Screen, T } from '../../components/ui';
 import { useAppStore } from '../../store/AppStore';
-import { fonts, radius, shadow, useTheme } from '../../theme/theme';
+import { fonts, glass, radius, shadow, useTheme } from '../../theme/theme';
 
 const SUGGESTIONS = ['타이레놀', '게보린', '이트라코나졸', '심바스타틴'];
 
@@ -21,7 +21,7 @@ export default function HomeScreen() {
       {/* 헤더: 로고 · 관심 의약품 · 마이 */}
       <Row style={{ justifyContent: 'space-between' }}>
         <Row gap={10}>
-          <View style={[{ width: 44, height: 44, borderRadius: 22, backgroundColor: c.surface, alignItems: 'center', justifyContent: 'center' }, shadow(c, 0.6)]}>
+          <View style={[glass(c), { width: 44, height: 44, borderRadius: 22, alignItems: 'center', justifyContent: 'center' }, shadow(c, 0.6)]}>
             <LogoMark size={24} />
           </View>
           <Text style={{ fontFamily: fonts.displayMedium, fontSize: 18, color: c.text, letterSpacing: -0.3 }}>MEDI GUARD</Text>
@@ -94,7 +94,7 @@ export default function HomeScreen() {
       </Row>
 
       {/* 사선 무늬 카드: 함께 먹는 약 */}
-      <Pressable onPress={() => router.push('/interactions')} style={({ pressed }) => [{ backgroundColor: c.surface, borderRadius: radius.xl, overflow: 'hidden', padding: 20, minHeight: 150, opacity: pressed ? 0.9 : 1 }, shadow(c, 0.6)]}>
+      <Pressable onPress={() => router.push('/interactions')} style={({ pressed }) => [{ ...glass(c), borderRadius: radius.xl, overflow: 'hidden', padding: 20, minHeight: 150, opacity: pressed ? 0.9 : 1 }, shadow(c, 0.6)]}>
         <Hatch />
         <T v="h2" style={{ fontSize: 21 }}>
           {'함께 먹는 약,\n같이 확인해요'}
@@ -157,8 +157,8 @@ function StatCard({
     <Pressable
       onPress={onPress}
       style={({ pressed }) => [
-        { flex: 1, minHeight: 150, borderRadius: radius.xl, padding: 16, justifyContent: 'space-between', backgroundColor: soft ? c.primarySoft : c.surface, opacity: pressed ? 0.85 : 1 },
-        !soft && shadow(c, 0.6),
+        { flex: 1, minHeight: 150, borderRadius: radius.xl, padding: 16, justifyContent: 'space-between', backgroundColor: soft ? c.primarySoft : c.card, opacity: pressed ? 0.85 : 1 },
+        !soft && [glass(c), shadow(c, 0.6)],
       ]}
     >
       <View style={{ width: 44, height: 44, borderRadius: 22, alignItems: 'center', justifyContent: 'center', backgroundColor: soft ? c.primaryStrong : c.surface2 }}>

@@ -1,12 +1,23 @@
-import { useColorScheme } from 'react-native';
+import { Platform, useColorScheme } from 'react-native';
 
 // 디자인 토큰. 디자인 레퍼런스가 바뀌면 이 파일부터 고친다.
 // 분위기: 부드러운 파스텔 배경, 큰 라운드 카드, 선명한 그린 패널, 민트 선택 상태, 떠 있는 탭바.
 // 메인 컬러를 바꾸려면 primary·block·mint 계열만 바꾸면 된다.
 
 const light = {
-  bg: '#f2f5f4',
-  bgGlow: '#d8f3e6',
+  bg: '#f2f7f4',
+  bgGlow: '#d6f3e5',
+  /** 화면 배경 그라데이션: 위(bgGlow) → 가운데(bg) → 아래(bgEnd) */
+  bgEnd: '#e9f4ef',
+  /** 반투명 유리 카드 */
+  card: 'rgba(255,255,255,0.82)',
+  cardBorder: 'rgba(255,255,255,0.95)',
+  /** 떠 있는 탭바 유리 */
+  barGlass: 'rgba(255,255,255,0.55)',
+  barShine: 'rgba(255,255,255,0.75)',
+  /** 선택된 탭 구슬 그라데이션 */
+  orbFrom: '#8af0bf',
+  orbTo: '#12a35d',
   surface: '#ffffff',
   surface2: '#eef3f0',
   surface3: '#f7faf8',
@@ -54,7 +65,14 @@ export type Colors = typeof light;
 const dark: Colors = {
   ...light,
   bg: '#0c110e',
-  bgGlow: '#12301f',
+  bgGlow: '#123222',
+  bgEnd: '#0e1712',
+  card: 'rgba(24,33,28,0.82)',
+  cardBorder: 'rgba(255,255,255,0.06)',
+  barGlass: 'rgba(30,40,34,0.6)',
+  barShine: 'rgba(255,255,255,0.08)',
+  orbFrom: '#6ff0ae',
+  orbTo: '#119c58',
   surface: '#151c18',
   surface2: '#1c2520',
   surface3: '#18211c',
@@ -91,7 +109,7 @@ const dark: Colors = {
   shadow: '#000000',
 };
 
-export const radius = { xl: 28, lg: 22, md: 16, pill: 999 };
+export const radius = { xl: 32, lg: 26, md: 20, pill: 999 };
 
 /** 폰트 이름(@expo-google-fonts). 굵기마다 다른 파일이라 fontWeight 대신 fontFamily로 고른다. */
 export const fonts = {
@@ -118,4 +136,12 @@ export const shadow = (c: Colors, strength = 1) => ({
   shadowRadius: 20,
   shadowOffset: { width: 0, height: 10 },
   elevation: 3 * strength,
+});
+
+/** 반투명 유리 카드: 흰 테두리 + (웹에서는) 배경 흐림 */
+export const glass = (c: Colors) => ({
+  backgroundColor: c.card,
+  borderWidth: 1,
+  borderColor: c.cardBorder,
+  ...(Platform.OS === 'web' ? ({ backdropFilter: 'blur(16px)' } as object) : {}),
 });

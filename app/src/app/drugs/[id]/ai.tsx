@@ -3,11 +3,11 @@ import { useRef, useState, type ComponentRef, type ReactNode } from 'react';
 import { KeyboardAvoidingView, Platform, Pressable, ScrollView, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { api } from '../../../api/client';
-import { GlowOrb, GradientPanel, Mascot, RoundButton } from '../../../components/art';
+import { BackgroundGlow, GlowOrb, GradientPanel, Mascot, RoundButton } from '../../../components/art';
 import { Icon } from '../../../components/Icon';
 import { ErrorBox, PageTop, Row, Skeleton, SourceInfo, Spinner, T } from '../../../components/ui';
 import { useAsync } from '../../../hooks/useAsync';
-import { fonts, radius, shadow, useTheme } from '../../../theme/theme';
+import { fonts, glass, radius, shadow, useTheme } from '../../../theme/theme';
 import type { AskResponse, DrugDetail } from '../../../types';
 import { toBullets } from '../../../utils';
 
@@ -60,6 +60,7 @@ function Chat({ drug }: { drug: DrugDetail }) {
 
   return (
     <KeyboardAvoidingView style={{ flex: 1, backgroundColor: c.bg }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      <BackgroundGlow />
       <ScrollView
         ref={scrollRef}
         onContentSizeChange={() => scrollRef.current?.scrollToEnd({ animated: true })}
@@ -181,7 +182,7 @@ function Chat({ drug }: { drug: DrugDetail }) {
             returnKeyType="send"
             maxLength={200}
             accessibilityLabel="질문 입력"
-            style={{ flex: 1, minWidth: 0, borderWidth: 1.5, borderColor: c.line, borderRadius: radius.pill, paddingVertical: 12, paddingHorizontal: 20, fontFamily: fonts.regular, fontSize: 16, color: c.text, backgroundColor: c.surface }}
+            style={{ flex: 1, minWidth: 0, ...glass(c), borderWidth: 1.5, borderRadius: radius.pill, paddingVertical: 12, paddingHorizontal: 20, fontFamily: fonts.regular, fontSize: 16, color: c.text }}
           />
           <Pressable
             accessibilityRole="button"
@@ -233,7 +234,7 @@ function Answer({ drug, response }: { drug: DrugDetail; response: AskResponse })
         ))}
       </Bubble>
       {response.citations.length > 0 && (
-        <View style={{ borderWidth: 1.5, borderColor: c.line, borderRadius: radius.lg, backgroundColor: c.surface, overflow: 'hidden' }}>
+        <View style={[glass(c), { borderRadius: radius.lg, overflow: 'hidden' }, shadow(c, 0.5)]}>
           <Pressable
             accessibilityRole="button"
             accessibilityState={{ expanded: open }}

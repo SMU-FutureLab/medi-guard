@@ -15,7 +15,7 @@ import {
   type ViewStyle,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { fonts, hasHangul, radius, shadow, useTheme } from '../theme/theme';
+import { fonts, glass, hasHangul, radius, shadow, useTheme } from '../theme/theme';
 import type { Source } from '../types';
 import { BackgroundGlow, RoundButton } from './art';
 import { Icon, type IconName } from './Icon';
@@ -218,7 +218,7 @@ export function Row({ children, gap = 8, wrap, style }: { children: ReactNode; g
 export function Card({ children, style, padded = true }: { children: ReactNode; style?: StyleProp<ViewStyle>; padded?: boolean }) {
   const { c } = useTheme();
   return (
-    <View style={[{ backgroundColor: c.surface, borderRadius: radius.xl, padding: padded ? 20 : 0, gap: 12 }, shadow(c), style]}>
+    <View style={[glass(c), { borderRadius: radius.xl, padding: padded ? 20 : 0, gap: 12 }, shadow(c), style]}>
       {children}
     </View>
   );
@@ -348,7 +348,7 @@ export function Skeleton({ lines = 3 }: { lines?: number }) {
 export function Empty({ title, desc, action }: { title: string; desc?: string; action?: ReactNode }) {
   const { c } = useTheme();
   return (
-    <View style={{ alignItems: 'center', gap: 10, paddingVertical: 48, paddingHorizontal: 16, backgroundColor: c.surface, borderRadius: radius.xl }}>
+    <View style={{ alignItems: 'center', gap: 10, paddingVertical: 48, paddingHorizontal: 16, ...glass(c), borderRadius: radius.xl }}>
       <T v="bodyBold">{title}</T>
       {desc ? (
         <T v="small" color={c.muted} style={{ textAlign: 'center' }}>

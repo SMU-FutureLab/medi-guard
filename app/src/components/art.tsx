@@ -3,7 +3,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import type { ReactNode } from 'react';
 import { Pressable, View, type StyleProp, type ViewStyle } from 'react-native';
 import Svg, { Circle, Defs, Ellipse, Line, Path, Pattern, RadialGradient, Rect, Stop } from 'react-native-svg';
-import { radius, shadow, useTheme } from '../theme/theme';
+import { glass, radius, shadow, useTheme } from '../theme/theme';
 import { Icon, type IconName } from './Icon';
 
 /** 마스코트 '메디': 웃는 캡슐 캐릭터 (레퍼런스의 3D 캐릭터 역할) */
@@ -110,7 +110,7 @@ export function RoundButton({
   active?: boolean;
 }) {
   const { c } = useTheme();
-  const bg = { surface: c.surface, soft: c.surface2, primary: c.primaryStrong, glass: c.glass, ink: c.ink }[variant];
+  const bg = { surface: c.card, soft: c.surface2, primary: c.primaryStrong, glass: c.glass, ink: c.ink }[variant];
   const fg = { surface: c.text, soft: c.muted, primary: c.onPrimary, glass: c.onBlock, ink: c.onInk }[variant];
   return (
     <Pressable
@@ -120,7 +120,7 @@ export function RoundButton({
       onPress={onPress}
       style={({ pressed }) => [
         { width: size, height: size, borderRadius: size / 2, backgroundColor: bg, alignItems: 'center', justifyContent: 'center', opacity: pressed ? 0.8 : 1 },
-        variant === 'surface' && shadow(c, 0.6),
+        variant === 'surface' && [glass(c), shadow(c, 0.6)],
       ]}
     >
       <Icon name={icon} size={Math.round(size * 0.45)} color={fg} />
@@ -128,16 +128,19 @@ export function RoundButton({
   );
 }
 
-/** 화면 뒤 은은한 빛 번짐 (레퍼런스의 파스텔 배경) */
+/** 화면 전체 배경: 위에서 아래로 부드럽게 바뀌는 그라데이션 + 은은한 빛 번짐 */
 export function BackgroundGlow() {
   const { c } = useTheme();
   return (
-    <LinearGradient
-      pointerEvents="none"
-      colors={[c.bgGlow, c.bg]}
-      start={{ x: 0.2, y: 0 }}
-      end={{ x: 0.5, y: 1 }}
-      style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 360 }}
-    />
+    <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}>
+      <LinearGradient
+        colors={[c.bgGlow, c.bg, c.bgEnd]}
+        locations={[0, 0.45, 1]}
+        start={{ x: 0.1, y: 0 }}
+        end={{ x: 0.6, y: 1 }}
+        style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}
+      />
+      <View style={{ position: 'absolute', width: 320, height: 320, borderRadius: 160, backgroundColor: c.bgGlow, opacity: 0.55, top: -140, right: -120 }} />
+    </View>
   );
 }

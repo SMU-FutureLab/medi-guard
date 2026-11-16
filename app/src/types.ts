@@ -32,6 +32,8 @@ export interface DrugSummary {
   classification?: string;
   /** 함량 (예: 500mg) */
   strength?: string;
+  /** 목록에 쓰는 작은 대표 사진 (보통 알약 사진) */
+  imageUrl?: string;
 }
 
 export interface DrugSection {
@@ -41,9 +43,35 @@ export interface DrugSection {
   original: string;
 }
 
+/** 의약품 사진: 패키지(포장) 또는 알약 낱알 */
+export interface DrugImage {
+  kind: 'package' | 'pill';
+  url: string;
+  /** 사진 출처 (예: 식약처 의약품 낱알식별) */
+  source?: string;
+}
+
+/** 알약 낱알 식별 정보 (식약처 의약품 낱알식별 정보 기준) */
+export interface PillIdentification {
+  /** 모양 (예: 장방형, 원형) */
+  shape?: string;
+  /** 색상 (예: 하양) */
+  color?: string;
+  /** 앞면 표시(각인) */
+  markFront?: string;
+  /** 뒷면 표시(각인) */
+  markBack?: string;
+  /** 크기 (예: 장축 17.5mm) */
+  size?: string;
+}
+
 export interface DrugDetail extends DrugSummary {
   sections: DrugSection[];
   source: Source;
+  /** 사진. 없으면 앱이 기본 그림을 보여준다 */
+  images?: DrugImage[];
+  /** 알약 모양 정보 */
+  identification?: PillIdentification;
 }
 
 /** AI 설명이 근거로 삼은 원문 구절 */
