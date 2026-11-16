@@ -3,8 +3,9 @@ import { useRef, useState, type ComponentRef, type ReactNode } from 'react';
 import { KeyboardAvoidingView, Platform, Pressable, ScrollView, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { api } from '../../../api/client';
+import { GlowOrb, GradientPanel, Mascot, RoundButton } from '../../../components/art';
 import { Icon } from '../../../components/Icon';
-import { Chip, ErrorBox, PageTop, Row, Skeleton, SourceInfo, Spinner, T } from '../../../components/ui';
+import { ErrorBox, PageTop, Row, Skeleton, SourceInfo, Spinner, T } from '../../../components/ui';
 import { useAsync } from '../../../hooks/useAsync';
 import { fonts, radius, shadow, useTheme } from '../../../theme/theme';
 import type { AskResponse, DrugDetail } from '../../../types';
@@ -27,7 +28,7 @@ export default function DrugChatScreen() {
   if (!drug.data)
     return (
       <View style={{ flex: 1, backgroundColor: c.bg, paddingTop: insets.top + 12, paddingHorizontal: 16, gap: 16 }}>
-        <PageTop title="AI 쉽게 설명" />
+        <PageTop title="AI 도우미" center />
         {drug.loading ? <Spinner /> : <ErrorBox error={drug.error ?? new Error('정보가 없어요.')} onRetry={drug.retry} />}
       </View>
     );
@@ -36,6 +37,7 @@ export default function DrugChatScreen() {
 
 function Chat({ drug }: { drug: DrugDetail }) {
   const { c } = useTheme();
+  const router = useRouter();
   const insets = useSafeAreaInsets();
   const [question, setQuestion] = useState('');
   const [messages, setMessages] = useState<QA[]>([]);
@@ -65,36 +67,90 @@ function Chat({ drug }: { drug: DrugDetail }) {
         keyboardShouldPersistTaps="handled"
       >
         <View style={{ width: '100%', maxWidth: 720, alignSelf: 'center', paddingHorizontal: 16, gap: 18 }}>
-          <PageTop title={`${drug.name} · AI 쉽게 설명`} />
+          <PageTop
+            title="AI 도우미"
+            center
+            right={<RoundButton icon="file" label="공식 정보 보기" onPress={() => router.push({ pathname: '/drugs/[id]', params: { id: drug.id } })} />}
+          />
 
-          <Row gap={12} style={{ backgroundColor: c.block, borderRadius: radius.lg, padding: 16 }}>
-            <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: c.lime, alignItems: 'center', justifyContent: 'center' }}>
-              <Icon name="sparkle" size={22} color={c.onLime} />
-            </View>
-            <T v="small" color={c.onBlock} style={{ flex: 1 }}>
-              공식 의약품 정보에 있는 내용만 쉬운 말로 알려드려요. 정보에 없는 내용은 지어내지 않아요.
-            </T>
-          </Row>
+          {/* 마스코트 패널: 대화 전에는 크게, 대화 중에는 작게 */}
+          <GradientPanel style={{ padding: 16, minHeight: messages.length === 0 ? 300 : undefined }}>
+            <Row style={{ justifyContent: 'space-between' }}>
+              <Row gap={8} style={{ backgroundColor: c.glass, borderRadius: radius.pill, paddingVertical: 6, paddingLeft: 6, paddingRight: 12, flexShrink: 1 }}>
+                <View style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: c.surface, alignItems: 'center', justifyContent: 'center' }}>
+                  <Icon name="pill" size={16} color={c.primaryStrong} />
+                </View>
+                <T v="label" color={c.onBlock} numberOfLines={1} style={{ flexShrink: 1 }}>
+                  {drug.name}
+                </T>
+              </Row>
+            </Row>
+            {messages.length === 0 ? (
+              <View style={{ alignItems: 'center', marginTop: 8 }}>
+                <View style={{ width: 190, height: 190, alignItems: 'center', justifyContent: 'center' }}>
+                  <View style={{ position: 'absolute' }}>
+                    <GlowOrb size={190} />
+                  </View>
+                  <View style={{ zIndex: 1 }}>
+                    <Mascot size={130} />
+                  </View>
+                </View>
+                <View style={{ backgroundColor: c.glass, borderRadius: radius.pill, paddingVertical: 8, paddingHorizontal: 16, marginTop: -6 }}>
+                  <T v="small" color={c.onBlock} style={{ fontFamily: fonts.medium }}>
+                    무엇이 궁금하세요?
+                  </T>
+                </View>
+              </View>
+            ) : (
+              <Row gap={10} style={{ marginTop: 10 }}>
+                <Mascot size={44} wave={false} />
+                <T v="small" color={c.onBlock} style={{ flex: 1 }}>
+                  공식 의약품 정보에 있는 내용만 쉬운 말로 알려드려요.
+                </T>
+              </Row>
+            )}
+          </GradientPanel>
 
           {messages.length === 0 && (
-            <Row wrap gap={8}>
-              {EXAMPLES.map((ex) => (
-                <Chip key={ex} label={ex} onPress={() => ask(ex)} />
-              ))}
-            </Row>
+            <>
+              <Row style={{ justifyContent: 'space-between' }}>
+                <Row gap={6}>
+                  <Icon name="shield" size={18} color={c.primary} />
+                  <T v="small" style={{ fontFamily: fonts.medium }}>
+                    공식 정보 안에서만 답해요
+                  </T>
+                </Row>
+                <T v="label" style={{ fontFamily: fonts.regular }}>
+                  식약처 e약은요
+                </T>
+              </Row>
+              <Row wrap gap={8}>
+                {EXAMPLES.map((ex, i) => (
+                  <Pressable
+                    key={ex}
+                    onPress={() => ask(ex)}
+                    style={({ pressed }) => ({ borderRadius: radius.pill, paddingVertical: 8, paddingHorizontal: 14, backgroundColor: i === 0 ? c.primaryStrong : c.surface, opacity: pressed ? 0.85 : 1 })}
+                  >
+                    <T v="small" color={i === 0 ? c.onPrimary : c.text} style={{ fontFamily: fonts.medium }}>
+                      {ex}
+                    </T>
+                  </Pressable>
+                ))}
+              </Row>
+            </>
           )}
 
           {messages.map((m, i) => (
             <View key={i} style={{ gap: 12 }}>
-              <Row gap={8} style={{ alignSelf: 'flex-end', maxWidth: '85%', backgroundColor: c.text, paddingVertical: 12, paddingHorizontal: 18, borderRadius: 22, borderBottomRightRadius: 6 }}>
-                <Icon name="user" size={18} color={c.surface} />
-                <T color={c.surface} style={{ fontFamily: fonts.medium, flexShrink: 1 }}>
+              <Row gap={8} style={{ alignSelf: 'flex-end', maxWidth: '85%', backgroundColor: c.primarySoft, paddingVertical: 12, paddingHorizontal: 18, borderRadius: 22, borderBottomRightRadius: 6 }}>
+                <Icon name="user" size={18} color={c.primaryStrong} />
+                <T color={c.text} style={{ fontFamily: fonts.medium, flexShrink: 1 }}>
                   {m.question}
                 </T>
               </Row>
               <View style={{ flexDirection: 'row', gap: 10, alignItems: 'flex-start' }}>
-                <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: c.text, alignItems: 'center', justifyContent: 'center' }}>
-                  <Icon name="sparkle" size={22} color={c.lime} />
+                <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: c.primaryStrong, alignItems: 'center', justifyContent: 'center' }}>
+                  <Icon name="sparkle" size={20} color={c.onPrimary} />
                 </View>
                 <View style={{ flex: 1, minWidth: 0, gap: 10 }}>
                   {m.error ? (
@@ -132,9 +188,9 @@ function Chat({ drug }: { drug: DrugDetail }) {
             accessibilityLabel="질문 보내기"
             disabled={pending || !question.trim()}
             onPress={() => ask(question)}
-            style={{ width: 50, height: 50, borderRadius: 25, alignItems: 'center', justifyContent: 'center', backgroundColor: pending || !question.trim() ? c.surface2 : c.lime }}
+            style={{ width: 50, height: 50, borderRadius: 25, alignItems: 'center', justifyContent: 'center', backgroundColor: pending || !question.trim() ? c.surface2 : c.primaryStrong }}
           >
-            <Icon name="send" color={pending || !question.trim() ? c.muted : c.onLime} />
+            <Icon name="send" color={pending || !question.trim() ? c.muted : c.onPrimary} />
           </Pressable>
         </Row>
       </View>
@@ -194,7 +250,7 @@ function Answer({ drug, response }: { drug: DrugDetail; response: AskResponse })
             <View style={{ paddingHorizontal: 16, paddingBottom: 16, gap: 8 }}>
               {sectionTitle ? <T v="label">{sectionTitle}</T> : null}
               {response.citations.map((cit) => (
-                <View key={cit.quote} style={{ borderLeftWidth: 3, borderLeftColor: c.lime, backgroundColor: c.quoteBg, paddingVertical: 8, paddingHorizontal: 12, borderRadius: 10, borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}>
+                <View key={cit.quote} style={{ borderLeftWidth: 3, borderLeftColor: c.mintLine, backgroundColor: c.quoteBg, paddingVertical: 8, paddingHorizontal: 12, borderRadius: 10, borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}>
                   <T v="small" color={c.text2}>
                     {cit.quote}
                   </T>

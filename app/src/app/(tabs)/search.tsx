@@ -18,7 +18,7 @@ export default function SearchScreen() {
   const { data, error, loading, retry } = useAsync(() => api.searchDrugs(query), [query], !!query);
 
   return (
-    <Screen>
+    <Screen tabs>
       <T v="h1">의약품 검색</T>
       <SearchBar initialValue={query} onSearch={search} onClear={() => router.setParams({ q: '' })} autoFocus={!query} />
 

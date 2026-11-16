@@ -1,78 +1,97 @@
 import { useColorScheme } from 'react-native';
 
 // 디자인 토큰. 디자인 레퍼런스가 바뀌면 이 파일부터 고친다.
-// 메인 컬러 그린 + 포인트 라임, 큰 라운드, 알약형 버튼.
+// 분위기: 부드러운 파스텔 배경, 큰 라운드 카드, 선명한 그린 패널, 민트 선택 상태, 떠 있는 탭바.
+// 메인 컬러를 바꾸려면 primary·block·mint 계열만 바꾸면 된다.
 
 const light = {
-  bg: '#f6f7f4',
+  bg: '#f2f5f4',
+  bgGlow: '#d8f3e6',
   surface: '#ffffff',
-  surface2: '#eef1ec',
-  surface3: '#f8f9f7',
-  text: '#0e1a13',
-  text2: '#34423a',
-  muted: '#66746b',
-  line: '#e3e7e1',
-  primary: '#0b9a55',
-  primaryStrong: '#06703d',
-  primarySoft: '#e2f4e8',
-  primaryDisabled: '#a9cdb8',
+  surface2: '#eef3f0',
+  surface3: '#f7faf8',
+  text: '#101814',
+  text2: '#3a4740',
+  muted: '#7a8780',
+  line: '#e4ebe7',
+  primary: '#16a862',
+  primaryStrong: '#0f8f51',
+  primarySoft: '#e3f6ec',
+  primaryDisabled: '#b4dfc8',
   onPrimary: '#ffffff',
-  block: '#0b9a55',
-  blockDeep: '#077a43',
+  /** 그린 패널 그라디언트 */
+  block: '#1cb86c',
+  blockDeep: '#0b8048',
   onBlock: '#ffffff',
-  onBlockMuted: 'rgba(255,255,255,0.8)',
-  lime: '#c4f03c',
-  onLime: '#0e1a13',
-  warn: '#a55f00',
+  onBlockMuted: 'rgba(255,255,255,0.82)',
+  glass: 'rgba(255,255,255,0.22)',
+  /** 포인트(민트) — 장식 원, 배지, 강조 */
+  lime: '#cdf5e0',
+  onLime: '#0b5c34',
+  /** 선택된 항목(레퍼런스의 민트 선택 상태) */
+  mint: '#e2f8ee',
+  mintLine: '#86dbb3',
+  /** 떠 있는 탭바의 선택 버튼 */
+  ink: '#141b17',
+  onInk: '#ffffff',
+  warn: '#b26a00',
   warnSoft: '#fff3dc',
-  danger: '#c0392b',
+  danger: '#d64535',
   dangerSoft: '#fdecea',
-  mark: '#eafbb0',
-  markActive: '#c4f03c',
-  markFg: '#0e1a13',
-  quoteBg: '#f4fbe0',
+  mark: '#d9f6e8',
+  markActive: '#9fe6c4',
+  markFg: '#101814',
+  quoteBg: '#eefaf4',
   pillShell: '#ffffff',
-  pillLine: '#cfdacf',
+  pillLine: '#d3e2d9',
   pillShine: 'rgba(255,255,255,0.9)',
-  shadow: '#0e1a13',
+  blush: '#ff9fb2',
+  shadow: '#1d4a33',
 };
 
 export type Colors = typeof light;
 
 const dark: Colors = {
   ...light,
-  bg: '#0b100d',
-  surface: '#131b16',
-  surface2: '#1b261f',
-  surface3: '#17211b',
-  text: '#eaf1ec',
-  text2: '#c6d2ca',
-  muted: '#8e9e94',
-  line: '#26332b',
-  primary: '#34d17f',
-  primaryStrong: '#34d17f',
-  primarySoft: '#133222',
-  primaryDisabled: '#22402f',
+  bg: '#0c110e',
+  bgGlow: '#12301f',
+  surface: '#151c18',
+  surface2: '#1c2520',
+  surface3: '#18211c',
+  text: '#e9f1ec',
+  text2: '#c4d0c9',
+  muted: '#8c9c93',
+  line: '#26322b',
+  primary: '#3ddc8a',
+  primaryStrong: '#3ddc8a',
+  primarySoft: '#14301f',
+  primaryDisabled: '#23402f',
   onPrimary: '#04210f',
-  block: '#0e5f37',
-  blockDeep: '#0a4a2a',
-  onBlockMuted: 'rgba(255,255,255,0.75)',
-  lime: '#b8e636',
+  block: '#159457',
+  blockDeep: '#0a5a33',
+  onBlockMuted: 'rgba(255,255,255,0.78)',
+  glass: 'rgba(255,255,255,0.14)',
+  lime: '#1f4a33',
+  onLime: '#bdf3d6',
+  mint: '#15291f',
+  mintLine: '#2f8a5f',
+  ink: '#e9f1ec',
+  onInk: '#0c110e',
   warn: '#f0a94a',
   warnSoft: '#3a2a12',
   danger: '#ff7b6e',
   dangerSoft: '#3d1d1a',
-  mark: '#3d4a12',
-  markActive: '#6b7f1c',
-  markFg: '#f4ffd6',
-  quoteBg: '#1f2612',
+  mark: '#1d4a33',
+  markActive: '#2f8a5f',
+  markFg: '#e9fff2',
+  quoteBg: '#14261c',
   pillShell: '#dce6de',
   pillLine: '#3a4a40',
   pillShine: 'rgba(255,255,255,0.6)',
   shadow: '#000000',
 };
 
-export const radius = { xl: 32, lg: 24, md: 16, pill: 999 };
+export const radius = { xl: 28, lg: 22, md: 16, pill: 999 };
 
 /** 폰트 이름(@expo-google-fonts). 굵기마다 다른 파일이라 fontWeight 대신 fontFamily로 고른다. */
 export const fonts = {
@@ -83,7 +102,7 @@ export const fonts = {
   bold: 'NotoSansKR_700Bold',
 };
 
-/** 한글이 섞인 제목: Sora에는 한글이 없어서 한글 굵은 글꼴을 쓴다 */
+/** 한글이 섞인 제목: Sora에는 한글이 없어서 한글 글꼴을 쓴다 */
 export const hasHangul = (s: string) => /[가-힣]/.test(s);
 
 export function useTheme() {
@@ -92,10 +111,11 @@ export function useTheme() {
   return { c, dark: scheme === 'dark' };
 }
 
+/** 부드럽게 퍼지는 그림자 (레퍼런스의 떠 있는 카드 느낌) */
 export const shadow = (c: Colors, strength = 1) => ({
   shadowColor: c.shadow,
-  shadowOpacity: 0.07 * strength,
-  shadowRadius: 16,
-  shadowOffset: { width: 0, height: 8 },
-  elevation: 2 * strength,
+  shadowOpacity: 0.08 * strength,
+  shadowRadius: 20,
+  shadowOffset: { width: 0, height: 10 },
+  elevation: 3 * strength,
 });

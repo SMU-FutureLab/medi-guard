@@ -1,5 +1,6 @@
 import { useRouter, type Href } from 'expo-router';
 import { View } from 'react-native';
+import { GradientPanel, Mascot } from '../../components/art';
 import { Icon, type IconName } from '../../components/Icon';
 import { Card, ListRow, Row, Screen, T, TitleBlock } from '../../components/ui';
 import { useAppStore } from '../../store/AppStore';
@@ -35,23 +36,22 @@ export default function MyScreen() {
   ];
 
   return (
-    <Screen>
+    <Screen tabs>
       <TitleBlock icon="user" title="마이페이지" />
 
-      <View style={{ backgroundColor: c.block, borderRadius: radius.xl, padding: 20, flexDirection: 'row', alignItems: 'center', gap: 16, overflow: 'hidden' }}>
-        <View style={{ position: 'absolute', width: 120, height: 120, borderRadius: 60, backgroundColor: c.lime, right: -40, top: -60 }} />
-        <View style={{ zIndex: 1, width: 60, height: 60, borderRadius: 30, backgroundColor: c.surface, alignItems: 'center', justifyContent: 'center' }}>
-          <Icon name="user" size={32} color={c.primaryStrong} />
-        </View>
-        <View style={{ zIndex: 1, flex: 1 }}>
-          <T v="h2" color={c.onBlock}>
-            사용자
-          </T>
-          <T v="small" color={c.onBlockMuted} style={{ fontFamily: fonts.regular }}>
-            로그인 없이 이 기기에 저장돼요
-          </T>
-        </View>
-      </View>
+      <GradientPanel>
+        <Row gap={14}>
+          <View style={{ flex: 1, gap: 4 }}>
+            <T v="h2" color={c.onBlock}>
+              사용자
+            </T>
+            <T v="small" color={c.onBlockMuted} style={{ fontFamily: fonts.regular }}>
+              로그인 없이 이 기기에 저장돼요
+            </T>
+          </View>
+          <Mascot size={84} />
+        </Row>
+      </GradientPanel>
 
       {rows.map((group, gi) => (
         <Card key={gi} padded={false} style={{ padding: 4, gap: 0, borderRadius: radius.lg }}>

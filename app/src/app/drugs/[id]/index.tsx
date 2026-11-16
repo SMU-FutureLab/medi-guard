@@ -124,7 +124,7 @@ export default function DrugDetailScreen() {
           <SourceInfo source={d.source} />
 
           {/* 탭 */}
-          <View style={{ flexDirection: 'row', backgroundColor: c.surface2, borderRadius: radius.pill, padding: 4, gap: 4 }} accessibilityRole="tablist">
+          <View style={{ flexDirection: 'row', gap: 8 }} accessibilityRole="tablist">
             {(
               [
                 ['official', '공식 정보'],
@@ -139,9 +139,9 @@ export default function DrugDetailScreen() {
                   accessibilityState={{ selected: on }}
                   aria-selected={on}
                   onPress={() => setTab(k)}
-                  style={{ flex: 1, paddingVertical: 11, borderRadius: radius.pill, alignItems: 'center', backgroundColor: on ? c.primaryStrong : 'transparent' }}
+                  style={[{ flex: 1, paddingVertical: 12, borderRadius: radius.pill, alignItems: 'center', backgroundColor: on ? c.primaryStrong : c.surface }, !on && shadow(c, 0.4)]}
                 >
-                  <Text style={{ fontFamily: on ? fonts.bold : fonts.medium, fontSize: 15, color: on ? c.onPrimary : c.muted }}>{label}</Text>
+                  <Text style={{ fontFamily: on ? fonts.bold : fonts.medium, fontSize: 15, color: on ? c.onPrimary : c.text2 }}>{label}</Text>
                 </Pressable>
               );
             })}
@@ -150,7 +150,7 @@ export default function DrugDetailScreen() {
           {/* 항목별 펼침 목록 */}
           <View
             onLayout={(e) => (listY.current = e.nativeEvent.layout.y)}
-            style={[{ backgroundColor: c.surface, borderRadius: radius.xl, padding: 6 }, shadow(c)]}
+            style={{ gap: 10 }}
           >
             {d.sections.map((s, i) => {
               const isOpen = open.has(s.key);
@@ -160,22 +160,24 @@ export default function DrugDetailScreen() {
                 <View
                   key={s.key}
                   onLayout={(e) => (sectionY.current[s.key] = e.nativeEvent.layout.y)}
-                  style={{ borderTopWidth: i === 0 ? 0 : 1, borderTopColor: c.line }}
+                  style={[{ borderRadius: radius.lg, borderWidth: 1.5, borderColor: isOpen ? c.mintLine : 'transparent', backgroundColor: isOpen ? c.mint : c.surface, overflow: 'hidden' }, !isOpen && shadow(c, 0.5)]}
                 >
                   <Pressable
                     accessibilityRole="button"
                     accessibilityState={{ expanded: isOpen }}
                     onPress={() => toggle(s.key)}
-                    style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 16, paddingHorizontal: 14, borderRadius: 16, backgroundColor: pressed ? c.surface3 : 'transparent' })}
+                    style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 14, paddingHorizontal: 14, opacity: pressed ? 0.8 : 1 })}
                   >
-                    <Icon name={SECTION_ICONS[s.key]} color={important ? c.warn : c.primary} />
+                    <View style={{ width: 36, height: 36, borderRadius: 18, alignItems: 'center', justifyContent: 'center', backgroundColor: isOpen ? c.surface : important ? c.warnSoft : c.primarySoft }}>
+                      <Icon name={SECTION_ICONS[s.key]} size={18} color={important ? c.warn : c.primaryStrong} />
+                    </View>
                     <T v="bodyBold" style={{ flex: 1 }}>
                       {s.title}
                     </T>
-                    <Icon name={isOpen ? 'chevronUp' : 'chevronDown'} color={c.muted} />
+                    <Icon name={isOpen ? 'chevronUp' : 'chevronDown'} color={isOpen ? c.primaryStrong : c.muted} />
                   </Pressable>
                   {isOpen && (
-                    <View style={{ paddingHorizontal: 14, paddingBottom: 18, gap: 10 }}>
+                    <View style={{ paddingHorizontal: 16, paddingBottom: 18, gap: 10 }}>
                       {tab === 'official' ? (
                         <T v="body" color={c.text2} style={{ fontSize: 15 }}>
                           <Highlight text={s.original} quotes={focus?.key === s.key ? [focus.quote] : []} active={focus?.quote} />

@@ -1,225 +1,180 @@
-import { useRouter, type Href } from 'expo-router';
-import { Pressable, View, useWindowDimensions } from 'react-native';
+import { useRouter } from 'expo-router';
+import { Pressable, Text, View } from 'react-native';
 import { USE_MOCK } from '../../api/client';
+import { GradientPanel, Hatch, Mascot, RoundButton } from '../../components/art';
 import { SearchBar } from '../../components/drug';
-import { Icon, LogoMark, PillArt, type IconName } from '../../components/Icon';
-import { Button, Chip, Row, Screen, T } from '../../components/ui';
+import { Icon, LogoMark, type IconName } from '../../components/Icon';
+import { Row, Screen, T } from '../../components/ui';
+import { useAppStore } from '../../store/AppStore';
 import { fonts, radius, shadow, useTheme } from '../../theme/theme';
 
 const SUGGESTIONS = ['타이레놀', '게보린', '이트라코나졸', '심바스타틴'];
 
-const FEATURES: { href: Href; icon: IconName; title: string; desc: string }[] = [
-  { href: '/search', icon: 'search', title: '의약품 검색', desc: '공식 정보 조회' },
-  { href: '/about', icon: 'sparkle', title: 'AI 쉬운 설명', desc: '어려운 용어를 쉽게' },
-  { href: '/interactions', icon: 'pill', title: '주의사항 확인', desc: '함께 먹는 약 확인' },
-  { href: '/history', icon: 'clock', title: '조회 기록', desc: '최근 검색 내역' },
-];
-
 export default function HomeScreen() {
   const { c } = useTheme();
   const router = useRouter();
-  const { width } = useWindowDimensions();
-  const wide = width >= 760;
+  const { history, favorites } = useAppStore();
   const search = (q: string) => router.push({ pathname: '/search', params: { q } });
 
   return (
-    <Screen wide contentStyle={{ gap: 28 }}>
-      {/* 상단 로고 */}
+    <Screen tabs contentStyle={{ gap: 14 }}>
+      {/* 헤더: 로고 · 관심 의약품 · 마이 */}
       <Row style={{ justifyContent: 'space-between' }}>
-        <Row gap={8}>
-          <LogoMark />
-          <T v="h3" style={{ fontFamily: fonts.display, letterSpacing: -0.2 }}>
-            MEDI GUARD
-          </T>
+        <Row gap={10}>
+          <View style={[{ width: 44, height: 44, borderRadius: 22, backgroundColor: c.surface, alignItems: 'center', justifyContent: 'center' }, shadow(c, 0.6)]}>
+            <LogoMark size={24} />
+          </View>
+          <Text style={{ fontFamily: fonts.displayMedium, fontSize: 18, color: c.text, letterSpacing: -0.3 }}>MEDI GUARD</Text>
+        </Row>
+        <Row gap={10}>
+          <RoundButton icon="star" label="관심 의약품" onPress={() => router.push('/favorites')} />
+          <RoundButton icon="user" label="마이페이지" variant="primary" onPress={() => router.navigate('/my')} />
         </Row>
       </Row>
+
+      {/* 제목 + 상태 칩 */}
+      <Row style={{ justifyContent: 'space-between', alignItems: 'flex-end', marginTop: 10 }}>
+        <T v="h1" style={{ flex: 1, fontSize: 27, lineHeight: 35 }}>
+          {'어려운 약 설명서,\n쉽게 읽어요'}
+        </T>
+        <View style={{ borderRadius: radius.pill, borderWidth: 1.5, borderColor: c.primary, paddingVertical: 5, paddingHorizontal: 12, marginBottom: 4 }}>
+          <T v="label" color={c.primaryStrong}>
+            AI 설명
+          </T>
+        </View>
+      </Row>
       {USE_MOCK && (
-        <Row gap={8} style={{ marginTop: -16 }}>
-          <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: c.lime }} />
+        <Row gap={6}>
+          <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: c.warn }} />
           <T v="label" style={{ fontFamily: fonts.regular, flex: 1 }}>
-            프로토타입 예시 데이터로 동작 중이에요. 실제 의약품 정보와 다를 수 있어요.
+            예시 데이터로 동작 중이에요. 실제 의약품 정보와 다를 수 있어요.
           </T>
         </Row>
       )}
 
-      {/* 히어로 */}
-      <View style={[{ backgroundColor: c.surface, borderRadius: radius.xl, overflow: 'hidden', flexDirection: wide ? 'row-reverse' : 'column' }, shadow(c)]}>
-        <View
-          style={{
-            flex: wide ? 1 : undefined,
-            margin: 10,
-            minHeight: wide ? 380 : 270,
-            backgroundColor: c.block,
-            borderRadius: radius.xl,
-            alignItems: 'center',
-            justifyContent: 'center',
-            overflow: 'hidden',
-          }}
-        >
-          <View style={{ position: 'absolute', width: 260, height: 260, borderRadius: 130, backgroundColor: c.lime }} />
-          <View style={{ zIndex: 1 }}>
-            <PillArt size={190} />
-          </View>
-          <FloatChip icon="shield" label="식약처 공식 데이터" style={{ top: 18, right: 14 }} />
-          <FloatChip icon="file" label="근거 원문 함께 제공" style={{ bottom: 20, left: 14 }} />
-        </View>
-        <View style={{ flex: wide ? 1.05 : undefined, padding: wide ? 44 : 22, paddingTop: wide ? 44 : 10, gap: 16, justifyContent: 'center' }}>
-          <Row
-            gap={8}
-            style={{ alignSelf: 'flex-start', borderWidth: 1.5, borderColor: c.line, borderRadius: radius.pill, paddingVertical: 6, paddingHorizontal: 12 }}
-          >
-            <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: c.lime }} />
-            <T v="label" color={c.text2}>
-              식약처 공식 의약품 정보 기반
-            </T>
-          </Row>
-          <T v="display" style={{ fontFamily: fonts.bold, fontSize: wide ? 44 : 32, lineHeight: wide ? 52 : 40 }}>
-            {'어려운 약 설명서,\n쉬운 말로 읽어요'}
-          </T>
-          <T color={c.text2}>약 이름만 검색하면 공식 주의사항을 AI가 쉬운 말로 풀어 드려요. 설명마다 근거가 된 원문을 함께 보여 드려요.</T>
-          <SearchBar variant="hero" onSearch={search} />
-          <Row wrap gap={8}>
-            <T v="label" style={{ fontFamily: fonts.regular }}>
-              추천
-            </T>
-            {SUGGESTIONS.map((s) => (
-              <Chip key={s} label={s} onPress={() => search(s)} />
-            ))}
-          </Row>
-        </View>
-      </View>
+      <SearchBar variant="hero" onSearch={search} placeholder="약 이름을 검색해 보세요" />
 
-      {/* 기능 타일 */}
-      <View style={{ backgroundColor: c.surface2, borderRadius: radius.xl, padding: wide ? 40 : 20, gap: 20 }}>
-        <T v="h1">{'MEDI GUARD로\n할 수 있는 것'}</T>
-        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12 }}>
-          {FEATURES.map((f, i) => {
-            const accent = i === 0;
-            return (
-              <Pressable
-                key={f.title}
-                onPress={() => router.push(f.href)}
-                style={({ pressed }) => ({
-                  flexBasis: wide ? '23%' : '47%',
-                  flexGrow: 1,
-                  minHeight: 156,
-                  padding: 18,
-                  borderRadius: radius.lg,
-                  backgroundColor: accent ? c.block : c.surface,
-                  justifyContent: 'space-between',
-                  transform: [{ translateY: pressed ? 2 : 0 }],
-                })}
-              >
-                <Icon name={f.icon} size={30} color={accent ? c.lime : c.primary} />
-                <View
-                  style={{
-                    position: 'absolute',
-                    top: 14,
-                    right: 14,
-                    width: 32,
-                    height: 32,
-                    borderRadius: 16,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    backgroundColor: accent ? c.lime : 'transparent',
-                    borderWidth: accent ? 0 : 1.5,
-                    borderColor: c.line,
-                  }}
-                >
-                  <Icon name="chevronRight" size={18} color={accent ? c.onLime : c.text} />
-                </View>
-                <View style={{ gap: 2 }}>
-                  <T v="h3" color={accent ? c.onBlock : c.text}>
-                    {f.title}
-                  </T>
-                  <T v="label" style={{ fontFamily: fonts.regular }} color={accent ? c.onBlockMuted : c.muted}>
-                    {f.desc}
-                  </T>
-                </View>
-              </Pressable>
-            );
-          })}
-        </View>
-      </View>
-
-      {/* 상호작용 배너 */}
-      <View style={{ backgroundColor: c.block, borderRadius: radius.xl, padding: wide ? 48 : 24, overflow: 'hidden', flexDirection: wide ? 'row' : 'column', gap: 24 }}>
-        <View style={{ position: 'absolute', width: 380, height: 380, borderRadius: 190, backgroundColor: c.lime, right: -170, bottom: -200 }} />
-        <View style={{ zIndex: 1, flex: wide ? 1 : undefined, gap: 14 }}>
-          <T v="h1" color={c.onBlock}>
-            {'함께 먹는 약,\n같이 확인해요'}
-          </T>
-          <T color={c.onBlockMuted}>여러 약을 담으면 식약처 DUR에 등록된 병용금기·성분중복 정보를 찾아 쉬운 말로 알려 드려요.</T>
-          <View style={{ marginTop: 8 }}>
-            <Button label="상호작용 확인하기" icon="pill" variant="lime" href="/interactions" />
-          </View>
-        </View>
-        <View style={{ zIndex: 1, flex: wide ? 1 : undefined, alignItems: 'center', justifyContent: 'center', paddingVertical: 12 }}>
-          <View style={[{ width: '100%', maxWidth: 320, backgroundColor: c.surface, borderRadius: radius.lg, padding: 18, gap: 6, transform: [{ rotate: '-3deg' }] }, shadow(c, 2)]}>
-            <Row style={{ justifyContent: 'space-between' }}>
-              <View style={{ backgroundColor: c.dangerSoft, borderRadius: radius.pill, paddingVertical: 3, paddingHorizontal: 10 }}>
-                <T v="label" color={c.danger}>
-                  병용금기
-                </T>
-              </View>
-              <T v="label" style={{ fontFamily: fonts.regular, fontSize: 11 }}>
-                예시
+      {/* 마스코트 패널 */}
+      <GradientPanel style={{ paddingVertical: 22, minHeight: 210 }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <View style={{ flex: 1, gap: 8, zIndex: 1 }}>
+            <View style={{ alignSelf: 'flex-start', backgroundColor: c.glass, borderRadius: radius.pill, paddingVertical: 4, paddingHorizontal: 10 }}>
+              <T v="label" color={c.onBlock}>
+                안녕하세요, 저는 메디예요
               </T>
-            </Row>
-            <T v="bodyBold">스포라녹스캡슐 + 조코정</T>
-            <T v="small" color={c.muted}>
-              이트라코나졸 ↔ 심바스타틴
-            </T>
-            <T v="small" color={c.text2}>
-              같이 먹으면 콜레스테롤 약이 몸에 많이 쌓여 근육이 손상될 위험이 커져요.
-            </T>
-          </View>
-        </View>
-      </View>
-
-      {/* 근거가 보이는 AI 설명 */}
-      <View style={{ flexDirection: wide ? 'row' : 'column', gap: 24, alignItems: wide ? 'center' : 'stretch' }}>
-        <View style={{ flex: wide ? 1 : undefined, backgroundColor: c.primarySoft, borderRadius: radius.xl, minHeight: 240, alignItems: 'center', justifyContent: 'center', padding: 32 }}>
-          <View style={[{ width: 220, backgroundColor: c.surface, borderRadius: radius.lg, paddingTop: 42, paddingHorizontal: 22, paddingBottom: 26, gap: 12 }, shadow(c)]}>
-            <View style={{ position: 'absolute', top: -20, left: -16, width: 50, height: 50, borderRadius: 25, backgroundColor: c.text, alignItems: 'center', justifyContent: 'center' }}>
-              <Icon name="sparkle" size={22} color={c.lime} />
             </View>
-            {[1, 1, 2, 1, 0.6].map((w, i) => (
-              <View key={i} style={{ height: 12, borderRadius: 6, width: `${(w > 1 ? 1 : w) * 100}%`, backgroundColor: w === 2 ? c.lime : c.surface2 }} />
-            ))}
+            <T v="h2" color={c.onBlock} style={{ fontSize: 22, lineHeight: 30 }}>
+              {'궁금한 약,\n저한테 물어보세요!'}
+            </T>
+            <T v="small" color={c.onBlockMuted}>
+              식약처 공식 정보를 쉬운 말로 알려드려요.
+            </T>
+          </View>
+          <View style={{ marginRight: -12, marginTop: -6 }}>
+            <Mascot size={132} />
           </View>
         </View>
-        <View style={{ flex: wide ? 1 : undefined, gap: 14 }}>
-          <T v="h1">{'근거가 보이는\nAI 설명'}</T>
-          <T color={c.text2}>AI는 공식 원문 안에서만 답해요. 설명 아래 근거 구절을 누르면 원문의 해당 부분을 바로 확인할 수 있어요.</T>
-          <Button label="작동 방식 보기" icon="info" href="/about" />
-        </View>
-      </View>
+        <Row wrap gap={8} style={{ marginTop: 14 }}>
+          {SUGGESTIONS.map((s) => (
+            <Pressable
+              key={s}
+              onPress={() => search(s)}
+              style={({ pressed }) => ({ backgroundColor: pressed ? c.surface : c.glass, borderRadius: radius.pill, paddingVertical: 7, paddingHorizontal: 14 })}
+            >
+              {({ pressed }) => <Text style={{ fontFamily: fonts.medium, fontSize: 14, color: pressed ? c.primaryStrong : c.onBlock }}>{s}</Text>}
+            </Pressable>
+          ))}
+        </Row>
+      </GradientPanel>
 
-      <T v="label" style={{ fontFamily: fonts.regular, textAlign: 'center' }}>
-        MEDI GUARD는 공식 의약품 정보의 이해를 돕는 보조 서비스이며, 의사·약사의 진료나 복약지도를 대신하지 않습니다. · 팀 머니머니
+      {/* 숫자 카드 2개 */}
+      <Row gap={12} style={{ alignItems: 'stretch' }}>
+        <StatCard tone="soft" icon="clock" value={history.length} unit="개" label="최근 조회한 의약품" onPress={() => router.navigate('/history')} />
+        <StatCard tone="plain" icon="bookmark" value={favorites.items.length} unit="개" label="관심 의약품" onPress={() => router.push('/favorites')} />
+      </Row>
+
+      {/* 사선 무늬 카드: 함께 먹는 약 */}
+      <Pressable onPress={() => router.push('/interactions')} style={({ pressed }) => [{ backgroundColor: c.surface, borderRadius: radius.xl, overflow: 'hidden', padding: 20, minHeight: 150, opacity: pressed ? 0.9 : 1 }, shadow(c, 0.6)]}>
+        <Hatch />
+        <T v="h2" style={{ fontSize: 21 }}>
+          {'함께 먹는 약,\n같이 확인해요'}
+        </T>
+        <T v="small" color={c.muted} style={{ marginTop: 4 }}>
+          병용금기 · 성분중복
+        </T>
+        <Row style={{ justifyContent: 'space-between', marginTop: 16 }}>
+          <View style={{ backgroundColor: c.mint, borderRadius: radius.pill, paddingVertical: 5, paddingHorizontal: 12 }}>
+            <T v="label" color={c.primaryStrong}>
+              식약처 DUR 기반
+            </T>
+          </View>
+          <View style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: c.primaryStrong, alignItems: 'center', justifyContent: 'center' }}>
+            <Icon name="chevronRight" color={c.onPrimary} />
+          </View>
+        </Row>
+      </Pressable>
+
+      {/* 그린 카드: 근거가 보이는 AI 설명 */}
+      <Pressable onPress={() => router.push('/about')}>
+        <GradientPanel style={{ minHeight: 140 }}>
+          <T v="h2" color={c.onBlock} style={{ fontSize: 21 }}>
+            {'근거가 보이는\nAI 설명'}
+          </T>
+          <T v="small" color={c.onBlockMuted} style={{ marginTop: 4, maxWidth: 240 }}>
+            설명마다 공식 원문 구절을 함께 보여드려요.
+          </T>
+          <View style={{ position: 'absolute', right: 18, bottom: 18, width: 44, height: 44, borderRadius: 22, backgroundColor: c.surface, alignItems: 'center', justifyContent: 'center' }}>
+            <Icon name="chevronRight" color={c.primaryStrong} />
+          </View>
+        </GradientPanel>
+      </Pressable>
+
+      <T v="label" style={{ fontFamily: fonts.regular, textAlign: 'center', marginTop: 6 }}>
+        MEDI GUARD는 공식 의약품 정보의 이해를 돕는 보조 서비스이며, 의사·약사의 진료나 복약지도를 대신하지 않습니다.
       </T>
     </Screen>
   );
 }
 
-function FloatChip({ icon, label, style }: { icon: IconName; label: string; style: object }) {
+function StatCard({
+  tone,
+  icon,
+  value,
+  unit,
+  label,
+  onPress,
+}: {
+  tone: 'soft' | 'plain';
+  icon: IconName;
+  value: number;
+  unit: string;
+  label: string;
+  onPress: () => void;
+}) {
   const { c } = useTheme();
+  const soft = tone === 'soft';
   return (
-    <Row
-      gap={8}
-      style={[
-        { position: 'absolute', zIndex: 2, backgroundColor: c.surface, borderRadius: radius.pill, paddingVertical: 8, paddingLeft: 8, paddingRight: 14 },
-        shadow(c, 2),
-        style,
+    <Pressable
+      onPress={onPress}
+      style={({ pressed }) => [
+        { flex: 1, minHeight: 150, borderRadius: radius.xl, padding: 16, justifyContent: 'space-between', backgroundColor: soft ? c.primarySoft : c.surface, opacity: pressed ? 0.85 : 1 },
+        !soft && shadow(c, 0.6),
       ]}
     >
-      <View style={{ width: 24, height: 24, borderRadius: 12, backgroundColor: c.lime, alignItems: 'center', justifyContent: 'center' }}>
-        <Icon name={icon} size={14} color={c.onLime} />
+      <View style={{ width: 44, height: 44, borderRadius: 22, alignItems: 'center', justifyContent: 'center', backgroundColor: soft ? c.primaryStrong : c.surface2 }}>
+        <Icon name={icon} color={soft ? c.onPrimary : c.text} />
       </View>
-      <T v="label" color={c.text}>
-        {label}
-      </T>
-    </Row>
+      <View>
+        <Row gap={4} style={{ alignItems: 'baseline', justifyContent: 'flex-end' }}>
+          <Text style={{ fontFamily: fonts.display, fontSize: 28, color: c.text }}>{value}</Text>
+          <T v="small" color={c.muted}>
+            {unit}
+          </T>
+        </Row>
+        <T v="small" color={c.text2}>
+          {label}
+        </T>
+      </View>
+    </Pressable>
   );
 }

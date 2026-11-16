@@ -17,6 +17,7 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { fonts, hasHangul, radius, shadow, useTheme } from '../theme/theme';
 import type { Source } from '../types';
+import { BackgroundGlow, RoundButton } from './art';
 import { Icon, type IconName } from './Icon';
 
 /* ───────── 글자 ───────── */
@@ -62,30 +63,37 @@ export function T({
 }
 
 /* ───────── 화면 틀 ───────── */
+/** 떠 있는 탭바에 가려지지 않도록 탭 화면 아래에 두는 여백 */
+export const TAB_BAR_SPACE = 110;
+
 export function Screen({
   children,
   scroll = true,
   wide = false,
+  tabs = false,
   footer,
   contentStyle,
 }: {
   children: ReactNode;
   scroll?: boolean;
   wide?: boolean;
+  /** 하단 탭 화면이면 true */
+  tabs?: boolean;
   footer?: ReactNode;
   contentStyle?: StyleProp<ViewStyle>;
 }) {
   const { c } = useTheme();
   const insets = useSafeAreaInsets();
   const inner = (
-    <View style={[{ width: '100%', maxWidth: wide ? 1040 : 720, alignSelf: 'center', paddingHorizontal: 16, gap: 16 }, contentStyle]}>
+    <View style={[{ width: '100%', maxWidth: wide ? 1040 : 640, alignSelf: 'center', paddingHorizontal: 18, gap: 16 }, contentStyle]}>
       {children}
     </View>
   );
   return (
     <View style={{ flex: 1, backgroundColor: c.bg, paddingTop: insets.top }}>
+      <BackgroundGlow />
       {scroll ? (
-        <ScrollView contentContainerStyle={{ paddingTop: 12, paddingBottom: 40 }} keyboardShouldPersistTaps="handled">
+        <ScrollView contentContainerStyle={{ paddingTop: 14, paddingBottom: (tabs ? TAB_BAR_SPACE : 40) + insets.bottom }} keyboardShouldPersistTaps="handled">
           {inner}
         </ScrollView>
       ) : (
@@ -97,23 +105,15 @@ export function Screen({
 }
 
 /** 하위 화면 상단: 뒤로가기 + 제목 (+ 오른쪽) */
-export function PageTop({ title, right }: { title: string; right?: ReactNode }) {
+export function PageTop({ title, right, center = false }: { title: string; right?: ReactNode; center?: boolean }) {
   const router = useRouter();
-  const { c } = useTheme();
   return (
-    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel="뒤로"
-        onPress={() => (router.canGoBack() ? router.back() : router.replace('/'))}
-        style={{ width: 42, height: 42, borderRadius: radius.pill, borderWidth: 1.5, borderColor: c.line, backgroundColor: c.surface, alignItems: 'center', justifyContent: 'center' }}
-      >
-        <Icon name="back" />
-      </Pressable>
-      <T v="h1" style={{ flex: 1 }} numberOfLines={2}>
+    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+      <RoundButton icon="back" label="뒤로" onPress={() => (router.canGoBack() ? router.back() : router.replace('/'))} />
+      <T v={center ? 'h3' : 'h2'} style={{ flex: 1, textAlign: center ? 'center' : 'left' }} numberOfLines={2}>
         {title}
       </T>
-      {right}
+      {right ?? (center ? <View style={{ width: 44 }} /> : null)}
     </View>
   );
 }
