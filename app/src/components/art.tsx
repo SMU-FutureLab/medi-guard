@@ -1,35 +1,52 @@
 // 장식 요소: 마스코트 '메디', 그라디언트 패널, 빛나는 구, 사선 무늬 카드, 둥근 아이콘 버튼
 import { LinearGradient } from 'expo-linear-gradient';
-import type { ReactNode } from 'react';
+import { useId, type ReactNode } from 'react';
 import { Pressable, View, type StyleProp, type ViewStyle } from 'react-native';
 import Svg, { Circle, Defs, Ellipse, Path, RadialGradient, Rect, Stop } from 'react-native-svg';
 import { glass, radius, shadow, useTheme } from '../theme/theme';
 import { Icon, type IconName } from './Icon';
 
-/** 마스코트 '메디': 웃는 캡슐 캐릭터 (레퍼런스의 3D 캐릭터 역할) */
-export function Mascot({ size = 140, wave = true }: { size?: number; wave?: boolean }) {
+/** 마스코트 '메디': 웃는 캡슐 캐릭터 (레퍼런스의 3D 캐릭터 역할)
+ *  halo: 뒤에 빛나는 후광. 초록 패널 위에서는 'light'(흰빛), 밝은 배경에서는 'mint' */
+export function Mascot({ size = 140, wave = true, halo = 'light' }: { size?: number; wave?: boolean; halo?: 'light' | 'mint' | false }) {
   const { c } = useTheme();
+  // 한 화면에 마스코트가 여러 개여도 그라데이션 id가 겹치지 않게
+  const uid = useId().replace(/[^a-zA-Z0-9]/g, '');
+  const id = (n: string) => `${n}${uid}`;
+  const haloColor = halo === 'mint' ? c.mintLine : '#ffffff';
   return (
     <Svg width={size} height={size} viewBox="0 0 160 160">
       <Defs>
-        <RadialGradient id="shell" cx="38%" cy="28%" r="80%">
+        <RadialGradient id={id('halo')} cx="50%" cy="50%" r="50%">
+          <Stop offset="0" stopColor={haloColor} stopOpacity={halo === 'mint' ? 0.6 : 1} />
+          <Stop offset="0.55" stopColor={haloColor} stopOpacity={halo === 'mint' ? 0.35 : 0.75} />
+          <Stop offset="0.8" stopColor={haloColor} stopOpacity={halo === 'mint' ? 0.12 : 0.3} />
+          <Stop offset="1" stopColor={haloColor} stopOpacity={0} />
+        </RadialGradient>
+        <RadialGradient id={id('shell')} cx="38%" cy="28%" r="80%">
           <Stop offset="0" stopColor="#ffffff" />
           <Stop offset="0.65" stopColor="#f1f6f3" />
           <Stop offset="1" stopColor="#d7e4dc" />
         </RadialGradient>
-        <RadialGradient id="green" cx="35%" cy="20%" r="90%">
+        <RadialGradient id={id('green')} cx="35%" cy="20%" r="90%">
           <Stop offset="0" stopColor="#5fe3a0" />
           <Stop offset="0.6" stopColor="#1cb86c" />
           <Stop offset="1" stopColor="#0b7a43" />
         </RadialGradient>
       </Defs>
+      {halo ? (
+        <>
+          <Circle cx="80" cy="80" r="80" fill={`url(#${id('halo')})`} />
+          <Circle cx="80" cy="80" r="60" fill="none" stroke={haloColor} strokeOpacity={halo === 'mint' ? 0.45 : 0.8} strokeWidth={2.5} />
+        </>
+      ) : null}
       <Ellipse cx="80" cy="150" rx="36" ry="5" fill="#000" opacity={0.12} />
       {/* 팔 */}
       <Path d="M46 98c-12-2-18-10-18-20" stroke="#14a05c" strokeWidth={8} strokeLinecap="round" fill="none" />
       <Path d={wave ? 'M114 92c12-4 18-14 16-28' : 'M114 98c12-2 18-10 18-20'} stroke="#14a05c" strokeWidth={8} strokeLinecap="round" fill="none" />
       {/* 몸통 */}
-      <Rect x="44" y="16" width="72" height="128" rx="36" fill="url(#shell)" />
-      <Path d="M44 82h72v26a36 36 0 0 1-72 0Z" fill="url(#green)" />
+      <Rect x="44" y="16" width="72" height="128" rx="36" fill={`url(#${id('shell')})`} />
+      <Path d="M44 82h72v26a36 36 0 0 1-72 0Z" fill={`url(#${id('green')})`} />
       <Path d="M44 82h72" stroke="#c9d9cf" strokeWidth={1.5} />
       <Ellipse cx="62" cy="38" rx="7" ry="13" fill="#fff" opacity={0.9} />
       <Ellipse cx="60" cy="104" rx="5" ry="10" fill="#fff" opacity={0.28} />

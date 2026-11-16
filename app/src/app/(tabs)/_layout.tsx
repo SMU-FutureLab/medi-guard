@@ -72,13 +72,13 @@ function FloatingTabBar() {
                 borderRadius: 26,
                 alignItems: 'center',
                 justifyContent: 'center',
-                backgroundColor: active ? c.ink : c.barShine,
+                backgroundColor: active ? c.primaryStrong : c.barShine,
                 borderWidth: active ? 0 : 1,
                 borderColor: c.cardBorder,
                 opacity: pressed ? 0.8 : 1,
               })}
             >
-              <Icon name={t.icon} size={23} color={active ? c.onInk : c.muted} />
+              <Icon name={t.icon} size={23} color={active ? c.onPrimary : c.muted} />
             </Pressable>
           );
         })}

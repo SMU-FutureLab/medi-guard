@@ -84,6 +84,7 @@ export default function DrugDetailScreen() {
         <View style={{ width: '100%', maxWidth: 720, alignSelf: 'center', paddingHorizontal: 16, gap: 16 }}>
           <PageTop
             title={d.name}
+            image={d.imageUrl}
             right={
               <Pressable
                 accessibilityRole="button"
@@ -96,7 +97,7 @@ export default function DrugDetailScreen() {
               </Pressable>
             }
           />
-          <View style={{ marginTop: -8, paddingLeft: 52 }}>
+          <View style={{ marginTop: -8, paddingLeft: d.imageUrl ? 120 : 56 }}>
             <DrugTags drug={d} />
           </View>
 

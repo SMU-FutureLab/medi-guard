@@ -63,3 +63,8 @@ npm run typecheck
 - `ios/`, `android/` 폴더는 만들지 않는다. 앱 설정은 `app.json`에서 한다.
 - 라이브러리는 `npm install` 대신 `npx expo install <패키지>`로 설치해야 SDK와 맞는 버전이 들어간다.
 - 실제 앱 파일(.apk/.ipa)로 배포하려면 EAS Build를 쓴다: `npx eas-cli@latest build`
+
+## 의약품 사진
+
+`assets/drugs/`의 사진은 **식품의약품안전처 의약품안전나라**(nedrug.mfds.go.kr) 의약품 상세정보의 낱알·포장 사진입니다. `*-thumb.jpg`는 낱알 사진에서 알약 하나를 정사각형으로 잘라낸 썸네일입니다. 발표나 배포 전에는 출처 표기와 이용 조건을 확인하세요.
+실제 API 연동 후에는 백엔드가 보내는 사진 주소(`images`, `imageUrl`)를 쓰며, 앱에 넣어 둔 사진은 목업에서만 사용합니다.

@@ -2,6 +2,7 @@
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Image, Pressable, Text, TextInput, View } from 'react-native';
+import { PILL_PHOTO_BG, imageSource } from '../api/images';
 import { fonts, glass, radius, shadow, useTheme } from '../theme/theme';
 import type { DrugSummary } from '../types';
 import { Icon, PillArt } from './Icon';
@@ -35,14 +36,14 @@ export function Thumb({ large = false, uri }: { large?: boolean; uri?: string })
         width: large ? '100%' : 64,
         height: large ? 150 : 64,
         borderRadius: large ? radius.lg : 32,
-        backgroundColor: large ? c.lime : c.mint,
+        backgroundColor: uri ? PILL_PHOTO_BG : large ? c.lime : c.mint,
         alignItems: 'center',
         justifyContent: 'center',
         overflow: 'hidden',
       }}
     >
       {uri ? (
-        <Image source={{ uri }} resizeMode="contain" style={{ width: '86%', height: '86%' }} accessibilityIgnoresInvertColors />
+        <Image source={imageSource(uri)} resizeMode="cover" style={{ width: '100%', height: '100%' }} accessibilityIgnoresInvertColors />
       ) : (
         <PillArt size={large ? 120 : 46} />
       )}

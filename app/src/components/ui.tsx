@@ -3,6 +3,7 @@ import { useRouter, type Href } from 'expo-router';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import {
   ActivityIndicator,
+  Image,
   Animated,
   Linking,
   Pressable,
@@ -17,6 +18,7 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { fonts, glass, hasHangul, radius, shadow, useTheme } from '../theme/theme';
 import type { Source } from '../types';
+import { PILL_PHOTO_BG, imageSource } from '../api/images';
 import { BackgroundGlow, RoundButton } from './art';
 import { Icon, type IconName } from './Icon';
 
@@ -105,11 +107,18 @@ export function Screen({
 }
 
 /** 하위 화면 상단: 뒤로가기 + 제목 (+ 오른쪽) */
-export function PageTop({ title, right, center = false }: { title: string; right?: ReactNode; center?: boolean }) {
+export function PageTop({ title, right, center = false, image }: { title: string; right?: ReactNode; center?: boolean; image?: string }) {
   const router = useRouter();
+  const { c } = useTheme();
+  const src = image ? imageSource(image) : undefined;
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
       <RoundButton icon="back" label="뒤로" onPress={() => (router.canGoBack() ? router.back() : router.replace('/'))} />
+      {src ? (
+        <View style={[{ width: 52, height: 52, borderRadius: 26, overflow: 'hidden', backgroundColor: PILL_PHOTO_BG, borderWidth: 2, borderColor: c.cardBorder }, shadow(c, 0.6)]}>
+          <Image source={src} resizeMode="cover" style={{ width: '100%', height: '100%' }} accessibilityLabel={`${title} 사진`} />
+        </View>
+      ) : null}
       <T v={center ? 'h3' : 'h2'} style={{ flex: 1, textAlign: center ? 'center' : 'left' }} numberOfLines={2}>
         {title}
       </T>

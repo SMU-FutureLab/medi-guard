@@ -57,7 +57,7 @@ function usePersisted<T>(key: string, fallback: T) {
   return [value, setValue, loaded] as const;
 }
 
-export const toSummary = ({ id, name, company, ingredients, category, form, classification, strength }: DrugSummary): DrugSummary => ({
+export const toSummary = ({ id, name, company, ingredients, category, form, classification, strength, imageUrl }: DrugSummary): DrugSummary => ({
   id,
   name,
   company,
@@ -66,6 +66,7 @@ export const toSummary = ({ id, name, company, ingredients, category, form, clas
   form,
   classification,
   strength,
+  imageUrl,
 });
 
 function makeList(items: DrugSummary[], set: Dispatch<SetStateAction<DrugSummary[]>>): DrugList {

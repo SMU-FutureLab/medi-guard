@@ -118,7 +118,7 @@ function Guide({ text, sub }: { text: string; sub?: string }) {
   const { c } = useTheme();
   return (
     <View style={[glass(c), { borderRadius: radius.xl, paddingVertical: 28, paddingHorizontal: 20, alignItems: 'center', gap: 8 }, shadow(c, 0.5)]}>
-      <Mascot size={96} />
+      <Mascot size={96} halo="mint" />
       <T v="bodyBold" style={{ textAlign: 'center' }}>
         {text}
       </T>
