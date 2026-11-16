@@ -4,6 +4,7 @@ import psycopg
 
 from database import get_connection
 from routers.medicine import router as medicine_router
+from routers.explanation import router as explanation_router
 
 
 app = FastAPI(
@@ -14,7 +15,7 @@ app = FastAPI(
 
 
 app.include_router(medicine_router)
-
+app.include_router(explanation_router)
 
 @app.get("/")
 def root():
