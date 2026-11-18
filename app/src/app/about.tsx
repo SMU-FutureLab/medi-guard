@@ -33,8 +33,7 @@ const SECTIONS: { icon: IconName; title: string; items: string[]; numbered?: boo
 export default function AboutScreen() {
   const { c } = useTheme();
   return (
-    <Screen>
-      <PageTop title="서비스 안내" />
+    <Screen header={<PageTop title="서비스 안내" />}>
       <T color={c.text2} style={{ fontSize: 17 }}>
         MEDI GUARD는 식품의약품안전처의 공식 의약품 정보를 AI가 쉬운 말로 설명해 주는 서비스예요. 설명마다 근거가 된 공식 원문을 함께
         보여드려요.

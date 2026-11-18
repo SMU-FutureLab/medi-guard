@@ -5,16 +5,16 @@ import { Platform, useColorScheme } from 'react-native';
 // 메인 컬러를 바꾸려면 primary·block·mint 계열만 바꾸면 된다.
 
 const light = {
-  bg: '#f2f7f4',
-  bgGlow: '#d6f3e5',
+  bg: '#ffffff',
+  bgGlow: '#ffffff',
   /** 화면 배경 그라데이션: 위(bgGlow) → 가운데(bg) → 아래(bgEnd) */
-  bgEnd: '#e9f4ef',
+  bgEnd: '#ffffff',
   /** 반투명 유리 카드 */
-  card: 'rgba(255,255,255,0.82)',
-  cardBorder: 'rgba(255,255,255,0.95)',
+  card: '#ffffff',
+  cardBorder: '#e6ece8',
   /** 떠 있는 탭바 유리 */
-  barGlass: 'rgba(255,255,255,0.55)',
-  barShine: 'rgba(255,255,255,0.75)',
+  barGlass: 'rgba(255,255,255,0.88)',
+  barShine: '#f2f5f3',
   /** 선택된 탭 구슬 그라데이션 */
   orbFrom: '#8af0bf',
   orbTo: '#12a35d',

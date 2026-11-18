@@ -39,8 +39,7 @@ export default function InteractionsScreen() {
   };
 
   return (
-    <Screen>
-      <PageTop title="함께 먹어도 될까?" />
+    <Screen header={<PageTop title="함께 먹어도 될까?" />}>
       <T color={c.muted}>함께 먹는 약을 담으면, 식약처 DUR(의약품안전사용서비스)에 등록된 병용금기·성분중복 정보를 확인해 드려요.</T>
 
       <Card>

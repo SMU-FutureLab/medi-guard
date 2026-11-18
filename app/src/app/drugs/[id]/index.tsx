@@ -6,7 +6,7 @@ import { api } from '../../../api/client';
 import { DrugTags, ingredientLine } from '../../../components/drug';
 import { DrugGallery } from '../../../components/gallery';
 import { Icon, type IconName } from '../../../components/Icon';
-import { Button, Card, Disclaimer, ErrorBox, Highlight, PageTop, Skeleton, SourceInfo, Spinner, T } from '../../../components/ui';
+import { Button, Card, Disclaimer, ErrorBox, Highlight, PageTop, Skeleton, SourceInfo, Spinner, T, TopBar } from '../../../components/ui';
 import { useAsync } from '../../../hooks/useAsync';
 import { useAppStore } from '../../../store/AppStore';
 import { BackgroundGlow } from '../../../components/art';
@@ -78,10 +78,9 @@ export default function DrugDetailScreen() {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: c.bg, paddingTop: insets.top }}>
+    <View style={{ flex: 1, backgroundColor: c.bg }}>
       <BackgroundGlow />
-      <ScrollView ref={scrollRef} contentContainerStyle={{ paddingTop: 12, paddingBottom: 40 + insets.bottom }}>
-        <View style={{ width: '100%', maxWidth: 720, alignSelf: 'center', paddingHorizontal: 16, gap: 16 }}>
+      <TopBar>
           <PageTop
             title={d.name}
             image={d.imageUrl}
@@ -97,7 +96,10 @@ export default function DrugDetailScreen() {
               </Pressable>
             }
           />
-          <View style={{ marginTop: -8, paddingLeft: d.imageUrl ? 120 : 56 }}>
+      </TopBar>
+      <ScrollView ref={scrollRef} contentContainerStyle={{ paddingTop: 16, paddingBottom: 40 + insets.bottom }}>
+        <View style={{ width: '100%', maxWidth: 720, alignSelf: 'center', paddingHorizontal: 16, gap: 16 }}>
+          <View style={{ marginTop: -6 }}>
             <DrugTags drug={d} />
           </View>
 

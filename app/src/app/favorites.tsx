@@ -5,8 +5,7 @@ import { useAppStore } from '../store/AppStore';
 export default function FavoritesScreen() {
   const { favorites } = useAppStore();
   return (
-    <Screen>
-      <PageTop title="관심 의약품" />
+    <Screen header={<PageTop title="관심 의약품" />}>
       {favorites.items.length === 0 ? (
         <Empty title="찜한 의약품이 없어요." desc="의약품 상세 화면에서 별 버튼을 누르면 여기에 모여요." />
       ) : (

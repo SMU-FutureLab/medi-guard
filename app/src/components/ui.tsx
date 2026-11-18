@@ -73,10 +73,13 @@ export function Screen({
   scroll = true,
   wide = false,
   tabs = false,
+  header,
   footer,
   contentStyle,
 }: {
   children: ReactNode;
+  /** 상단 바에 넣을 내용 (제목, 버튼 등) */
+  header?: ReactNode;
   scroll?: boolean;
   wide?: boolean;
   /** 하단 탭 화면이면 true */
@@ -92,8 +95,9 @@ export function Screen({
     </View>
   );
   return (
-    <View style={{ flex: 1, backgroundColor: c.bg, paddingTop: insets.top }}>
+    <View style={{ flex: 1, backgroundColor: c.bg, paddingTop: header ? 0 : insets.top }}>
       <BackgroundGlow />
+      {header ? <TopBar>{header}</TopBar> : null}
       {scroll ? (
         <ScrollView contentContainerStyle={{ paddingTop: 14, paddingBottom: (tabs ? TAB_BAR_SPACE : 40) + insets.bottom }} keyboardShouldPersistTaps="handled">
           {inner}
@@ -102,6 +106,45 @@ export function Screen({
         inner
       )}
       {footer}
+    </View>
+  );
+}
+
+/** 화면 맨 위에 고정되는 상단 바. 흰 바탕 + 아래 구분선 + 옅은 그림자로 내용과 나눈다. */
+export function TopBar({ children }: { children: ReactNode }) {
+  const { c } = useTheme();
+  const insets = useSafeAreaInsets();
+  return (
+    <View
+      style={{
+        paddingTop: insets.top,
+        backgroundColor: c.surface,
+        borderBottomWidth: 1,
+        borderBottomColor: c.line,
+        zIndex: 5,
+        shadowColor: c.shadow,
+        shadowOpacity: 0.05,
+        shadowRadius: 10,
+        shadowOffset: { width: 0, height: 3 },
+        elevation: 2,
+      }}
+    >
+      <View style={{ width: '100%', maxWidth: 640, alignSelf: 'center', paddingHorizontal: 18, minHeight: 62, paddingVertical: 9, justifyContent: 'center' }}>
+        {children}
+      </View>
+    </View>
+  );
+}
+
+/** 상단 바 제목 (아이콘 + 제목 + 오른쪽 버튼) */
+export function BarTitle({ icon, title, right }: { icon?: IconName; title: string; right?: ReactNode }) {
+  return (
+    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+      {icon ? <Icon name={icon} size={24} /> : null}
+      <T v="h2" style={{ flex: 1 }}>
+        {title}
+      </T>
+      {right}
     </View>
   );
 }

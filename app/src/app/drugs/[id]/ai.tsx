@@ -5,7 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { api } from '../../../api/client';
 import { BackgroundGlow, GlowOrb, GradientPanel, Mascot, RoundButton } from '../../../components/art';
 import { Icon } from '../../../components/Icon';
-import { ErrorBox, PageTop, Row, Skeleton, SourceInfo, Spinner, T } from '../../../components/ui';
+import { ErrorBox, PageTop, TopBar, Row, Skeleton, SourceInfo, Spinner, T } from '../../../components/ui';
 import { useAsync } from '../../../hooks/useAsync';
 import { fonts, glass, radius, shadow, useTheme } from '../../../theme/theme';
 import type { AskResponse, DrugDetail } from '../../../types';
@@ -61,18 +61,20 @@ function Chat({ drug }: { drug: DrugDetail }) {
   return (
     <KeyboardAvoidingView style={{ flex: 1, backgroundColor: c.bg }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <BackgroundGlow />
-      <ScrollView
-        ref={scrollRef}
-        onContentSizeChange={() => scrollRef.current?.scrollToEnd({ animated: true })}
-        contentContainerStyle={{ paddingTop: insets.top + 12, paddingBottom: 16 }}
-        keyboardShouldPersistTaps="handled"
-      >
-        <View style={{ width: '100%', maxWidth: 720, alignSelf: 'center', paddingHorizontal: 16, gap: 18 }}>
+      <TopBar>
           <PageTop
             title="AI 도우미"
             center
             right={<RoundButton icon="file" label="공식 정보 보기" onPress={() => router.push({ pathname: '/drugs/[id]', params: { id: drug.id } })} />}
           />
+      </TopBar>
+      <ScrollView
+        ref={scrollRef}
+        onContentSizeChange={() => scrollRef.current?.scrollToEnd({ animated: true })}
+        contentContainerStyle={{ paddingTop: 16, paddingBottom: 16 }}
+        keyboardShouldPersistTaps="handled"
+      >
+        <View style={{ width: '100%', maxWidth: 720, alignSelf: 'center', paddingHorizontal: 16, gap: 18 }}>
 
           {/* 마스코트 패널: 대화 전에는 크게, 대화 중에는 작게 */}
           <GradientPanel style={{ padding: 16, minHeight: messages.length === 0 ? 300 : undefined }}>

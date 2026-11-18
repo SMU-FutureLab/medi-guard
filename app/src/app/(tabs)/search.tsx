@@ -4,7 +4,7 @@ import { api } from '../../api/client';
 import { Mascot, RoundButton } from '../../components/art';
 import { DrugCard, SearchBar } from '../../components/drug';
 import { Icon } from '../../components/Icon';
-import { ErrorBox, Row, Screen, Spinner, T } from '../../components/ui';
+import { BarTitle, ErrorBox, Row, Screen, Spinner, T } from '../../components/ui';
 import { useAsync } from '../../hooks/useAsync';
 import { useAppStore } from '../../store/AppStore';
 import { fonts, glass, radius, shadow, useTheme } from '../../theme/theme';
@@ -21,12 +21,11 @@ export default function SearchScreen() {
   const { data, error, loading, retry } = useAsync(() => api.searchDrugs(query), [query], !!query);
 
   return (
-    <Screen tabs contentStyle={{ gap: 18 }}>
-      {/* 헤더 */}
-      <Row style={{ justifyContent: 'space-between' }}>
-        <T v="h1">의약품 검색</T>
-        <RoundButton icon="star" label="관심 의약품" onPress={() => router.push('/favorites')} />
-      </Row>
+    <Screen
+      tabs
+      contentStyle={{ gap: 18 }}
+      header={<BarTitle icon="search" title="의약품 검색" right={<RoundButton icon="star" label="관심 의약품" onPress={() => router.push('/favorites')} />} />}
+    >
 
       <SearchBar
         variant="hero"

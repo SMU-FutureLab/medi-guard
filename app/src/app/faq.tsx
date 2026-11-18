@@ -27,8 +27,7 @@ export default function FaqScreen() {
   const { c } = useTheme();
   const [open, setOpen] = useState<number | null>(null);
   return (
-    <Screen>
-      <PageTop title="자주 묻는 질문" />
+    <Screen header={<PageTop title="자주 묻는 질문" />}>
       <Card padded={false} style={{ padding: 4, gap: 0, borderRadius: radius.lg }}>
         {FAQ.map((f, i) => {
           const isOpen = open === i;

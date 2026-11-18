@@ -18,18 +18,23 @@ export default function HomeScreen() {
   const search = (q: string) => router.push({ pathname: '/search', params: { q } });
 
   return (
-    <Screen tabs contentStyle={{ gap: 14 }}>
-      {/* 헤더: 로고 · 관심 의약품 · 마이 */}
-      <Row style={{ justifyContent: 'space-between' }}>
-        <LogoLockup height={34} />
-        <Row gap={10}>
-          <RoundButton icon="star" label="관심 의약품" onPress={() => router.push('/favorites')} />
-          <RoundButton icon="user" label="마이페이지" variant="primary" onPress={() => router.navigate('/my')} />
+    <Screen
+      tabs
+      contentStyle={{ gap: 14 }}
+      header={
+        // 상단 바: 로고 · 관심 의약품 · 마이
+        <Row style={{ justifyContent: 'space-between' }}>
+          <LogoLockup height={34} />
+          <Row gap={10}>
+            <RoundButton icon="star" label="관심 의약품" onPress={() => router.push('/favorites')} />
+            <RoundButton icon="user" label="마이페이지" variant="primary" onPress={() => router.navigate('/my')} />
+          </Row>
         </Row>
-      </Row>
+      }
+    >
 
       {/* 제목 + 상태 칩 */}
-      <Row style={{ justifyContent: 'space-between', alignItems: 'flex-end', marginTop: 10 }}>
+      <Row style={{ justifyContent: 'space-between', alignItems: 'flex-end', marginTop: 4 }}>
         <T v="h1" style={{ flex: 1, fontSize: 27, lineHeight: 35 }}>
           {'어려운 약 설명서,\n쉽게 읽어요'}
         </T>

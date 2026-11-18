@@ -2,7 +2,7 @@ import { useRouter, type Href } from 'expo-router';
 import { View } from 'react-native';
 import { GradientPanel, Mascot } from '../../components/art';
 import { Icon, type IconName } from '../../components/Icon';
-import { Card, ListRow, Row, Screen, T, TitleBlock } from '../../components/ui';
+import { Card, ListRow, Row, Screen, T, BarTitle } from '../../components/ui';
 import { useAppStore } from '../../store/AppStore';
 import { fonts, radius, useTheme } from '../../theme/theme';
 
@@ -36,8 +36,7 @@ export default function MyScreen() {
   ];
 
   return (
-    <Screen tabs>
-      <TitleBlock icon="user" title="마이페이지" />
+    <Screen tabs header={<BarTitle icon="user" title="마이페이지" />}>
 
       <GradientPanel>
         <Row gap={14}>

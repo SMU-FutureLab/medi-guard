@@ -1,6 +1,6 @@
 import { Pressable } from 'react-native';
 import { DrugCard } from '../../components/drug';
-import { Button, Empty, Screen, T, TitleBlock } from '../../components/ui';
+import { BarTitle, Button, Empty, Screen, T } from '../../components/ui';
 import { useAppStore } from '../../store/AppStore';
 import { useTheme } from '../../theme/theme';
 import { formatDateTime } from '../../utils';
@@ -10,8 +10,8 @@ export default function HistoryScreen() {
   const { history, clearHistory } = useAppStore();
 
   return (
-    <Screen tabs>
-      <TitleBlock icon="clock" title="조회 기록" desc="최근에 검색한 의약품을 확인할 수 있어요." />
+    <Screen tabs header={<BarTitle icon="clock" title="조회 기록" />}>
+      <T color={c.muted}>최근에 검색한 의약품을 확인할 수 있어요.</T>
       {history.length === 0 ? (
         <Empty title="아직 조회한 의약품이 없어요." action={<Button label="의약품 검색하기" icon="search" href="/search" />} />
       ) : (
