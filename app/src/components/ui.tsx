@@ -21,6 +21,7 @@ import type { Source } from '../types';
 import { PILL_PHOTO_BG, imageSource } from '../api/images';
 import { BackgroundGlow, Mascot, RoundButton } from './art';
 import { TopTabs } from './TopTabs';
+import { Footer } from './Footer';
 import { Icon, type IconName } from './Icon';
 
 /* ───────── 글자 ───────── */
@@ -92,8 +93,19 @@ export function Screen({
       <BackgroundGlow />
       {header ? <TopBar below={tabs ? <TopTabs /> : undefined}>{header}</TopBar> : null}
       {scroll ? (
-        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingTop: 14, paddingBottom: 40 + insets.bottom }} keyboardShouldPersistTaps="handled">
+        // 탭 화면은 내용 아래에 푸터를 붙이고, 내용이 짧아도 푸터가 화면 맨 아래에 오게 한다
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={tabs ? { flexGrow: 1, paddingTop: 14, paddingBottom: insets.bottom } : { paddingTop: 14, paddingBottom: 40 + insets.bottom }}
+          keyboardShouldPersistTaps="handled"
+        >
           {inner}
+          {tabs ? (
+            <>
+              <View style={{ flex: 1 }} />
+              <Footer />
+            </>
+          ) : null}
         </ScrollView>
       ) : (
         inner

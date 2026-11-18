@@ -108,10 +108,6 @@ export default function HomeScreen() {
           </View>
         </GradientPanel>
       </Pressable>
-
-      <T v="label" style={{ fontFamily: fonts.regular, textAlign: 'center', marginTop: 6 }}>
-        MEDI GUARD는 공식 의약품 정보의 이해를 돕는 보조 서비스이며, 의사·약사의 진료나 복약지도를 대신하지 않습니다.
-      </T>
     </Screen>
   );
 }
