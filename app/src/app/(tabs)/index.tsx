@@ -99,8 +99,9 @@ export default function HomeScreen() {
           <T v="h2" color={c.onBlock} style={{ fontSize: 21 }}>
             {'근거가 보이는\nAI 설명'}
           </T>
-          <T v="small" color={c.onBlockMuted} style={{ marginTop: 4, maxWidth: 240 }}>
-            설명마다 공식 원문 구절을 함께 보여드려요.
+          {/* 줄바꿈 위치를 직접 정해서 한 글자만 다음 줄로 넘어가지 않게 한다 */}
+          <T v="small" color={c.onBlockMuted} style={{ marginTop: 4, paddingRight: 60 }}>
+            {'설명마다 공식 원문 구절을\n함께 보여드려요.'}
           </T>
           <View style={{ position: 'absolute', right: 18, bottom: 18, width: 44, height: 44, borderRadius: 22, backgroundColor: c.surface, alignItems: 'center', justifyContent: 'center' }}>
             <Icon name="chevronRight" color={c.primaryStrong} />
@@ -136,23 +137,23 @@ function StatCard({
     <Pressable
       onPress={onPress}
       style={({ pressed }) => [
-        { flex: 1, minHeight: 150, borderRadius: radius.xl, padding: 16, justifyContent: 'space-between', backgroundColor: soft ? c.primarySoft : c.card, opacity: pressed ? 0.85 : 1 },
+        { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 12, borderRadius: radius.lg, paddingVertical: 14, paddingHorizontal: 14, backgroundColor: soft ? c.primarySoft : c.card, opacity: pressed ? 0.85 : 1 },
         !soft && [glass(c), shadow(c, 0.6)],
       ]}
     >
-      <View style={{ width: 44, height: 44, borderRadius: 22, alignItems: 'center', justifyContent: 'center', backgroundColor: soft ? c.primaryStrong : c.surface2 }}>
-        <Icon name={icon} color={soft ? c.onPrimary : c.text} />
+      <View style={{ width: 42, height: 42, borderRadius: 21, alignItems: 'center', justifyContent: 'center', backgroundColor: soft ? c.primaryStrong : c.surface2 }}>
+        <Icon name={icon} size={20} color={soft ? c.onPrimary : c.text} />
       </View>
-      <View>
-        <Row gap={4} style={{ alignItems: 'baseline' }}>
-          <Text style={{ fontFamily: fonts.display, fontSize: 28, color: c.text }}>{value}</Text>
+      <View style={{ flex: 1 }}>
+        <T v="small" color={c.text2} numberOfLines={1}>
+          {label}
+        </T>
+        <Row gap={3} style={{ alignItems: 'baseline' }}>
+          <Text style={{ fontFamily: fonts.display, fontSize: 24, lineHeight: 30, color: c.text }}>{value}</Text>
           <T v="small" color={c.muted}>
             {unit}
           </T>
         </Row>
-        <T v="small" color={c.text2}>
-          {label}
-        </T>
       </View>
     </Pressable>
   );

@@ -16,7 +16,7 @@ import {
   type ViewStyle,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { fonts, glass, hasHangul, radius, shadow, useTheme } from '../theme/theme';
+import { fonts, glass, radius, shadow, useTheme } from '../theme/theme';
 import type { Source } from '../types';
 import { PILL_PHOTO_BG, imageSource } from '../api/images';
 import { BackgroundGlow, Mascot, RoundButton } from './art';
@@ -49,15 +49,8 @@ export function T({
 }: TextProps & { v?: Variant; color?: string; style?: StyleProp<TextStyle> }) {
   const { c } = useTheme();
   const isHeading = HEADINGS.includes(v);
-  const text = typeof children === 'string' ? children : '';
-  // 영문 제목은 Sora, 한글이 섞이면 Noto Sans KR 굵게
-  const fontFamily = isHeading
-    ? hasHangul(text) || typeof children !== 'string'
-      ? fonts.bold
-      : fonts.display
-    : v === 'bodyBold' || v === 'label'
-      ? fonts.bold
-      : fonts.regular;
+  // 제목·굵은 글씨는 Pretendard Bold, 작은 라벨은 SemiBold, 본문은 Regular
+  const fontFamily = isHeading || v === 'bodyBold' ? fonts.bold : v === 'label' ? fonts.semibold : fonts.regular;
   return (
     <Text style={[VARIANTS[v], { fontFamily, color: color ?? (v === 'label' ? c.muted : c.text) }, style]} {...rest}>
       {children}

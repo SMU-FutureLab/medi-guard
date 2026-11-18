@@ -1,9 +1,4 @@
-// 쓰는 굵기만 하나씩 불러온다 (패키지 전체를 불러오면 모든 굵기가 앱에 들어가 용량이 커짐)
-import { NotoSansKR_400Regular } from '@expo-google-fonts/noto-sans-kr/400Regular';
-import { NotoSansKR_500Medium } from '@expo-google-fonts/noto-sans-kr/500Medium';
-import { NotoSansKR_700Bold } from '@expo-google-fonts/noto-sans-kr/700Bold';
-import { Sora_600SemiBold } from '@expo-google-fonts/sora/600SemiBold';
-import { Sora_700Bold } from '@expo-google-fonts/sora/700Bold';
+// 본문 글꼴: Pretendard (assets/fonts, OFL 라이선스). 로고 글자만 Nunito.
 import { Nunito_800ExtraBold } from '@expo-google-fonts/nunito/800ExtraBold';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
@@ -19,12 +14,11 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   const { c, dark } = useTheme();
   const [loaded, error] = useFonts({
-    Sora_600SemiBold,
-    Sora_700Bold,
+    'Pretendard-Regular': require('../../assets/fonts/Pretendard-Regular.otf'),
+    'Pretendard-Medium': require('../../assets/fonts/Pretendard-Medium.otf'),
+    'Pretendard-SemiBold': require('../../assets/fonts/Pretendard-SemiBold.otf'),
+    'Pretendard-Bold': require('../../assets/fonts/Pretendard-Bold.otf'),
     Nunito_800ExtraBold,
-    NotoSansKR_400Regular,
-    NotoSansKR_500Medium,
-    NotoSansKR_700Bold,
   });
 
   useEffect(() => {

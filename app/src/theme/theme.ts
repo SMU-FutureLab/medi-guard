@@ -111,17 +111,15 @@ const dark: Colors = {
 
 export const radius = { xl: 32, lg: 26, md: 20, pill: 999 };
 
-/** 폰트 이름(@expo-google-fonts). 굵기마다 다른 파일이라 fontWeight 대신 fontFamily로 고른다. */
+/** 폰트 이름 (Pretendard, assets/fonts). 굵기마다 다른 파일이라 fontWeight 대신 fontFamily로 고른다. */
 export const fonts = {
-  display: 'Sora_700Bold',
-  displayMedium: 'Sora_600SemiBold',
-  regular: 'NotoSansKR_400Regular',
-  medium: 'NotoSansKR_500Medium',
-  bold: 'NotoSansKR_700Bold',
+  display: 'Pretendard-Bold',
+  displayMedium: 'Pretendard-SemiBold',
+  regular: 'Pretendard-Regular',
+  medium: 'Pretendard-Medium',
+  semibold: 'Pretendard-SemiBold',
+  bold: 'Pretendard-Bold',
 };
-
-/** 한글이 섞인 제목: Sora에는 한글이 없어서 한글 글꼴을 쓴다 */
-export const hasHangul = (s: string) => /[가-힣]/.test(s);
 
 export function useTheme() {
   const scheme = useColorScheme();
