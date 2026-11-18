@@ -18,7 +18,7 @@ export function TopTabs() {
   const isActive = (href: Href) => (href === '/' ? pathname === '/' : pathname.startsWith(String(href)));
 
   return (
-    <View accessibilityRole="tablist" style={{ flexDirection: 'row', gap: 8, justifyContent: 'center' }}>
+    <View accessibilityRole="tablist" style={{ flexDirection: 'row', gap: 6 }}>
       {TABS.map((t) => {
         const active = isActive(t.href);
         return (
@@ -31,7 +31,8 @@ export function TopTabs() {
             style={(state) => {
               const hovered = (state as { hovered?: boolean }).hovered;
               return {
-                paddingHorizontal: 12,
+                flex: 1,
+                alignItems: 'center',
                 paddingTop: 8,
                 paddingBottom: 10,
                 borderRadius: radius.md,
@@ -39,8 +40,11 @@ export function TopTabs() {
               };
             }}
           >
-            <Text style={{ fontFamily: active ? fonts.bold : fonts.medium, fontSize: 16, color: active ? c.text : c.muted }}>{t.title}</Text>
-            <View style={{ position: 'absolute', left: 12, right: 12, bottom: 2, height: 2.5, borderRadius: 2, backgroundColor: active ? c.primaryStrong : 'transparent' }} />
+            <View>
+              <Text style={{ fontFamily: active ? fonts.bold : fonts.medium, fontSize: 16, color: active ? c.text : c.muted }}>{t.title}</Text>
+              {/* 밑줄: 글자 너비만큼 */}
+              <View style={{ position: 'absolute', left: -4, right: -4, bottom: -8, height: 2.5, borderRadius: 2, backgroundColor: active ? c.primaryStrong : 'transparent' }} />
+            </View>
           </Pressable>
         );
       })}
