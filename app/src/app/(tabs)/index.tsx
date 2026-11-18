@@ -139,7 +139,7 @@ function StatCard({
     <Pressable
       onPress={onPress}
       style={({ pressed }) => [
-        { flex: 1, flexDirection: 'row', alignItems: 'center', gap: narrow ? 10 : 18, borderRadius: radius.lg, paddingVertical: 18, paddingHorizontal: narrow ? 14 : 20, backgroundColor: soft ? c.primarySoft : c.card, opacity: pressed ? 0.85 : 1 },
+        { flex: 1, flexDirection: 'row', alignItems: 'center', gap: narrow ? 10 : 14, borderRadius: radius.lg, paddingVertical: 18, paddingHorizontal: narrow ? 14 : 18, backgroundColor: soft ? c.primarySoft : c.card, opacity: pressed ? 0.85 : 1 },
         !soft && [glass(c), shadow(c, 0.6)],
       ]}
     >
