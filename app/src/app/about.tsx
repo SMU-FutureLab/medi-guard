@@ -40,7 +40,7 @@ export default function AboutScreen() {
   return (
     <Screen header={<PageTop title="서비스 안내" />}>
       {/* 한 문장이 끝나면 다음 문단으로 */}
-      <View style={{ gap: 2 }}>
+      <View style={{ gap: 2, paddingHorizontal: 8 }}>
         <T color={c.text2} style={INTRO}>
           MEDI GUARD는 식품의약품안전처의 공식 의약품 정보를 AI가 쉬운 말로 설명해 주는 서비스예요.
         </T>
