@@ -1,10 +1,12 @@
 import { useRouter, type Href } from 'expo-router';
 import { Pressable, Text, View } from 'react-native';
 import { GradientPanel, Mascot } from '../../components/art';
+import { DrugCard } from '../../components/drug';
 import { Icon, type IconName } from '../../components/Icon';
 import { BarTitle, Card, ListRow, Row, Screen, T } from '../../components/ui';
 import { useAppStore } from '../../store/AppStore';
-import { fonts, radius, useTheme } from '../../theme/theme';
+import { fonts, glass, radius, useTheme } from '../../theme/theme';
+import { formatDateTime } from '../../utils';
 
 export default function MyScreen() {
   const { c } = useTheme();
@@ -59,6 +61,27 @@ export default function MyScreen() {
           ))}
         </Row>
       </GradientPanel>
+
+      {/* 조회 기록: 최근 3개만 보여주고 전체는 조회 기록 화면에서 */}
+      <View style={{ gap: 10 }}>
+        <Row style={{ justifyContent: 'space-between' }}>
+          <T v="h3">최근 본 의약품</T>
+          {history.length > 0 && (
+            <Pressable onPress={() => router.push('/history')} style={[glass(c), { borderRadius: radius.pill, paddingVertical: 5, paddingHorizontal: 12 }]}>
+              <Text style={{ fontFamily: fonts.medium, fontSize: 13, color: c.text2 }}>전체 보기</Text>
+            </Pressable>
+          )}
+        </Row>
+        {history.length === 0 ? (
+          <View style={[glass(c), { borderRadius: radius.lg, paddingVertical: 20, paddingHorizontal: 20, alignItems: 'center', gap: 4 }]}>
+            <T v="small" color={c.muted}>
+              아직 조회한 의약품이 없어요.
+            </T>
+          </View>
+        ) : (
+          history.slice(0, 3).map((h) => <DrugCard key={h.drug.id} drug={h.drug} sub={`조회일 ${formatDateTime(h.viewedAt)}`} showTags={false} />)
+        )}
+      </View>
 
       <Card padded={false} style={{ padding: 4, gap: 0, borderRadius: radius.lg }}>
         {rows.map((r, i) => (

@@ -69,7 +69,7 @@ export default function HomeScreen() {
 
       {/* 숫자 카드 2개 */}
       <Row gap={12} style={{ alignItems: 'stretch' }}>
-        <StatCard tone="soft" icon="clock" value={history.length} unit="개" label="최근 본 의약품" onPress={() => router.navigate('/history')} />
+        <StatCard tone="soft" icon="clock" value={history.length} unit="개" label="최근 본 의약품" onPress={() => router.push('/history')} />
         <StatCard tone="plain" icon="bookmark" value={favorites.items.length} unit="개" label="관심 의약품" onPress={() => router.push('/favorites')} />
       </Row>
 

@@ -7,7 +7,6 @@ import { fonts, radius, useTheme } from '../theme/theme';
 export const TABS: { name: string; href: Href; title: string }[] = [
   { name: 'index', href: '/', title: '홈' },
   { name: 'search', href: '/search', title: '검색' },
-  { name: 'history', href: '/history', title: '기록' },
   { name: 'my', href: '/my', title: '마이' },
 ];
 

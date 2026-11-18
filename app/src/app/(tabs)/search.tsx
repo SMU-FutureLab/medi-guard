@@ -64,7 +64,7 @@ export default function SearchScreen() {
       {/* 최근 조회 */}
       {!query && history.length > 0 && (
         <View style={{ gap: 10 }}>
-          <SectionHead title="최근 조회한 의약품" action="전체 보기" onAction={() => router.navigate('/history')} />
+          <SectionHead title="최근 조회한 의약품" action="전체 보기" onAction={() => router.push('/history')} />
           {history.slice(0, 3).map((h) => (
             <DrugCard key={h.drug.id} drug={h.drug} />
           ))}

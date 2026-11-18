@@ -45,6 +45,7 @@ export default function RootLayout() {
           <Stack.Screen name="drugs/[id]/ai" />
           <Stack.Screen name="interactions" />
           <Stack.Screen name="favorites" />
+          <Stack.Screen name="history" />
           <Stack.Screen name="about" />
           <Stack.Screen name="faq" />
         </Stack>
