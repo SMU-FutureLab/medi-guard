@@ -12,6 +12,7 @@ import { useAppStore } from '../../../store/AppStore';
 import { BackgroundGlow } from '../../../components/art';
 import { fonts, glass, radius, shadow, useTheme } from '../../../theme/theme';
 import type { SectionKey } from '../../../types';
+import { toBullets } from '../../../utils';
 
 const SECTION_ICONS: Record<SectionKey, IconName> = {
   efficacy: 'shield',
@@ -184,9 +185,14 @@ export default function DrugDetailScreen() {
                   {isOpen && (
                     <View style={{ paddingHorizontal: 16, paddingBottom: 18, gap: 10 }}>
                       {tab === 'official' ? (
-                        <T v="body" color={c.text2} style={{ fontSize: 15 }}>
-                          <Highlight text={s.original} quotes={focus?.key === s.key ? [focus.quote] : []} active={focus?.quote} />
-                        </T>
+                        // 한 문장이 끝나면 다음 문단으로
+                        <View style={{ gap: 8 }}>
+                          {toBullets(s.original).map((line, li) => (
+                            <T key={li} v="body" color={c.text2} style={{ fontSize: 14, lineHeight: 22 }}>
+                              <Highlight text={line} quotes={focus?.key === s.key ? [focus.quote] : []} active={focus?.quote} />
+                            </T>
+                          ))}
+                        </View>
                       ) : explain.loading ? (
                         <>
                           <AiLabel text="AI가 공식 정보를 쉬운 말로 정리하고 있어요…" />
@@ -195,7 +201,13 @@ export default function DrugDetailScreen() {
                       ) : exp ? (
                         <>
                           <AiLabel text="AI 쉬운 설명" />
-                          <T v="easy">{exp.easyText}</T>
+                          <View style={{ gap: 8 }}>
+                            {toBullets(exp.easyText).map((line, li) => (
+                              <T key={li} v="easy" style={{ fontSize: 15, lineHeight: 24 }}>
+                                {line}
+                              </T>
+                            ))}
+                          </View>
                           {exp.citations.length > 0 && (
                             <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 6, paddingTop: 10, borderTopWidth: 1, borderTopColor: c.line, borderStyle: 'dashed' }}>
                               <T v="label">근거 원문</T>

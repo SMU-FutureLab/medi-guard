@@ -77,7 +77,7 @@ export function Layout() {
           <p className="footer-note">
             MEDI GUARD는 공식 의약품 정보의 이해를 돕는 보조 서비스이며, 의사·약사의 진료나 복약지도를 대신하지 않습니다.
           </p>
-          <p className="footer-meta">팀 머니머니 · 상명대학교</p>
+          <p className="footer-meta">팀 케로케로 · 상명대학교</p>
         </div>
       </footer>
     </>

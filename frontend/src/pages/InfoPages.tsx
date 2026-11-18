@@ -44,7 +44,7 @@ export function AboutPage() {
       </section>
 
       <Disclaimer />
-      <p className="muted small">만든 사람: 상명대학교 팀 머니머니</p>
+      <p className="muted small">만든 사람: 상명대학교 팀 케로케로</p>
     </div>
   );
 }

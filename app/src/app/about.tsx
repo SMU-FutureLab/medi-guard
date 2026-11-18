@@ -30,27 +30,36 @@ const SECTIONS: { icon: IconName; title: string; items: string[]; numbered?: boo
   },
 ];
 
+/** 이 화면 본문 글자: 모두 같은 크기·줄 높이 */
+const TEXT = { fontSize: 15, lineHeight: 23 };
+
 export default function AboutScreen() {
   const { c } = useTheme();
   return (
     <Screen header={<PageTop title="서비스 안내" />}>
-      <T color={c.text2} style={{ fontSize: 17 }}>
-        MEDI GUARD는 식품의약품안전처의 공식 의약품 정보를 AI가 쉬운 말로 설명해 주는 서비스예요. 설명마다 근거가 된 공식 원문을 함께
-        보여드려요.
-      </T>
+      {/* 한 문장이 끝나면 다음 문단으로 */}
+      <View style={{ gap: 6 }}>
+        <T color={c.text2} style={TEXT}>
+          MEDI GUARD는 식품의약품안전처의 공식 의약품 정보를 AI가 쉬운 말로 설명해 주는 서비스예요.
+        </T>
+        <T color={c.text2} style={TEXT}>
+          설명마다 근거가 된 공식 원문을 함께 보여드려요.
+        </T>
+      </View>
       {SECTIONS.map((s) => (
         <Card key={s.title}>
           <Row gap={8}>
             <Icon name={s.icon} color={c.primary} />
             <T v="h3">{s.title}</T>
           </Row>
-          <View style={{ gap: 6 }}>
+          <View style={{ gap: 8 }}>
             {s.items.map((item, i) => (
-              <Row key={item} gap={10} style={{ alignItems: 'flex-start' }}>
-                <T v="bodyBold" color={c.primary} style={{ width: 16 }}>
+              // 번호·점과 글자를 같은 크기·줄 높이로 맞춰 첫 줄이 나란히 오게 한다
+              <Row key={item} gap={8} style={{ alignItems: 'flex-start' }}>
+                <T v="bodyBold" color={c.primary} style={[TEXT, { width: 18 }]}>
                   {s.numbered ? `${i + 1}.` : '•'}
                 </T>
-                <T style={{ flex: 1 }}>{item}</T>
+                <T style={[TEXT, { flex: 1 }]}>{item}</T>
               </Row>
             ))}
           </View>
@@ -58,7 +67,7 @@ export default function AboutScreen() {
       ))}
       <Disclaimer />
       <T v="small" color={c.muted}>
-        만든 사람: 상명대학교 팀 머니머니
+        만든 사람: 상명대학교 팀 케로케로
       </T>
     </Screen>
   );
