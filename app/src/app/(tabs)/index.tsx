@@ -1,5 +1,5 @@
 import { useRouter } from 'expo-router';
-import { Pressable, Text, View } from 'react-native';
+import { Pressable, Text, View, useWindowDimensions } from 'react-native';
 import { GradientPanel, Mascot, RoundButton } from '../../components/art';
 import { SearchBar } from '../../components/drug';
 import { Icon, type IconName } from '../../components/Icon';
@@ -133,18 +133,20 @@ function StatCard({
 }) {
   const { c } = useTheme();
   const soft = tone === 'soft';
+  // 좁은 폰에서는 라벨이 두 줄로 꺾이지 않게 간격을 조금 줄인다
+  const narrow = useWindowDimensions().width < 400;
   return (
     <Pressable
       onPress={onPress}
       style={({ pressed }) => [
-        { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 10, borderRadius: radius.lg, paddingVertical: 16, paddingHorizontal: 14, backgroundColor: soft ? c.primarySoft : c.card, opacity: pressed ? 0.85 : 1 },
+        { flex: 1, flexDirection: 'row', alignItems: 'center', gap: narrow ? 10 : 18, borderRadius: radius.lg, paddingVertical: 18, paddingHorizontal: narrow ? 14 : 20, backgroundColor: soft ? c.primarySoft : c.card, opacity: pressed ? 0.85 : 1 },
         !soft && [glass(c), shadow(c, 0.6)],
       ]}
     >
       <View style={{ width: 38, height: 38, borderRadius: 19, alignItems: 'center', justifyContent: 'center', backgroundColor: soft ? c.primaryStrong : c.surface2 }}>
         <Icon name={icon} size={18} color={soft ? c.onPrimary : c.text} />
       </View>
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, gap: 2 }}>
         <T v="small" color={c.text2}>
           {label}
         </T>
