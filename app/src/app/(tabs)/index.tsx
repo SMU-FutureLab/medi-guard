@@ -95,12 +95,12 @@ export default function HomeScreen() {
 
       {/* 그린 카드: 근거가 보이는 AI 설명 */}
       <Pressable onPress={() => router.push('/about')}>
-        <GradientPanel style={{ minHeight: 140 }}>
-          <T v="h2" color={c.onBlock} style={{ fontSize: 21 }}>
+        <GradientPanel style={{ minHeight: 140, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 64 }}>
+          <T v="h2" color={c.onBlock} style={{ fontSize: 21, textAlign: 'center' }}>
             {'근거가 보이는\nAI 설명'}
           </T>
           {/* 줄바꿈 위치를 직접 정해서 한 글자만 다음 줄로 넘어가지 않게 한다 */}
-          <T v="small" color={c.onBlockMuted} style={{ marginTop: 4, paddingRight: 60 }}>
+          <T v="small" color={c.onBlockMuted} style={{ marginTop: 4, textAlign: 'center' }}>
             {'설명마다 공식 원문 구절을\n함께 보여드려요.'}
           </T>
           <View style={{ position: 'absolute', right: 18, bottom: 18, width: 44, height: 44, borderRadius: 22, backgroundColor: c.surface, alignItems: 'center', justifyContent: 'center' }}>
