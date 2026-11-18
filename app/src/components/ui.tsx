@@ -20,6 +20,7 @@ import { fonts, glass, hasHangul, radius, shadow, useTheme } from '../theme/them
 import type { Source } from '../types';
 import { PILL_PHOTO_BG, imageSource } from '../api/images';
 import { BackgroundGlow, Mascot, RoundButton } from './art';
+import { TopTabs } from './TopTabs';
 import { Icon, type IconName } from './Icon';
 
 /* ───────── 글자 ───────── */
@@ -65,8 +66,6 @@ export function T({
 }
 
 /* ───────── 화면 틀 ───────── */
-/** 떠 있는 탭바에 가려지지 않도록 탭 화면 아래에 두는 여백 */
-export const TAB_BAR_SPACE = 110;
 
 export function Screen({
   children,
@@ -82,7 +81,7 @@ export function Screen({
   header?: ReactNode;
   scroll?: boolean;
   wide?: boolean;
-  /** 하단 탭 화면이면 true */
+  /** 탭 화면(홈·검색·기록·마이)이면 true: 상단 바 아래에 탭을 보여준다 */
   tabs?: boolean;
   footer?: ReactNode;
   contentStyle?: StyleProp<ViewStyle>;
@@ -97,9 +96,9 @@ export function Screen({
   return (
     <View style={{ flex: 1, backgroundColor: c.bg, paddingTop: header ? 0 : insets.top }}>
       <BackgroundGlow />
-      {header ? <TopBar>{header}</TopBar> : null}
+      {header ? <TopBar below={tabs ? <TopTabs /> : undefined}>{header}</TopBar> : null}
       {scroll ? (
-        <ScrollView contentContainerStyle={{ paddingTop: 14, paddingBottom: (tabs ? TAB_BAR_SPACE : 40) + insets.bottom }} keyboardShouldPersistTaps="handled">
+        <ScrollView contentContainerStyle={{ paddingTop: 14, paddingBottom: 40 + insets.bottom }} keyboardShouldPersistTaps="handled">
           {inner}
         </ScrollView>
       ) : (
@@ -111,7 +110,7 @@ export function Screen({
 }
 
 /** 화면 맨 위에 고정되는 상단 바. 흰 바탕 + 아래 구분선 + 옅은 그림자로 내용과 나눈다. */
-export function TopBar({ children }: { children: ReactNode }) {
+export function TopBar({ children, below }: { children: ReactNode; /** 제목 줄 아래에 붙는 내용 (예: 탭) */ below?: ReactNode }) {
   const { c } = useTheme();
   const insets = useSafeAreaInsets();
   return (
@@ -132,6 +131,7 @@ export function TopBar({ children }: { children: ReactNode }) {
       <View style={{ width: '100%', maxWidth: 640, alignSelf: 'center', paddingHorizontal: 18, minHeight: 62, paddingVertical: 9, justifyContent: 'center' }}>
         {children}
       </View>
+      {below ? <View style={{ width: '100%', maxWidth: 640, alignSelf: 'center', paddingHorizontal: 18 }}>{below}</View> : null}
     </View>
   );
 }
