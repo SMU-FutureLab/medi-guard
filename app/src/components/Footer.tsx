@@ -39,7 +39,7 @@ export function Footer() {
         {/* 로고 + 소개 */}
         <View style={{ gap: 6 }}>
           <LogoLockup height={20} />
-          <Text style={[small, { color: c.muted }]}>어려운 의약품 정보를, 쉬운 말로 잇는 MEDI GUARD.</Text>
+          <Text style={[small, { color: c.muted }]}>어려운 약 정보, 한 번에 이해되게.</Text>
         </View>
 
         {/* 메뉴 묶음 */}
