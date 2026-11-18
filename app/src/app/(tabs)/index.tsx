@@ -3,7 +3,8 @@ import { Pressable, Text, View } from 'react-native';
 import { USE_MOCK } from '../../api/client';
 import { GradientPanel, Mascot, RoundButton } from '../../components/art';
 import { SearchBar } from '../../components/drug';
-import { Icon, LogoMark, type IconName } from '../../components/Icon';
+import { Icon, type IconName } from '../../components/Icon';
+import { LogoLockup } from '../../components/logo';
 import { Row, Screen, T } from '../../components/ui';
 import { useAppStore } from '../../store/AppStore';
 import { fonts, glass, radius, shadow, useTheme } from '../../theme/theme';
@@ -20,12 +21,7 @@ export default function HomeScreen() {
     <Screen tabs contentStyle={{ gap: 14 }}>
       {/* 헤더: 로고 · 관심 의약품 · 마이 */}
       <Row style={{ justifyContent: 'space-between' }}>
-        <Row gap={10}>
-          <View style={[glass(c), { width: 44, height: 44, borderRadius: 22, alignItems: 'center', justifyContent: 'center' }, shadow(c, 0.6)]}>
-            <LogoMark size={24} />
-          </View>
-          <Text style={{ fontFamily: fonts.displayMedium, fontSize: 18, color: c.text, letterSpacing: -0.3 }}>MEDI GUARD</Text>
-        </Row>
+        <LogoLockup height={34} />
         <Row gap={10}>
           <RoundButton icon="star" label="관심 의약품" onPress={() => router.push('/favorites')} />
           <RoundButton icon="user" label="마이페이지" variant="primary" onPress={() => router.navigate('/my')} />

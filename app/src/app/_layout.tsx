@@ -4,6 +4,7 @@ import { NotoSansKR_500Medium } from '@expo-google-fonts/noto-sans-kr/500Medium'
 import { NotoSansKR_700Bold } from '@expo-google-fonts/noto-sans-kr/700Bold';
 import { Sora_600SemiBold } from '@expo-google-fonts/sora/600SemiBold';
 import { Sora_700Bold } from '@expo-google-fonts/sora/700Bold';
+import { Nunito_800ExtraBold } from '@expo-google-fonts/nunito/800ExtraBold';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
@@ -20,6 +21,7 @@ export default function RootLayout() {
   const [loaded, error] = useFonts({
     Sora_600SemiBold,
     Sora_700Bold,
+    Nunito_800ExtraBold,
     NotoSansKR_400Regular,
     NotoSansKR_500Medium,
     NotoSansKR_700Bold,

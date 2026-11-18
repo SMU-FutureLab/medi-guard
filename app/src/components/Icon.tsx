@@ -127,17 +127,6 @@ export function Icon({ name, size = 20, color, fill }: { name: IconName; size?: 
   );
 }
 
-/** 로고 마크: 초록·라임 두 색이 겹친 십자 */
-export function LogoMark({ size = 28, inverse = false }: { size?: number; inverse?: boolean }) {
-  const { c } = useTheme();
-  return (
-    <Svg width={size} height={size} viewBox="0 0 28 28">
-      <Rect x="2" y="10" width="24" height="8.5" rx="4.25" fill={c.lime} />
-      <Rect x="9.75" y="2" width="8.5" height="24" rx="4.25" fill={inverse ? c.onBlock : c.primary} />
-    </Svg>
-  );
-}
-
 /** 캡슐 일러스트 (의약품 이미지가 없을 때 쓰는 대표 이미지) */
 export function PillArt({ size = 96 }: { size?: number }) {
   const { c } = useTheme();
