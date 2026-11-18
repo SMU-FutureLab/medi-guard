@@ -69,7 +69,7 @@ export default function HomeScreen() {
 
       {/* 숫자 카드 2개 */}
       <Row gap={12} style={{ alignItems: 'stretch' }}>
-        <StatCard tone="soft" icon="clock" value={history.length} unit="개" label="최근 조회한 의약품" onPress={() => router.navigate('/history')} />
+        <StatCard tone="soft" icon="clock" value={history.length} unit="개" label="최근 본 의약품" onPress={() => router.navigate('/history')} />
         <StatCard tone="plain" icon="bookmark" value={favorites.items.length} unit="개" label="관심 의약품" onPress={() => router.push('/favorites')} />
       </Row>
 
@@ -95,17 +95,19 @@ export default function HomeScreen() {
 
       {/* 그린 카드: 근거가 보이는 AI 설명 */}
       <Pressable onPress={() => router.push('/about')}>
-        <GradientPanel style={{ minHeight: 140, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 64 }}>
-          <T v="h2" color={c.onBlock} style={{ fontSize: 21, textAlign: 'center' }}>
-            {'근거가 보이는\nAI 설명'}
+        {/* 제목 한 줄 + 설명 한 줄, 가운데 정렬. 화살표는 제목 옆에 둔다 */}
+        <GradientPanel style={{ minHeight: 120, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 16, gap: 6 }}>
+          <Row gap={8}>
+            <T v="h2" color={c.onBlock} style={{ fontSize: 21 }} numberOfLines={1}>
+              근거가 보이는 AI 설명
+            </T>
+            <View style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: c.surface, alignItems: 'center', justifyContent: 'center' }}>
+              <Icon name="chevronRight" size={16} color={c.primaryStrong} />
+            </View>
+          </Row>
+          <T v="small" color={c.onBlockMuted} style={{ textAlign: 'center' }} numberOfLines={1}>
+            설명마다 공식 원문 구절을 함께 보여드려요.
           </T>
-          {/* 줄바꿈 위치를 직접 정해서 한 글자만 다음 줄로 넘어가지 않게 한다 */}
-          <T v="small" color={c.onBlockMuted} style={{ marginTop: 4, textAlign: 'center' }}>
-            {'설명마다 공식 원문 구절을\n함께 보여드려요.'}
-          </T>
-          <View style={{ position: 'absolute', right: 18, bottom: 18, width: 44, height: 44, borderRadius: 22, backgroundColor: c.surface, alignItems: 'center', justifyContent: 'center' }}>
-            <Icon name="chevronRight" color={c.primaryStrong} />
-          </View>
         </GradientPanel>
       </Pressable>
 
@@ -145,7 +147,7 @@ function StatCard({
         <Icon name={icon} size={20} color={soft ? c.onPrimary : c.text} />
       </View>
       <View style={{ flex: 1 }}>
-        <T v="small" color={c.text2} numberOfLines={1}>
+        <T v="small" color={c.text2}>
           {label}
         </T>
         <Row gap={3} style={{ alignItems: 'baseline' }}>
