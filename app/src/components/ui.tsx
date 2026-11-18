@@ -92,7 +92,7 @@ export function Screen({
       <BackgroundGlow />
       {header ? <TopBar below={tabs ? <TopTabs /> : undefined}>{header}</TopBar> : null}
       {scroll ? (
-        <ScrollView contentContainerStyle={{ paddingTop: 14, paddingBottom: 40 + insets.bottom }} keyboardShouldPersistTaps="handled">
+        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingTop: 14, paddingBottom: 40 + insets.bottom }} keyboardShouldPersistTaps="handled">
           {inner}
         </ScrollView>
       ) : (

@@ -70,6 +70,7 @@ function Chat({ drug }: { drug: DrugDetail }) {
       </TopBar>
       <ScrollView
         ref={scrollRef}
+        showsVerticalScrollIndicator={false}
         onContentSizeChange={() => scrollRef.current?.scrollToEnd({ animated: true })}
         contentContainerStyle={{ paddingTop: 16, paddingBottom: 16 }}
         keyboardShouldPersistTaps="handled"
