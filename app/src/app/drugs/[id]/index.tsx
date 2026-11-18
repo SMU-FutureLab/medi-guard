@@ -114,11 +114,12 @@ export default function DrugDetailScreen() {
                 ['제형', d.form ?? '정보 없음'],
                 ['업체명', d.company],
               ].map(([k, v], i) => (
-                <View key={k} style={{ flexDirection: 'row', paddingVertical: 12, paddingHorizontal: 10, borderBottomWidth: i < 2 ? 1 : 0, borderBottomColor: c.line }}>
-                  <T v="label" style={{ width: 66 }}>
+                // 항목 이름과 값을 같은 크기·줄 높이로 맞춰 첫 줄이 나란히 오게 한다
+                <View key={k} style={{ flexDirection: 'row', gap: 12, paddingVertical: 14, paddingHorizontal: 10, borderBottomWidth: i < 2 ? 1 : 0, borderBottomColor: c.line }}>
+                  <T v="body" color={c.muted} style={{ width: 60, fontSize: 15, lineHeight: 22, fontFamily: fonts.medium }}>
                     {k}
                   </T>
-                  <T v="body" style={{ flex: 1, fontFamily: fonts.medium }}>
+                  <T v="body" style={{ flex: 1, fontSize: 15, lineHeight: 22, fontFamily: fonts.semibold }}>
                     {v}
                   </T>
                 </View>
