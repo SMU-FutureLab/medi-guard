@@ -74,7 +74,7 @@ function Chat({ drug }: { drug: DrugDetail }) {
         contentContainerStyle={{ paddingTop: 16, paddingBottom: 16 }}
         keyboardShouldPersistTaps="handled"
       >
-        <View style={{ width: '100%', maxWidth: 640, alignSelf: 'center', paddingHorizontal: 18, gap: 18 }}>
+        <View style={{ width: '100%', maxWidth: 640, alignSelf: 'center', paddingHorizontal: 24, gap: 18 }}>
 
           {/* 마스코트 패널: 대화 전에는 크게, 대화 중에는 작게 */}
           <GradientPanel style={{ padding: 16, minHeight: messages.length === 0 ? 300 : undefined }}>
@@ -173,8 +173,8 @@ function Chat({ drug }: { drug: DrugDetail }) {
       </ScrollView>
 
       {/* 입력창 */}
-      <View style={{ paddingHorizontal: 18, paddingTop: 10, paddingBottom: 10 + insets.bottom, backgroundColor: c.bg }}>
-        <Row gap={8} style={{ width: '100%', maxWidth: 640 - 36, alignSelf: 'center' }}>
+      <View style={{ paddingHorizontal: 24, paddingTop: 10, paddingBottom: 10 + insets.bottom, backgroundColor: c.bg }}>
+        <Row gap={8} style={{ width: '100%', maxWidth: 640 - 48, alignSelf: 'center' }}>
           <TextInput
             value={question}
             onChangeText={setQuestion}

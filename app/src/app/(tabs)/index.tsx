@@ -47,8 +47,8 @@ export default function HomeScreen() {
               식약처 공식 정보를 쉬운 말로 알려드려요.
             </T>
           </View>
-          <View style={{ marginRight: -12, marginTop: -6 }}>
-            <Mascot size={132} />
+          <View style={{ marginRight: -14, marginTop: -6 }}>
+            <Mascot size={112} />
           </View>
         </View>
         <Row wrap gap={8} style={{ marginTop: 14 }}>
@@ -74,7 +74,7 @@ export default function HomeScreen() {
       </Row>
 
       {/* 함께 먹는 약 카드 */}
-      <Pressable onPress={() => router.push('/interactions')} style={({ pressed }) => [{ ...glass(c), borderRadius: radius.xl, overflow: 'hidden', padding: 20, minHeight: 150, opacity: pressed ? 0.9 : 1 }, shadow(c, 0.6)]}>
+      <Pressable onPress={() => router.push('/interactions')} style={({ pressed }) => [{ ...glass(c), borderRadius: radius.xl, overflow: 'hidden', padding: 24, minHeight: 150, opacity: pressed ? 0.9 : 1 }, shadow(c, 0.6)]}>
         <T v="h2" style={{ fontSize: 21 }}>
           {'이 약들,\n같이 먹어도 될까요?'}
         </T>
@@ -95,19 +95,17 @@ export default function HomeScreen() {
 
       {/* 그린 카드: 근거가 보이는 AI 설명 */}
       <Pressable onPress={() => router.push('/about')}>
-        {/* 제목 한 줄 + 설명 한 줄, 가운데 정렬. 화살표는 제목 옆에 둔다 */}
-        <GradientPanel style={{ minHeight: 120, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 16, gap: 6 }}>
-          <Row gap={8}>
-            <T v="h2" color={c.onBlock} style={{ fontSize: 21 }} numberOfLines={1}>
-              근거가 보이는 AI 설명
-            </T>
-            <View style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: c.surface, alignItems: 'center', justifyContent: 'center' }}>
-              <Icon name="chevronRight" size={16} color={c.primaryStrong} />
-            </View>
-          </Row>
-          <T v="small" color={c.onBlockMuted} style={{ textAlign: 'center' }} numberOfLines={1}>
-            설명마다 공식 원문 구절을 함께 보여드려요.
+        <GradientPanel style={{ minHeight: 140 }}>
+          <T v="h2" color={c.onBlock} style={{ fontSize: 21 }}>
+            {'근거가 보이는\nAI 설명'}
           </T>
+          {/* 줄바꿈 위치를 직접 정해서 한 글자만 다음 줄로 넘어가지 않게 한다 */}
+          <T v="small" color={c.onBlockMuted} style={{ marginTop: 4, paddingRight: 60 }}>
+            {'설명마다 공식 원문 구절을\n함께 보여드려요.'}
+          </T>
+          <View style={{ position: 'absolute', right: 18, bottom: 18, width: 44, height: 44, borderRadius: 22, backgroundColor: c.surface, alignItems: 'center', justifyContent: 'center' }}>
+            <Icon name="chevronRight" color={c.primaryStrong} />
+          </View>
         </GradientPanel>
       </Pressable>
 
@@ -139,12 +137,12 @@ function StatCard({
     <Pressable
       onPress={onPress}
       style={({ pressed }) => [
-        { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 12, borderRadius: radius.lg, paddingVertical: 14, paddingHorizontal: 14, backgroundColor: soft ? c.primarySoft : c.card, opacity: pressed ? 0.85 : 1 },
+        { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 10, borderRadius: radius.lg, paddingVertical: 16, paddingHorizontal: 14, backgroundColor: soft ? c.primarySoft : c.card, opacity: pressed ? 0.85 : 1 },
         !soft && [glass(c), shadow(c, 0.6)],
       ]}
     >
-      <View style={{ width: 42, height: 42, borderRadius: 21, alignItems: 'center', justifyContent: 'center', backgroundColor: soft ? c.primaryStrong : c.surface2 }}>
-        <Icon name={icon} size={20} color={soft ? c.onPrimary : c.text} />
+      <View style={{ width: 38, height: 38, borderRadius: 19, alignItems: 'center', justifyContent: 'center', backgroundColor: soft ? c.primaryStrong : c.surface2 }}>
+        <Icon name={icon} size={18} color={soft ? c.onPrimary : c.text} />
       </View>
       <View style={{ flex: 1 }}>
         <T v="small" color={c.text2}>

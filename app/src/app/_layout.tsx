@@ -5,11 +5,19 @@ import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
+import { Platform } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AppStoreProvider } from '../store/AppStore';
 import { useTheme } from '../theme/theme';
 
 SplashScreen.preventAutoHideAsync();
+
+// 웹: 한글이 글자 단위로 끊기지 않고 단어(띄어쓰기) 단위로 줄바꿈되게 한다
+if (Platform.OS === 'web' && typeof document !== 'undefined') {
+  const style = document.createElement('style');
+  style.textContent = 'body { word-break: keep-all; }';
+  document.head.appendChild(style);
+}
 
 export default function RootLayout() {
   const { c, dark } = useTheme();

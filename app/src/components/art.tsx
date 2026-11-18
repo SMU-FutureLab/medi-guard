@@ -86,7 +86,7 @@ export function GradientPanel({ children, style }: { children: ReactNode; style?
       colors={[c.block, c.blockDeep]}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}
-      style={[{ borderRadius: radius.xl, overflow: 'hidden', padding: 20 }, shadow(c, 1.5), style]}
+      style={[{ borderRadius: radius.xl, overflow: 'hidden', padding: 24 }, shadow(c, 1.5), style]}
     >
       <View pointerEvents="none" style={{ position: 'absolute', width: 220, height: 220, borderRadius: 110, backgroundColor: c.glass, top: -90, right: -60 }} />
       <View pointerEvents="none" style={{ position: 'absolute', width: 140, height: 140, borderRadius: 70, backgroundColor: c.glass, bottom: -70, left: -40, opacity: 0.6 }} />

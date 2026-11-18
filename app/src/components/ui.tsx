@@ -52,7 +52,8 @@ export function T({
   // 제목·굵은 글씨는 Pretendard Bold, 작은 라벨은 SemiBold, 본문은 Regular
   const fontFamily = isHeading || v === 'bodyBold' ? fonts.bold : v === 'label' ? fonts.semibold : fonts.regular;
   return (
-    <Text style={[VARIANTS[v], { fontFamily, color: color ?? (v === 'label' ? c.muted : c.text) }, style]} {...rest}>
+    // 아이폰: 한글을 단어 단위로 줄바꿈
+    <Text lineBreakStrategyIOS="hangul-word" style={[VARIANTS[v], { fontFamily, color: color ?? (v === 'label' ? c.muted : c.text) }, style]} {...rest}>
       {children}
     </Text>
   );
@@ -82,7 +83,7 @@ export function Screen({
   const { c } = useTheme();
   const insets = useSafeAreaInsets();
   const inner = (
-    <View style={[{ width: '100%', maxWidth: wide ? 1040 : 640, alignSelf: 'center', paddingHorizontal: 18, gap: 16 }, contentStyle]}>
+    <View style={[{ width: '100%', maxWidth: wide ? 1040 : 640, alignSelf: 'center', paddingHorizontal: 24, gap: 16 }, contentStyle]}>
       {children}
     </View>
   );
@@ -121,10 +122,10 @@ export function TopBar({ children, below }: { children: ReactNode; /** 제목 �
         elevation: 2,
       }}
     >
-      <View style={{ width: '100%', maxWidth: 640, alignSelf: 'center', paddingHorizontal: 18, minHeight: 62, paddingVertical: 9, justifyContent: 'center' }}>
+      <View style={{ width: '100%', maxWidth: 640, alignSelf: 'center', paddingHorizontal: 24, minHeight: 62, paddingVertical: 9, justifyContent: 'center' }}>
         {children}
       </View>
-      {below ? <View style={{ width: '100%', maxWidth: 640, alignSelf: 'center', paddingHorizontal: 18 }}>{below}</View> : null}
+      {below ? <View style={{ width: '100%', maxWidth: 640, alignSelf: 'center', paddingHorizontal: 24 }}>{below}</View> : null}
     </View>
   );
 }
@@ -263,7 +264,7 @@ export function Row({ children, gap = 8, wrap, style }: { children: ReactNode; g
 export function Card({ children, style, padded = true }: { children: ReactNode; style?: StyleProp<ViewStyle>; padded?: boolean }) {
   const { c } = useTheme();
   return (
-    <View style={[glass(c), { borderRadius: radius.xl, padding: padded ? 20 : 0, gap: 12 }, shadow(c), style]}>
+    <View style={[glass(c), { borderRadius: radius.xl, padding: padded ? 24 : 0, gap: 12 }, shadow(c), style]}>
       {children}
     </View>
   );
