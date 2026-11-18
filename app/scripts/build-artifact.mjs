@@ -43,7 +43,7 @@ const page = `<title>MEDI GUARD</title>
 <script>(function(){var b=document.createElement('base');b.href=location.href.replace(/[?#].*$/,'').replace(/[^/]*$/,'');document.head.insertBefore(b,document.head.firstChild);})();</script>
 <meta name="description" content="공식 의약품 정보를 AI가 쉬운 말로 설명하는 MEDI GUARD 앱 프로토타입" />
 <style>
-  :root { --bg: #f2f7f4; }
+  :root { --bg: #ffffff; }
   @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #0c110e; color-scheme: dark; } }
   :root[data-theme="dark"] { --bg: #0c110e; color-scheme: dark; }
   html, body { height: 100%; }
