@@ -1,7 +1,7 @@
 import { useRouter, type Href } from 'expo-router';
 import { Pressable, Text, View } from 'react-native';
 import { GradientPanel, Mascot } from '../../components/art';
-import { DrugCard } from '../../components/drug';
+import { Thumb } from '../../components/drug';
 import { Icon, type IconName } from '../../components/Icon';
 import { BarTitle, Card, ListRow, Row, Screen, T } from '../../components/ui';
 import { useAppStore } from '../../store/AppStore';
@@ -72,15 +72,46 @@ export default function MyScreen() {
             </Pressable>
           )}
         </Row>
-        {history.length === 0 ? (
-          <View style={[glass(c), { borderRadius: radius.lg, paddingVertical: 20, paddingHorizontal: 20, alignItems: 'center', gap: 4 }]}>
-            <T v="small" color={c.muted}>
-              아직 조회한 의약품이 없어요.
-            </T>
-          </View>
-        ) : (
-          history.slice(0, 3).map((h) => <DrugCard key={h.drug.id} drug={h.drug} sub={`조회일 ${formatDateTime(h.viewedAt)}`} showTags={false} />)
-        )}
+        {/* 아래 서비스 안내 목록과 같은 모양: 한 카드 안에 구분선으로 나눈 행 */}
+        <Card padded={false} style={{ padding: 4, gap: 0, borderRadius: radius.lg }}>
+          {history.length === 0 ? (
+            <View style={{ paddingVertical: 18, alignItems: 'center' }}>
+              <T v="small" color={c.muted}>
+                아직 조회한 의약품이 없어요.
+              </T>
+            </View>
+          ) : (
+            history.slice(0, 3).map((h, i, arr) => (
+              <Pressable
+                key={h.drug.id}
+                accessibilityRole="button"
+                onPress={() => router.push({ pathname: '/drugs/[id]', params: { id: h.drug.id } })}
+                style={({ pressed }) => ({
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  gap: 14,
+                  paddingVertical: 12,
+                  paddingHorizontal: 14,
+                  borderBottomWidth: i < arr.length - 1 ? 1 : 0,
+                  borderBottomColor: c.line,
+                  borderRadius: 14,
+                  backgroundColor: pressed ? c.surface3 : 'transparent',
+                })}
+              >
+                <Thumb uri={h.drug.imageUrl} size={40} />
+                <View style={{ flex: 1 }}>
+                  <T v="bodyBold" style={{ fontSize: 16, lineHeight: 22 }} numberOfLines={1}>
+                    {h.drug.name}
+                  </T>
+                  <T v="label" style={{ fontFamily: fonts.regular }}>
+                    조회일 {formatDateTime(h.viewedAt)}
+                  </T>
+                </View>
+                <Icon name="chevronRight" color={c.muted} />
+              </Pressable>
+            ))
+          )}
+        </Card>
       </View>
 
       <Card padded={false} style={{ padding: 4, gap: 0, borderRadius: radius.lg }}>

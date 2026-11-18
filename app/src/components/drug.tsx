@@ -28,14 +28,14 @@ export function DrugTags({ drug }: { drug: DrugSummary }) {
   );
 }
 
-export function Thumb({ large = false, uri }: { large?: boolean; uri?: string }) {
+export function Thumb({ large = false, uri, size = 64 }: { large?: boolean; uri?: string; /** 동그란 썸네일 지름 */ size?: number }) {
   const { c } = useTheme();
   return (
     <View
       style={{
-        width: large ? '100%' : 64,
-        height: large ? 150 : 64,
-        borderRadius: large ? radius.lg : 32,
+        width: large ? '100%' : size,
+        height: large ? 150 : size,
+        borderRadius: large ? radius.lg : size / 2,
         backgroundColor: uri ? PILL_PHOTO_BG : large ? c.lime : c.mint,
         alignItems: 'center',
         justifyContent: 'center',
@@ -45,7 +45,7 @@ export function Thumb({ large = false, uri }: { large?: boolean; uri?: string })
       {uri ? (
         <Image source={imageSource(uri)} resizeMode="cover" style={{ width: '100%', height: '100%' }} accessibilityIgnoresInvertColors />
       ) : (
-        <PillArt size={large ? 120 : 46} />
+        <PillArt size={large ? 120 : size * 0.72} />
       )}
     </View>
   );
