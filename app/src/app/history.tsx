@@ -11,7 +11,7 @@ export default function HistoryScreen() {
   const { history, clearHistory } = useAppStore();
 
   return (
-    <Screen header={<PageTop title="조회 기록" />}>
+    <Screen header={<PageTop title="최근 본 의약품" />}>
       <T color={c.muted}>최근에 검색한 의약품을 확인할 수 있어요.</T>
       {history.length === 0 ? (
         <Empty title="아직 조회한 의약품이 없어요." action={<Button label="의약품 검색하기" icon="search" href="/search" />} />
