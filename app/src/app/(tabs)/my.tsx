@@ -62,59 +62,63 @@ export default function MyScreen() {
         </Row>
       </GradientPanel>
 
-      {/* 조회 기록: 최근 3개만 보여주고 전체는 조회 기록 화면에서 */}
-      <View style={{ gap: 10 }}>
-        <Row style={{ justifyContent: 'space-between' }}>
-          <T v="h3">최근 본 의약품</T>
+      {/* 한 카드 안에: 최근 본 의약품(최대 3개) → 구분선 → 서비스 안내·FAQ */}
+      <Card padded={false} style={{ padding: 4, gap: 0, borderRadius: radius.lg }}>
+        <Row style={{ justifyContent: 'space-between', paddingHorizontal: 14, paddingTop: 12, paddingBottom: 4 }}>
+          <T v="label" style={{ fontFamily: fonts.semibold }}>
+            최근 본 의약품
+          </T>
           {history.length > 0 && (
-            <Pressable onPress={() => router.push('/history')} style={[glass(c), { borderRadius: radius.pill, paddingVertical: 5, paddingHorizontal: 12 }]}>
-              <Text style={{ fontFamily: fonts.medium, fontSize: 13, color: c.text2 }}>전체 보기</Text>
+            <Pressable onPress={() => router.push('/history')} accessibilityRole="link" hitSlop={8}>
+              {({ pressed }) => (
+                <Row gap={2}>
+                  <Text style={{ fontFamily: fonts.medium, fontSize: 13, color: pressed ? c.primaryStrong : c.text2 }}>전체 보기</Text>
+                  <Icon name="chevronRight" size={14} color={pressed ? c.primaryStrong : c.text2} />
+                </Row>
+              )}
             </Pressable>
           )}
         </Row>
-        {/* 아래 서비스 안내 목록과 같은 모양: 한 카드 안에 구분선으로 나눈 행 */}
-        <Card padded={false} style={{ padding: 4, gap: 0, borderRadius: radius.lg }}>
-          {history.length === 0 ? (
-            <View style={{ paddingVertical: 18, alignItems: 'center' }}>
-              <T v="small" color={c.muted}>
-                아직 조회한 의약품이 없어요.
-              </T>
-            </View>
-          ) : (
-            history.slice(0, 3).map((h, i, arr) => (
-              <Pressable
-                key={h.drug.id}
-                accessibilityRole="button"
-                onPress={() => router.push({ pathname: '/drugs/[id]', params: { id: h.drug.id } })}
-                style={({ pressed }) => ({
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  gap: 14,
-                  paddingVertical: 12,
-                  paddingHorizontal: 14,
-                  borderBottomWidth: i < arr.length - 1 ? 1 : 0,
-                  borderBottomColor: c.line,
-                  borderRadius: 14,
-                  backgroundColor: pressed ? c.surface3 : 'transparent',
-                })}
-              >
-                <Thumb uri={h.drug.imageUrl} size={40} />
-                <View style={{ flex: 1 }}>
-                  <T v="bodyBold" style={{ fontSize: 16, lineHeight: 22 }} numberOfLines={1}>
-                    {h.drug.name}
-                  </T>
-                  <T v="label" style={{ fontFamily: fonts.regular }}>
-                    조회일 {formatDateTime(h.viewedAt)}
-                  </T>
-                </View>
-                <Icon name="chevronRight" color={c.muted} />
-              </Pressable>
-            ))
-          )}
-        </Card>
-      </View>
 
-      <Card padded={false} style={{ padding: 4, gap: 0, borderRadius: radius.lg }}>
+        {history.length === 0 ? (
+          <View style={{ paddingVertical: 14, paddingHorizontal: 14 }}>
+            <T v="small" color={c.muted}>
+              아직 조회한 의약품이 없어요.
+            </T>
+          </View>
+        ) : (
+          history.slice(0, 3).map((h) => (
+            <Pressable
+              key={h.drug.id}
+              accessibilityRole="button"
+              onPress={() => router.push({ pathname: '/drugs/[id]', params: { id: h.drug.id } })}
+              style={({ pressed }) => ({
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: 14,
+                paddingVertical: 10,
+                paddingHorizontal: 14,
+                borderRadius: 14,
+                backgroundColor: pressed ? c.surface3 : 'transparent',
+              })}
+            >
+              <Thumb uri={h.drug.imageUrl} size={36} />
+              <View style={{ flex: 1 }}>
+                <T v="bodyBold" style={{ fontSize: 15, lineHeight: 21 }} numberOfLines={1}>
+                  {h.drug.name}
+                </T>
+                <T v="label" style={{ fontFamily: fonts.regular, fontSize: 12, lineHeight: 16 }}>
+                  조회일 {formatDateTime(h.viewedAt)}
+                </T>
+              </View>
+              <Icon name="chevronRight" color={c.muted} />
+            </Pressable>
+          ))
+        )}
+
+        {/* 구역 구분선 */}
+        <View style={{ height: 1, backgroundColor: c.line, marginHorizontal: 14, marginVertical: 6 }} />
+
         {rows.map((r, i) => (
           <ListRow key={r.label} icon={r.icon} label={r.label} last={i === rows.length - 1} onPress={() => router.push(r.href)} />
         ))}
