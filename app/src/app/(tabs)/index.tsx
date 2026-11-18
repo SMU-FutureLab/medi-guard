@@ -32,30 +32,7 @@ export default function HomeScreen() {
         </Row>
       }
     >
-
-      {/* 제목 + 상태 칩 */}
-      <Row style={{ justifyContent: 'space-between', alignItems: 'flex-end', marginTop: 4 }}>
-        <T v="h1" style={{ flex: 1, fontSize: 27, lineHeight: 35 }}>
-          {'어려운 약 설명서,\n쉽게 읽어요'}
-        </T>
-        <View style={{ borderRadius: radius.pill, borderWidth: 1.5, borderColor: c.primary, paddingVertical: 5, paddingHorizontal: 12, marginBottom: 4 }}>
-          <T v="label" color={c.primaryStrong}>
-            AI 설명
-          </T>
-        </View>
-      </Row>
-      {USE_MOCK && (
-        <Row gap={6}>
-          <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: c.warn }} />
-          <T v="label" style={{ fontFamily: fonts.regular, flex: 1 }}>
-            예시 데이터로 동작 중이에요. 실제 의약품 정보와 다를 수 있어요.
-          </T>
-        </Row>
-      )}
-
-      <SearchBar variant="hero" onSearch={search} placeholder="약 이름을 검색해 보세요" />
-
-      {/* 마스코트 패널 */}
+      {/* 맨 위 배너: 마스코트 메디 */}
       <GradientPanel style={{ paddingVertical: 22, minHeight: 210 }}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <View style={{ flex: 1, gap: 8, zIndex: 1 }}>
@@ -88,6 +65,17 @@ export default function HomeScreen() {
         </Row>
       </GradientPanel>
 
+      {/* 배너 바로 아래 검색창 */}
+      <SearchBar variant="hero" onSearch={search} placeholder="약 이름을 검색해 보세요" />
+      {USE_MOCK && (
+        <Row gap={6} style={{ marginTop: -4 }}>
+          <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: c.warn }} />
+          <T v="label" style={{ fontFamily: fonts.regular, flex: 1 }}>
+            예시 데이터로 동작 중이에요. 실제 의약품 정보와 다를 수 있어요.
+          </T>
+        </Row>
+      )}
+
       {/* 숫자 카드 2개 */}
       <Row gap={12} style={{ alignItems: 'stretch' }}>
         <StatCard tone="soft" icon="clock" value={history.length} unit="개" label="최근 조회한 의약품" onPress={() => router.navigate('/history')} />
@@ -97,15 +85,15 @@ export default function HomeScreen() {
       {/* 함께 먹는 약 카드 */}
       <Pressable onPress={() => router.push('/interactions')} style={({ pressed }) => [{ ...glass(c), borderRadius: radius.xl, overflow: 'hidden', padding: 20, minHeight: 150, opacity: pressed ? 0.9 : 1 }, shadow(c, 0.6)]}>
         <T v="h2" style={{ fontSize: 21 }}>
-          {'함께 먹는 약,\n같이 확인해요'}
+          {'이 약들,\n같이 먹어도 될까요?'}
         </T>
         <T v="small" color={c.muted} style={{ marginTop: 4 }}>
-          병용금기 · 성분중복
+          먹고 있는 약을 담으면, 함께 먹으면 안 되는 조합을 알려드려요.
         </T>
         <Row style={{ justifyContent: 'space-between', marginTop: 16 }}>
           <View style={{ backgroundColor: c.mint, borderRadius: radius.pill, paddingVertical: 5, paddingHorizontal: 12 }}>
             <T v="label" color={c.primaryStrong}>
-              식약처 DUR 기반
+              식약처 공식 정보로 확인
             </T>
           </View>
           <View style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: c.primaryStrong, alignItems: 'center', justifyContent: 'center' }}>
@@ -165,7 +153,7 @@ function StatCard({
         <Icon name={icon} color={soft ? c.onPrimary : c.text} />
       </View>
       <View>
-        <Row gap={4} style={{ alignItems: 'baseline', justifyContent: 'flex-end' }}>
+        <Row gap={4} style={{ alignItems: 'baseline' }}>
           <Text style={{ fontFamily: fonts.display, fontSize: 28, color: c.text }}>{value}</Text>
           <T v="small" color={c.muted}>
             {unit}
