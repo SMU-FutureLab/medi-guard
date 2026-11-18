@@ -98,7 +98,7 @@ export default function DrugDetailScreen() {
           />
       </TopBar>
       <ScrollView ref={scrollRef} contentContainerStyle={{ paddingTop: 16, paddingBottom: 40 + insets.bottom }}>
-        <View style={{ width: '100%', maxWidth: 720, alignSelf: 'center', paddingHorizontal: 16, gap: 16 }}>
+        <View style={{ width: '100%', maxWidth: 640, alignSelf: 'center', paddingHorizontal: 18, gap: 16 }}>
           <View style={{ marginTop: -6 }}>
             <DrugTags drug={d} />
           </View>
