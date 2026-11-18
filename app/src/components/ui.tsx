@@ -303,8 +303,13 @@ export function ListRow({
         borderRadius: 14,
       })}
     >
-      {icon && <Icon name={icon} size={22} color={iconColor ?? c.primary} />}
-      <T v="bodyBold" style={{ flex: 1 }}>
+      {/* 한글 글자는 줄 안에서 아래쪽에 그려져서, 아이콘을 1.5px 내려 눈으로 보기에 가운데를 맞춘다 */}
+      {icon && (
+        <View style={{ transform: [{ translateY: 1.5 }] }}>
+          <Icon name={icon} size={22} color={iconColor ?? c.primary} />
+        </View>
+      )}
+      <T v="bodyBold" style={{ flex: 1, fontSize: 16, lineHeight: 22 }}>
         {label}
       </T>
       {right ?? <Icon name="chevronRight" color={c.muted} />}
