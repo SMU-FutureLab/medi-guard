@@ -1,6 +1,5 @@
 import { useRouter } from 'expo-router';
 import { Pressable, Text, View } from 'react-native';
-import { USE_MOCK } from '../../api/client';
 import { GradientPanel, Mascot, RoundButton } from '../../components/art';
 import { SearchBar } from '../../components/drug';
 import { Icon, type IconName } from '../../components/Icon';
@@ -67,14 +66,6 @@ export default function HomeScreen() {
 
       {/* 배너 바로 아래 검색창 */}
       <SearchBar variant="hero" onSearch={search} placeholder="약 이름을 검색해 보세요" />
-      {USE_MOCK && (
-        <Row gap={6} style={{ marginTop: -4 }}>
-          <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: c.warn }} />
-          <T v="label" style={{ fontFamily: fonts.regular, flex: 1 }}>
-            예시 데이터로 동작 중이에요. 실제 의약품 정보와 다를 수 있어요.
-          </T>
-        </Row>
-      )}
 
       {/* 숫자 카드 2개 */}
       <Row gap={12} style={{ alignItems: 'stretch' }}>
