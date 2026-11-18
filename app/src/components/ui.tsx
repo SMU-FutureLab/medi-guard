@@ -19,7 +19,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { fonts, glass, hasHangul, radius, shadow, useTheme } from '../theme/theme';
 import type { Source } from '../types';
 import { PILL_PHOTO_BG, imageSource } from '../api/images';
-import { BackgroundGlow, RoundButton } from './art';
+import { BackgroundGlow, Mascot, RoundButton } from './art';
 import { Icon, type IconName } from './Icon';
 
 /* ───────── 글자 ───────── */
@@ -400,14 +400,17 @@ export function Skeleton({ lines = 3 }: { lines?: number }) {
 export function Empty({ title, desc, action }: { title: string; desc?: string; action?: ReactNode }) {
   const { c } = useTheme();
   return (
-    <View style={{ alignItems: 'center', gap: 10, paddingVertical: 48, paddingHorizontal: 16, ...glass(c), borderRadius: radius.xl }}>
-      <T v="bodyBold">{title}</T>
+    <View style={[{ alignItems: 'center', gap: 8, paddingVertical: 28, paddingHorizontal: 20, ...glass(c), borderRadius: radius.xl }, shadow(c, 0.5)]}>
+      <Mascot size={96} halo="mint" />
+      <T v="bodyBold" style={{ textAlign: 'center' }}>
+        {title}
+      </T>
       {desc ? (
         <T v="small" color={c.muted} style={{ textAlign: 'center' }}>
           {desc}
         </T>
       ) : null}
-      {action}
+      {action ? <View style={{ alignItems: 'center', marginTop: 6 }}>{action}</View> : null}
     </View>
   );
 }
