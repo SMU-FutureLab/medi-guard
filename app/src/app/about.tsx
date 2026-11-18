@@ -32,17 +32,19 @@ const SECTIONS: { icon: IconName; title: string; items: string[]; numbered?: boo
 
 /** 이 화면 본문 글자: 모두 같은 크기·줄 높이 */
 const TEXT = { fontSize: 15, lineHeight: 23 };
+/** 맨 위 소개 글: 카드 안 글자보다 한 단계 작게 */
+const INTRO = { fontSize: 13, lineHeight: 20 };
 
 export default function AboutScreen() {
   const { c } = useTheme();
   return (
     <Screen header={<PageTop title="서비스 안내" />}>
       {/* 한 문장이 끝나면 다음 문단으로 */}
-      <View style={{ gap: 6 }}>
-        <T color={c.text2} style={TEXT}>
+      <View style={{ gap: 2 }}>
+        <T color={c.text2} style={INTRO}>
           MEDI GUARD는 식품의약품안전처의 공식 의약품 정보를 AI가 쉬운 말로 설명해 주는 서비스예요.
         </T>
-        <T color={c.text2} style={TEXT}>
+        <T color={c.text2} style={INTRO}>
           설명마다 근거가 된 공식 원문을 함께 보여드려요.
         </T>
       </View>
