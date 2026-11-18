@@ -18,7 +18,7 @@ export function TopTabs() {
   const isActive = (href: Href) => (href === '/' ? pathname === '/' : pathname.startsWith(String(href)));
 
   return (
-    <View accessibilityRole="tablist" style={{ flexDirection: 'row', gap: 4, marginLeft: -12 }}>
+    <View accessibilityRole="tablist" style={{ flexDirection: 'row', gap: 8, justifyContent: 'center' }}>
       {TABS.map((t) => {
         const active = isActive(t.href);
         return (
