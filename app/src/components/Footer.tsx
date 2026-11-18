@@ -1,4 +1,5 @@
 // 화면 맨 아래 푸터: 로고·소개 / 메뉴 묶음 / 안내 문구·저작권
+// 회색 바탕으로 본문과 확실히 나누고, 세로 높이는 낮게 유지한다.
 import { useRouter, type Href } from 'expo-router';
 import { Pressable, Text, View } from 'react-native';
 import { fonts, useTheme } from '../theme/theme';
@@ -33,21 +34,19 @@ export function Footer() {
   const router = useRouter();
 
   return (
-    <View style={{ marginTop: 40, backgroundColor: c.surface, borderTopWidth: 1, borderTopColor: c.line }}>
-      <View style={{ width: '100%', maxWidth: 640, alignSelf: 'center', paddingHorizontal: 24, paddingTop: 32, paddingBottom: 28 }}>
+    <View style={{ marginTop: 36, backgroundColor: c.surface2 }}>
+      <View style={{ width: '100%', maxWidth: 640, alignSelf: 'center', paddingHorizontal: 24, paddingTop: 22, paddingBottom: 18 }}>
         {/* 로고 + 소개 */}
-        <View style={{ gap: 10 }}>
-          <LogoLockup height={26} />
-          <Text style={[small, { color: c.muted }]}>
-            {'어려운 의약품 정보를, 쉬운 말로 잇는 MEDI GUARD.\n식약처 공식 정보와 근거 원문을 함께 보여드려요.'}
-          </Text>
+        <View style={{ gap: 6 }}>
+          <LogoLockup height={20} />
+          <Text style={[small, { color: c.muted }]}>어려운 의약품 정보를, 쉬운 말로 잇는 MEDI GUARD.</Text>
         </View>
 
         {/* 메뉴 묶음 */}
-        <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 26, rowGap: 22 }}>
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 16, rowGap: 14 }}>
           {COLUMNS.map((col) => (
-            <View key={col.title} style={{ flexBasis: '33.33%', flexGrow: 1, minWidth: 110, gap: 8 }}>
-              <Text style={{ fontFamily: fonts.bold, fontSize: 13, lineHeight: 18, color: c.text }}>{col.title}</Text>
+            <View key={col.title} style={{ flexBasis: '33.33%', flexGrow: 1, minWidth: 110, gap: 4 }}>
+              <Text style={{ fontFamily: fonts.bold, fontSize: 12, lineHeight: 18, color: c.text, marginBottom: 2 }}>{col.title}</Text>
               {col.links.map((l) =>
                 l.href ? (
                   <Pressable key={l.label} accessibilityRole="link" onPress={() => router.push(l.href!)}>
@@ -64,11 +63,11 @@ export function Footer() {
         </View>
 
         {/* 구분선 + 안내 + 저작권 */}
-        <View style={{ height: 1, backgroundColor: c.line, marginTop: 28, marginBottom: 18 }} />
-        <Text style={[small, { color: c.muted, fontSize: 12, lineHeight: 18, textAlign: 'center' }]}>
+        <View style={{ height: 1, backgroundColor: c.line, marginTop: 16, marginBottom: 12 }} />
+        <Text style={[small, { color: c.muted, fontSize: 11, lineHeight: 16, textAlign: 'center' }]}>
           MEDI GUARD는 공식 의약품 정보의 이해를 돕는 보조 서비스이며, 의사·약사의 진료나 복약지도를 대신하지 않습니다.
         </Text>
-        <Text style={[small, { color: c.muted, fontSize: 12, lineHeight: 18, textAlign: 'center', marginTop: 6 }]}>
+        <Text style={[small, { color: c.muted, fontSize: 11, lineHeight: 16, textAlign: 'center', marginTop: 2 }]}>
           © 2026 MEDI GUARD · 상명대학교 팀 케로케로
         </Text>
       </View>
@@ -76,4 +75,4 @@ export function Footer() {
   );
 }
 
-const small = { fontFamily: fonts.regular, fontSize: 13, lineHeight: 20 };
+const small = { fontFamily: fonts.regular, fontSize: 12, lineHeight: 18 };
