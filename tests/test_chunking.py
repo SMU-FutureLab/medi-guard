@@ -1,6 +1,6 @@
 import pytest
 
-from chunking import split_text
+from services.chunking_service import split_text
 
 
 def test_empty_text():

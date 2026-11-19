@@ -1,9 +1,8 @@
-
 import os
 import unittest
 from unittest.mock import Mock, patch
 
-from analyze_medicine_data import get_items, fetch_medicines
+from scripts.analyze_medicine_data import get_items, fetch_medicines
 
 
 class TestGetItems(unittest.TestCase):
@@ -66,7 +65,7 @@ class TestGetItems(unittest.TestCase):
 class TestFetchMedicines(unittest.TestCase):
 
     @patch.dict(os.environ, {"DATA_GO_KR_SERVICE_KEY": "test-key"})
-    @patch("analyze_medicine_data.requests.get")
+    @patch("scripts.analyze_medicine_data.requests.get")
     def test_successful_request(self, mock_get):
         mock_response = Mock()
         mock_response.json.return_value = {

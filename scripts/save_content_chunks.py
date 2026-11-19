@@ -1,9 +1,7 @@
-
 import logging
 
 from database import get_connection
-from chunking import split_text
-
+from services.chunking_service import split_text
 
 logging.basicConfig(
     level=logging.INFO,

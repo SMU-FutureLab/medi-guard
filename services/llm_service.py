@@ -21,7 +21,7 @@ def get_gemini_client():
 
     return genai.Client(
         api_key=api_key,
-        http_options={"timeout": 20000},
+        http_options={"timeout": 60000},
     )
 
 

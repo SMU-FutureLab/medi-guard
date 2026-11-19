@@ -3,7 +3,7 @@ import logging
 
 from dotenv import load_dotenv
 
-from analyze_medicine_data import fetch_medicines
+from scripts.analyze_medicine_data import fetch_medicines
 from database import get_connection
 
 

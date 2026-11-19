@@ -5,6 +5,7 @@ from services.medicine_service import get_medicine_detail
 from services.retrieval_service import search_relevant_chunks
 from services.evidence_service import check_evidence_sufficiency
 from services.llm_service import generate_medicine_explanation
+from services.dosage_validation_service import validate_dosage
 
 
 router = APIRouter(
@@ -17,6 +18,9 @@ class ExplanationRequest(BaseModel):
     item_seq: str = Field(..., min_length=1)
     question: str = Field(..., min_length=1)
     limit: int = Field(default=5, ge=1, le=10)
+
+    age_years: int | None = Field(default=None, ge=0, le=120)
+    weight_kg: float | None = Field(default=None, gt=0, le=300)
 
 
 @router.post("")
@@ -33,6 +37,50 @@ def create_explanation(request: ExplanationRequest):
             )
 
         item_name = medicine["item_name"]
+
+        # 2. 복용량 관련 질문인지 확인
+        dosage_keywords = (
+            "복용량",
+            "1회 용량",
+            "1회 복용량",
+            "몇 mg",
+            "몇밀리그램",
+            "몇 알",
+            "몇알",
+            "몇 정",
+            "몇정",
+            "몇 포",
+            "몇포",
+            "하루 최대",
+            "최대 복용량",
+            "mg/kg",
+        )
+
+        is_dosage_question = any(
+            keyword in request.question
+            for keyword in dosage_keywords
+        )
+
+        # 3. 복용량 질문이면 식약처 공식 복용법으로 검증
+        if is_dosage_question:
+            dosage_result = validate_dosage(
+                medicine_contents=medicine.get("contents", []),
+                age_years=request.age_years,
+                weight_kg=request.weight_kg,
+            )
+
+            if not dosage_result["can_provide_specific_dose"]:
+                return {
+                    "item_seq": request.item_seq,
+                    "item_name": item_name,
+                    "question": request.question,
+                    "intent": "USAGE",
+                    "status": dosage_result["status"],
+                    "answer": None,
+                    "evidence": [],
+                    "dosage_validation": dosage_result,
+                    "notice": dosage_result["reason"],
+                }
 
         # 2. RAG 근거 검색
         search_results = search_relevant_chunks(
