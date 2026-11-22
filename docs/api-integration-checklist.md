@@ -214,9 +214,21 @@
 5. **함께 먹는 약(DUR) API** 범위 결정 (4-1)
 6. 서버 주소 공유 (프론트 `.env`의 `EXPO_PUBLIC_API_BASE_URL`에 넣음)
 
-## 프론트가 할 것
+## 프론트가 할 것 (완료)
 
-1. 주소를 `/api/v1/...`로 변경, 백엔드 응답 → 프론트 형식 **변환 코드(adapter)** 추가
-2. 에러 응답 `detail` 읽기
-3. 질문 응답 `status`별 화면 처리, `notice` 표시
-4. ID를 `item_seq`로 사용 (예시 데이터 ID 교체)
+- [x] 주소를 `/api/v1/...`로 변경, 백엔드 응답 → 프론트 형식 변환 코드 추가 (`app/src/api/adapter.ts`)
+- [x] 에러 응답 `detail` 읽기
+- [x] 질문 응답 `status`별 화면 처리, `notice` 표시
+- [x] ID를 `item_seq`로 사용
+- [x] 업체명·주성분·사진이 없어도 화면이 깨지지 않게 처리 (빈 칸 숨김, 기본 그림)
+- [x] 항목별 쉬운 설명: 전용 API가 생기기 전까지 질문 API를 항목마다 불러 대신함
+- [x] 함께 먹는 약: 백엔드 API가 생기기 전까지 "준비 중" 안내 (예시 데이터 모드에서는 시연 가능)
+
+### 실제 백엔드로 실행하는 법
+
+`app/.env` 파일을 만들고 아래처럼 적은 뒤 `npx expo start --web`
+
+```
+EXPO_PUBLIC_USE_MOCK=false
+EXPO_PUBLIC_API_BASE_URL=http://localhost:8000
+```

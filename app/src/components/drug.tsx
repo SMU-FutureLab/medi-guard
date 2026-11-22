@@ -9,6 +9,8 @@ import { Icon, PillArt } from './Icon';
 import { T } from './ui';
 
 export function ingredientLine(d: DrugSummary) {
+  // 백엔드 데이터에 주성분이 없으면 업체명을 대신 보여준다
+  if (d.ingredients.length === 0) return d.company;
   if (d.ingredients.length === 1) return [d.ingredients[0], d.strength].filter(Boolean).join(' ');
   return `${d.ingredients[0]} 외 ${d.ingredients.length - 1}종`;
 }

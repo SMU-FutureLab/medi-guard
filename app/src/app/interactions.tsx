@@ -55,7 +55,7 @@ export default function InteractionsScreen() {
                 <View style={{ flex: 1 }}>
                   <T v="bodyBold">{d.name}</T>
                   <T v="small" color={c.muted}>
-                    {d.ingredients.join(', ')}
+                    {d.ingredients.join(', ') || d.company}
                   </T>
                 </View>
                 <Button small variant={medList.has(d.id) ? 'ghost' : 'dark'} disabled={medList.has(d.id)} label={medList.has(d.id) ? '담김' : '담기'} onPress={() => medList.add(d)} />

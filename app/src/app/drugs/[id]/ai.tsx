@@ -235,6 +235,11 @@ function Answer({ drug, response }: { drug: DrugDetail; response: AskResponse })
             <T style={{ flex: 1 }}>{b}</T>
           </Row>
         ))}
+        {response.notice ? (
+          <T v="label" style={{ fontFamily: fonts.regular, marginTop: 4 }}>
+            {response.notice}
+          </T>
+        ) : null}
       </Bubble>
       {response.citations.length > 0 && (
         <View style={[glass(c), { borderRadius: radius.lg, overflow: 'hidden' }, shadow(c, 0.5)]}>

@@ -92,6 +92,8 @@ export interface AskResponse {
   answerable: boolean;
   answer: string;
   citations: Citation[];
+  /** 백엔드 안내 문구 (예: "AI 설명은 공식 정보를 바탕으로 생성되었습니다…") */
+  notice?: string;
 }
 
 export type InteractionType = '병용금기' | '동일성분중복';

@@ -107,16 +107,22 @@ export default function DrugDetailScreen() {
           {/* 사진 (패키지 · 알약 모양) */}
           <DrugGallery drug={d} />
 
-          {/* 정보 표 */}
+          {/* 정보 표 (보여줄 값이 하나도 없으면 숨김) */}
+          {(d.ingredients.length > 0 || d.form || d.company) && (
           <Card style={{ paddingVertical: 6, paddingHorizontal: 10, gap: 0 }}>
             <View>
-              {[
-                ['주성분', d.ingredients.length === 1 ? ingredientLine(d) : d.ingredients.join(', ')],
-                ['제형', d.form ?? '정보 없음'],
-                ['업체명', d.company],
-              ].map(([k, v], i) => (
+              {(
+                [
+                  ['주성분', d.ingredients.length === 1 ? ingredientLine(d) : d.ingredients.join(', ')],
+                  ['제형', d.form ?? ''],
+                  ['업체명', d.company],
+                ] as [string, string][]
+              )
+                // 값이 없는 줄은 숨긴다 (백엔드 데이터에 주성분·제형이 없을 수 있음)
+                .filter(([, v]) => v)
+                .map(([k, v], i, rows) => (
                 // 항목 이름과 값을 같은 크기·줄 높이로 맞춰 첫 줄이 나란히 오게 한다
-                <View key={k} style={{ flexDirection: 'row', gap: 12, paddingVertical: 14, paddingHorizontal: 10, borderBottomWidth: i < 2 ? 1 : 0, borderBottomColor: c.line }}>
+                <View key={k} style={{ flexDirection: 'row', gap: 12, paddingVertical: 14, paddingHorizontal: 10, borderBottomWidth: i < rows.length - 1 ? 1 : 0, borderBottomColor: c.line }}>
                   <T v="body" color={c.muted} style={{ width: 60, fontSize: 15, lineHeight: 22, fontFamily: fonts.medium }}>
                     {k}
                   </T>
@@ -127,6 +133,7 @@ export default function DrugDetailScreen() {
               ))}
             </View>
           </Card>
+          )}
           <SourceInfo source={d.source} />
 
           {/* 탭 */}
