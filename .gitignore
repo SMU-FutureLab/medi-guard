@@ -1,0 +1,15 @@
+.env
+.env.*
+__pycache__/
+*.py[cod]
+*.class
+.venv/
+venv/
+env/
+.pytest_cache/
+*.log
+*.dump
+*.sql.backup
+*.bak
+.vscode/
+.idea/
