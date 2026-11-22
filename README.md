@@ -10,7 +10,7 @@ MEDI GUARD는 공식 의약품 정보를 기반으로 사용자가 의약품에 
 
 단순한 AI 응답에 의존하지 않고, 의약품 관련 정보를 검색하고 답변에 활용할 근거를 구성하는 과정을 통해 정보 중심의 설명을 제공하는 것을 목표로 합니다.
 
----
+
 
 ## 02. Key Features
 
@@ -33,7 +33,7 @@ MEDI GUARD는 공식 의약품 정보를 기반으로 사용자가 의약품에 
 - 복용량 관련 입력값 검증
 - 복용량 검증 로직을 통한 입력 정보 확인
 
----
+
 
 ## 03. AI Processing Pipeline
 
@@ -66,7 +66,7 @@ AI Medicine Explanation
 | Evidence | 답변 생성에 활용할 근거 구성 |
 | LLM | 근거 정보를 활용한 AI 설명 생성 |
 
----
+
 
 ## 04. Tech Stack
 
@@ -101,7 +101,7 @@ AI Medicine Explanation
 |---|---|
 | Pytest | Backend Testing |
 
----
+
 
 ## 05. Backend Architecture
 
@@ -199,7 +199,7 @@ Chunk Storage
 
 데이터 분석, 의약품 데이터 저장 및 콘텐츠 Chunk 저장을 위한 스크립트를 별도로 관리합니다.
 
----
+
 
 ## 07. Services
 
@@ -221,7 +221,7 @@ Gemini API를 활용한 AI 설명 생성 로직을 담당합니다.
 ### `dosage_validation_service.py`
 복용량 관련 입력값 검증 로직을 담당합니다.
 
----
+
 
 ## 08. Scripts
 
@@ -237,7 +237,7 @@ Gemini API를 활용한 AI 설명 생성 로직을 담당합니다.
 | `check_medicine_api.py` | 의약품 API 확인 |
 | `check_retrieval.py` | Retrieval 동작 확인 |
 
----
+
 
 ## 09. Testing
 
@@ -267,7 +267,7 @@ py -m pytest -v
 
 기존 테스트 실행 기준으로 37개의 테스트와 2개의 subtest가 통과했습니다.
 
----
+
 
 ## 10. Environment Setup
 
@@ -305,7 +305,7 @@ py -m uvicorn main:app --reload
 - Swagger UI: `http://127.0.0.1:8000/docs`
 - ReDoc: `http://127.0.0.1:8000/redoc`
 
----
+
 
 ## 11. Git
 
@@ -327,7 +327,7 @@ refactor: 백엔드 디렉토리 구조 정리 및 서비스 모듈명 통일
 
 이번 리팩토링을 통해 테스트 파일, 데이터 처리 스크립트, 서비스 모듈을 역할에 따라 분리하고 백엔드 디렉토리 구조를 정리했습니다.
 
----
+
 
 ## 12. Project Goal
 
