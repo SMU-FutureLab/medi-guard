@@ -123,12 +123,12 @@ def save_medicine(medicine: dict) -> None:
     )
 
 
-def main() -> None:
+def main(names: list[str] | None = None) -> None:
     logger.info("의약품 API 조회 시작")
 
     # 저장할 약 이름 목록. 실행할 때 직접 줄 수도 있다:
     #   python -m scripts.save_medicine_data 타이레놀 게보린 베아제
-    names = sys.argv[1:] or DEFAULT_SEARCH_NAMES
+    names = names or (sys.argv[1:] if __name__ == "__main__" else []) or DEFAULT_SEARCH_NAMES
 
     total = 0
 
