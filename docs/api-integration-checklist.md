@@ -232,3 +232,20 @@
 EXPO_PUBLIC_USE_MOCK=false
 EXPO_PUBLIC_API_BASE_URL=http://localhost:8811
 ```
+
+---
+
+## 실제 서버 연결 테스트 결과 (2026-11-23, 파트너 서버 `:8811`)
+
+| 기능 | 결과 |
+|---|---|
+| `/health` | ✅ `{"status":"healthy","database":"connected"}` |
+| 검색 `GET /api/v1/medicines` | ✅ 실제 데이터 표시 (예: 타이레놀 7건), 오타 제안도 동작 |
+| 상세 `GET /api/v1/medicines/{item_seq}` | ✅ 원문 7개 항목 → 화면 6칸으로 표시 |
+| AI 질문 `POST /api/v1/explanations` | ✅ 답변·근거·안내 표시 (Gemini 마크다운은 프론트에서 정리) |
+| 항목별 쉬운 설명 | ✅ 질문 API로 대신 생성해서 표시 |
+
+### 백엔드에 남은 요청
+1. **CORS 미적용** — 웹에서 호출하면 브라우저가 막음 (`OPTIONS` 요청이 405). 테스트는 임시 중계로 확인함. `main.py`에 `CORSMiddleware` 추가 필요.
+2. **"술 마셔도 돼요?" → `no_results`** — 우먼스타이레놀정(202200658) 경고 원문에 음주 내용이 있는데 근거를 못 찾음. 검색(retrieval) 키워드에 술·음주 확인 필요.
+3. 업체명(`entp_name`)·사진(`item_image`) 추가 (그대로 유효)

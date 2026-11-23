@@ -25,4 +25,8 @@ export function editDistance(a: string, b: string) {
 export const normalizeName = (s: string) => s.replace(/\(.*?\)/g, '').replace(/\s/g, '');
 
 /** 문장 단위로 나눠 목록으로 보여줄 때 사용 */
-export const toBullets = (text: string) => text.split(/(?<=[.!?])\s+/).filter(Boolean);
+export const toBullets = (text: string) =>
+  text
+    .split(/\n+|(?<=[.!?])\s+/)
+    .map((s) => s.trim())
+    .filter(Boolean);

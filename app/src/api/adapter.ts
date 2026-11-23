@@ -158,13 +158,51 @@ function toCitations(evidence: BeEvidence[]): Citation[] {
   return out;
 }
 
-const NOT_FOUND = '공식 의약품 정보에서 이 질문과 관련된 내용을 찾지 못했어요. 정확한 답변은 의사 또는 약사에게 문의해 주세요.';
+/**
+ * Gemini 답변(마크다운) → 앱에서 보여줄 글.
+ * - "안녕하세요… / …안내해 드립니다." 같은 인사말 줄은 뺀다
+ * - "**1. 질문에 대한 핵심 설명**" 같은 제목 줄은 "# 제목" 으로 (화면에서 작은 소제목으로 표시)
+ * - "* 항목" 글머리표와 ** 굵게 표시는 걷어낸다
+ */
+export function cleanAnswer(raw: string): string {
+  return raw
+    .split(/\r?\n/)
+    .map((l) => l.trim())
+    // 빈 줄, 구분선(---), 인사말 줄은 뺀다
+    .filter((l) => l && !/^[-*_]{3,}$/.test(l) && !/^안녕하세요|문의하신 내용|안내해 ?드립니다\.?$/.test(l))
+    .map((l) => {
+      const heading = l.match(/^#{1,6}\s*(.+)$/) ?? l.match(/^\*\*\s*(\d+\.\s*.+?)\s*\*\*$/);
+      if (heading) return `# ${heading[1].replace(/\*\*/g, '').replace(/^\d+\.\s*/, '').trim()}`;
+      return l
+        .replace(/^[*\-•]\s+/, '')
+        .replace(/\*\*(.+?)\*\*/g, '$1')
+        .replace(/\*\*/g, '')
+        .trim();
+    })
+    .filter(Boolean)
+    .join('\n');
+}
+
+/** 정리된 답변에서 첫 소제목(핵심 설명) 아래 내용만 꺼낸다. 항목별 쉬운 설명에 사용 */
+export function coreOfAnswer(cleaned: string): string {
+  const lines = cleaned.split('\n');
+  const start = lines.findIndex((l) => l.startsWith('# '));
+  if (start < 0) return cleaned;
+  const end = lines.findIndex((l, i) => i > start && l.startsWith('# '));
+  return lines
+    .slice(start + 1, end < 0 ? undefined : end)
+    // "효능·효과: …" 처럼 앞에 붙은 항목 이름은 화면 제목과 겹쳐서 뺀다
+    .map((l) => l.replace(/^[^:：]{1,15}[:：]\s*/, ''))
+    .join('\n');
+}
+
+const NOT_FOUND ='공식 의약품 정보에서 이 질문과 관련된 내용을 찾지 못했어요. 정확한 답변은 의사 또는 약사에게 문의해 주세요.';
 const FAILED = 'AI 설명을 만드는 중 문제가 생겼어요. 공식 원문을 직접 확인하거나 잠시 후 다시 질문해 주세요.';
 
 /** 질문 답변: status가 answered일 때만 답을 보여주고, 나머지는 안내 문구를 보여준다 */
 export function toAskResponse(res: BeExplanationResponse): AskResponse {
   if (res.status === 'answered' && res.answer) {
-    return { answerable: true, answer: res.answer, citations: toCitations(res.evidence ?? []), notice: res.notice ?? undefined };
+    return { answerable: true, answer: cleanAnswer(res.answer), citations: toCitations(res.evidence ?? []), notice: res.notice ?? undefined };
   }
   const fallback = res.status === 'generation_failed' ? FAILED : NOT_FOUND;
   return { answerable: false, answer: res.notice?.trim() || fallback, citations: [] };

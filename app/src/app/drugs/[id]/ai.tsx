@@ -268,12 +268,19 @@ function Answer({ drug, question, response }: { drug: DrugDetail; question: stri
     <>
       <Bubble>
         <T v="bodyBold">공식 정보에서 찾은 내용이에요.</T>
-        {toBullets(response.answer).map((b) => (
-          <Row key={b} gap={10} style={{ alignItems: 'flex-start' }}>
-            <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: c.primary, marginTop: 10 }} />
-            <T style={{ flex: 1 }}>{b}</T>
-          </Row>
-        ))}
+        {toBullets(response.answer).map((b, i) =>
+          // "# 제목" 줄은 소제목, 나머지는 글머리표
+          b.startsWith('# ') ? (
+            <T key={`h${i}`} v="label" color={c.primaryStrong} style={{ fontFamily: fonts.bold, marginTop: i === 0 ? 0 : 6 }}>
+              {b.slice(2)}
+            </T>
+          ) : (
+            <Row key={`b${i}`} gap={10} style={{ alignItems: 'flex-start' }}>
+              <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: c.primary, marginTop: 10 }} />
+              <T style={{ flex: 1 }}>{b}</T>
+            </Row>
+          ),
+        )}
         {response.notice ? (
           <T v="label" style={{ fontFamily: fonts.regular, marginTop: 4 }}>
             {response.notice}

@@ -7,6 +7,7 @@ import type {
   SectionKey,
 } from '../types';
 import {
+  coreOfAnswer,
   errorMessage,
   toAskResponse,
   toDrugDetail,
@@ -79,7 +80,7 @@ const realApi: MediGuardApi = {
       drug.sections.map(async (s): Promise<SectionExplanation | null> => {
         try {
           const res = toAskResponse(await postExplanation(id, SECTION_QUESTIONS[s.key]));
-          return res.answerable ? { sectionKey: s.key, easyText: res.answer, citations: res.citations } : null;
+          return res.answerable ? { sectionKey: s.key, easyText: coreOfAnswer(res.answer), citations: res.citations } : null;
         } catch {
           return null; // 한 항목이 실패해도 나머지는 보여준다 (실패한 항목은 화면에서 안내 문구)
         }
