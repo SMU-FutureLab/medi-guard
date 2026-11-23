@@ -230,5 +230,5 @@
 
 ```
 EXPO_PUBLIC_USE_MOCK=false
-EXPO_PUBLIC_API_BASE_URL=http://localhost:8000
+EXPO_PUBLIC_API_BASE_URL=http://localhost:8811
 ```
