@@ -1,0 +1,38 @@
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Dependencies
+node_modules/
+venv/
+.venv/
+
+# Build and cache
+dist/
+build/
+.expo/
+.expo-shared/
+.next/
+coverage/
+__pycache__/
+*.pyc
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Backup files
+
+# Local backups
+backups/
+
+# Local AI/editor settings
+frontend/.claude/settings.json
