@@ -334,18 +334,23 @@ export function SourceInfo({ source }: { source: Source }) {
   const { c } = useTheme();
   const date = new Date(source.retrievedAt).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
   return (
-    <Row gap={6} wrap>
-      <View style={{ width: 7, height: 7, borderRadius: 4, backgroundColor: c.primary }} />
-      <T v="label" style={{ fontFamily: fonts.regular }}>
-        출처:{' '}
-        <Text
-          style={{ color: c.primaryStrong, textDecorationLine: source.url ? 'underline' : 'none' }}
-          onPress={source.url ? () => Linking.openURL(source.url!) : undefined}
-        >
-          {source.name}
-        </Text>{' '}
-        · {date} 조회
-      </T>
+    // 첫 줄: 출처 이름 / 둘째 줄: 조회 날짜
+    <Row gap={6} style={{ alignItems: 'flex-start' }}>
+      <View style={{ width: 7, height: 7, borderRadius: 4, backgroundColor: c.primary, marginTop: 6 }} />
+      <View style={{ flex: 1, gap: 1 }}>
+        <T v="label" style={{ fontFamily: fonts.regular }}>
+          출처:{' '}
+          <Text
+            style={{ color: c.primaryStrong, textDecorationLine: source.url ? 'underline' : 'none' }}
+            onPress={source.url ? () => Linking.openURL(source.url!) : undefined}
+          >
+            {source.name}
+          </Text>
+        </T>
+        <T v="label" style={{ fontFamily: fonts.regular }}>
+          {date} 조회
+        </T>
+      </View>
     </Row>
   );
 }

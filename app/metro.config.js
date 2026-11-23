@@ -3,10 +3,22 @@
 // 개발 서버가 그 요청을 EXPO_PUBLIC_API_BASE_URL(백엔드)로 그대로 전달하므로 브라우저 CORS 제한을 받지 않는다.
 // (휴대폰 앱은 CORS 제한이 없어서 백엔드를 직접 부른다 — src/api/client.ts 참고)
 const http = require('http');
+const path = require('path');
 const https = require('https');
 const { getDefaultConfig } = require('expo/metro-config');
 
 const config = getDefaultConfig(__dirname);
+
+// 빌드 결과물 폴더는 개발 서버가 살펴볼 필요가 없다.
+// (OneDrive 동기화 중인 파일을 읽다가 개발 서버가 멈추는 문제 방지)
+// 이 프로젝트 바로 아래의 artifact-web/, dist/ 만 막는다 (node_modules 안의 dist는 그대로 둔다)
+const escapeRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const ignoreBuildOutput = ['artifact-web', 'dist'].map(
+  (dir) => new RegExp(`^${escapeRe(path.join(__dirname, dir))}[\\\\/].*`),
+);
+const existing = config.resolver.blockList;
+config.resolver.blockList = [...(Array.isArray(existing) ? existing : existing ? [existing] : []), ...ignoreBuildOutput];
+
 const backend = process.env.EXPO_PUBLIC_API_BASE_URL;
 
 if (backend) {
