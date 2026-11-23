@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
 import type {
   AskResponse,
@@ -78,21 +79,8 @@ const realApi: MediGuardApi = {
   getDrug: async (id) => toDrugDetail(await request<BeMedicineDetail>(`/api/v1/medicines/${encodeURIComponent(id)}`)),
 
   // 백엔드에 항목별 설명 API가 아직 없어서, 질문 API를 항목마다 동시에 불러 만든다.
-  // 백엔드에 전용 API가 생기면 이 부분만 바꾸면 된다.
-  explainDrug: async (id) => {
-    const drug = await realApi.getDrug(id);
-    const results = await Promise.all(
-      drug.sections.map(async (s): Promise<SectionExplanation | null> => {
-        try {
-          const res = toAskResponse(await postExplanation(id, SECTION_QUESTIONS[s.key]));
-          return res.answerable ? { sectionKey: s.key, easyText: coreOfAnswer(res.answer), citations: res.citations } : null;
-        } catch {
-          return null; // 한 항목이 실패해도 나머지는 보여준다 (실패한 항목은 화면에서 안내 문구)
-        }
-      }),
-    );
-    return results.filter((r): r is SectionExplanation => r !== null);
-  },
+  // AI 호출이 많으니 결과를 저장해 두고 다시 쓴다 (cachedExplanations). 전용 API가 생기면 이 부분만 바꾸면 된다.
+  explainDrug: (id) => cachedExplanations(id, () => fetchExplanations(id)),
 
   ask: async (id, question) => toAskResponse(await postExplanation(id, question)),
 
@@ -101,6 +89,60 @@ const realApi: MediGuardApi = {
     throw new ApiError('함께 먹는 약 확인 기능은 아직 준비 중이에요. 여러 약을 함께 먹는다면 약사에게 확인해 주세요.', 501);
   },
 };
+
+/* ───────── 항목별 쉬운 설명: 저장해 두고 다시 쓰기 ───────── */
+
+const EXPLAIN_TTL = 7 * 24 * 60 * 60 * 1000; // 기기에 7일 보관
+const explainKey = (id: string) => `mg:explain:v1:${id}`;
+/** 지금 실행 중에 받은 설명 (같은 약을 다시 열거나 동시에 요청해도 한 번만 부름) */
+const explainMemory = new Map<string, Promise<SectionExplanation[]>>();
+
+async function cachedExplanations(id: string, load: () => Promise<SectionExplanation[]>): Promise<SectionExplanation[]> {
+  const inMemory = explainMemory.get(id);
+  if (inMemory) return inMemory;
+
+  const job = (async () => {
+    // 1) 기기에 저장된 설명이 있으면 그대로 사용
+    try {
+      const saved = await AsyncStorage.getItem(explainKey(id));
+      if (saved) {
+        const { at, data } = JSON.parse(saved) as { at: number; data: SectionExplanation[] };
+        if (Date.now() - at < EXPLAIN_TTL && data.length > 0) return data;
+      }
+    } catch {
+      // 저장소를 못 읽으면 새로 받는다
+    }
+    // 2) 없으면 AI에 요청하고, 하나라도 받았으면 저장
+    const data = await load();
+    if (data.length > 0) {
+      AsyncStorage.setItem(explainKey(id), JSON.stringify({ at: Date.now(), data })).catch(() => {});
+    }
+    return data;
+  })();
+
+  explainMemory.set(id, job);
+  // 실패했거나 비어 있으면 다음에 다시 시도할 수 있게 지운다
+  job.then(
+    (d) => d.length === 0 && explainMemory.delete(id),
+    () => explainMemory.delete(id),
+  );
+  return job;
+}
+
+async function fetchExplanations(id: string): Promise<SectionExplanation[]> {
+  const drug = await realApi.getDrug(id);
+  const results = await Promise.all(
+    drug.sections.map(async (s): Promise<SectionExplanation | null> => {
+      try {
+        const res = toAskResponse(await postExplanation(id, SECTION_QUESTIONS[s.key]));
+        return res.answerable ? { sectionKey: s.key, easyText: coreOfAnswer(res.answer), citations: res.citations } : null;
+      } catch {
+        return null; // 한 항목이 실패해도 나머지는 보여준다 (실패한 항목은 화면에서 안내 문구)
+      }
+    }),
+  );
+  return results.filter((r): r is SectionExplanation => r !== null);
+}
 
 export const api: MediGuardApi = USE_MOCK ? mockApi : realApi;
 

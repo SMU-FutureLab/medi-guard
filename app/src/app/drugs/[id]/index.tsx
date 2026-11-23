@@ -32,10 +32,16 @@ export default function DrugDetailScreen() {
   const router = useRouter();
   const store = useAppStore();
   const drug = useAsync(() => api.getDrug(id), [id]);
-  // 원문을 먼저 보여주고, AI 설명은 따로 불러와 준비되는 대로 채운다
-  const explain = useAsync(() => api.explainDrug(id), [id], !!drug.data);
-
   const [tab, setTab] = useState<Tab>('official');
+  // AI 설명은 'AI 쉽게 설명' 탭을 처음 열 때 불러온다 (안 보면 AI를 부르지 않음).
+  // 한 번 연 뒤에는 공식 정보 탭으로 돌아가도 결과를 그대로 둔다.
+  const [wantExplain, setWantExplain] = useState(false);
+  useEffect(() => {
+    if (tab !== 'official') setWantExplain(true);
+  }, [tab]);
+  useEffect(() => setWantExplain(false), [id]);
+  const explain = useAsync(() => api.explainDrug(id), [id], !!drug.data && wantExplain);
+
   const [open, setOpen] = useState<Set<SectionKey>>(() => new Set(['efficacy']));
   const [focus, setFocus] = useState<{ key: SectionKey; quote: string }>();
   const scrollRef = useRef<ComponentRef<typeof ScrollView>>(null);
