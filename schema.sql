@@ -1,6 +1,8 @@
 CREATE TABLE medicines (
     item_seq VARCHAR(20) PRIMARY KEY,
     item_name VARCHAR(255) NOT NULL,
+    entp_name VARCHAR(255),          -- 업체명 (e약은요 entpName)
+    item_image TEXT,                 -- 낱알 이미지 주소 (e약은요 itemImage)
     created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

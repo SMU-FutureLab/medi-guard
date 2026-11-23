@@ -1,0 +1,9 @@
+# 백엔드 실행에 필요한 패키지 (코드의 import 기준으로 정리, 로컬 실행용)
+fastapi
+uvicorn[standard]
+pydantic
+psycopg[binary]
+python-dotenv
+requests
+google-genai
+pytest

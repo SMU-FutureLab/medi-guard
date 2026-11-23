@@ -29,12 +29,16 @@ def detect_question_intent(question: str) -> str:
     question = question.lower()
 
     intent_keywords = {
-        "INTERACTION": ["상호작용", "함께 복용", "같이 복용", "병용"],
+        "INTERACTION": ["상호작용", "함께 복용", "같이 복용", "병용",
+                        "같이 먹", "함께 먹", "다른 약", "커피", "자몽"],
         "SIDE_EFFECT": ["부작용", "이상반응", "피부발진", "알레르기"],
         "STORAGE": ["보관", "보관 방법", "보관 장소", "유통기한"],
         "USAGE": ["복용 방법", "어떻게 복용", "복용해야", "복용법", "용법", "용량",
-                  "몇 번", "복용 간격", "투여 방법", "사용 방법", "먹는 방법",],
-        "WARNING": ["복용 전", "경고", "음주", "임산부", "임신", "간손상"],
+                  "몇 번", "복용 간격", "투여 방법", "사용 방법", "먹는 방법",
+                  "몇 알", "몇알", "몇 정", "몇정", "하루에", "언제 먹"],
+        # 일상 표현(술, 마셔도, 수유 등)도 경고 질문으로 인식
+        "WARNING": ["복용 전", "경고", "음주", "술", "알코올", "마셔도",
+                    "임산부", "임신", "수유", "간손상", "간 질환", "간질환"],
         "CAUTION": ["주의사항", "주의해야", "주의할 점", "주의"],
         "EFFICACY": ["효능", "효과", "어떤 약", "무슨 약", "약인가요", "약인지",
                     "무엇인가요", "무엇인지", "어디에 사용하는지", "어떤 증상",
@@ -52,8 +56,9 @@ def get_field_priority(intent: str) -> list[str]:
     priorities = {
         "EFFICACY": ["efcyQesitm"],
         "USAGE": ["useMethodQesitm"],
-        "WARNING": ["atpnWarnQesitm"],
-        "CAUTION": ["atpnQesitm"],
+        # 경고(atpnWarnQesitm)와 주의사항(atpnQesitm)은 내용이 겹치는 경우가 많아 둘 다 찾는다
+        "WARNING": ["atpnWarnQesitm", "atpnQesitm"],
+        "CAUTION": ["atpnQesitm", "atpnWarnQesitm"],
         "INTERACTION": ["intrcQesitm"],
         "SIDE_EFFECT": ["seQesitm"],
         "STORAGE": ["depositMethodQesitm"]
@@ -123,10 +128,9 @@ def search_relevant_chunks(
     else:
         keywords = extract_keywords(question)
 
+        # 의도가 분명하지 않은(GENERAL) 질문도 바로 포기하지 않고 키워드로 원문을 찾아본다.
+        # 키워드가 원문에 없으면 결과가 비어서 "근거 없음"으로 처리된다.
         if not keywords:
-            return []
-
-        if intent == "GENERAL":
             return []
 
         where_conditions = [

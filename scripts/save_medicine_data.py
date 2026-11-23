@@ -1,5 +1,6 @@
 
 import logging
+import sys
 
 from dotenv import load_dotenv
 
@@ -26,6 +27,18 @@ CONTENT_FIELDS = {
     "depositMethodQesitm": "STORAGE",
 }
 
+# 기본으로 저장할 약 (e약은요는 일반의약품 위주라 자주 찾는 일반의약품으로 구성)
+DEFAULT_SEARCH_NAMES = [
+    "타이레놀",
+    "게보린",
+    "펜잘",
+    "판콜",
+    "판피린",
+    "부루펜",
+    "베아제",
+    "훼스탈",
+]
+
 SOURCE_NAME = "식품의약품안전처"
 SOURCE_URL = (
     "https://apis.data.go.kr/1471000/"
@@ -36,6 +49,9 @@ SOURCE_URL = (
 def save_medicine(medicine: dict) -> None:
     item_seq = str(medicine.get("itemSeq") or "").strip()
     item_name = str(medicine.get("itemName") or "").strip()
+    # 업체명·낱알 이미지 (없으면 NULL)
+    entp_name = str(medicine.get("entpName") or "").strip() or None
+    item_image = str(medicine.get("itemImage") or "").strip() or None
 
     if not item_seq or not item_name:
         raise ValueError("의약품명 또는 품목기준코드가 없습니다.")
@@ -44,14 +60,16 @@ def save_medicine(medicine: dict) -> None:
         with connection.cursor() as cursor:
             cursor.execute(
                 """
-                INSERT INTO medicines (item_seq, item_name)
-                VALUES (%s, %s)
+                INSERT INTO medicines (item_seq, item_name, entp_name, item_image)
+                VALUES (%s, %s, %s, %s)
                 ON CONFLICT (item_seq)
                 DO UPDATE SET
                     item_name = EXCLUDED.item_name,
+                    entp_name = EXCLUDED.entp_name,
+                    item_image = EXCLUDED.item_image,
                     updated_at = CURRENT_TIMESTAMP
                 """,
-                (item_seq, item_name),
+                (item_seq, item_name, entp_name, item_image),
             )
 
             saved_contents = 0
@@ -108,16 +126,29 @@ def save_medicine(medicine: dict) -> None:
 def main() -> None:
     logger.info("의약품 API 조회 시작")
 
-    medicines = fetch_medicines("타이레놀")
+    # 저장할 약 이름 목록. 실행할 때 직접 줄 수도 있다:
+    #   python -m scripts.save_medicine_data 타이레놀 게보린 베아제
+    names = sys.argv[1:] or DEFAULT_SEARCH_NAMES
 
-    if not medicines:
-        logger.warning("저장할 의약품 데이터가 없습니다.")
-        return
+    total = 0
 
-    for medicine in medicines:
-        save_medicine(medicine)
+    for name in names:
+        try:
+            medicines = fetch_medicines(name)
+        except Exception:
+            logger.exception("의약품 조회 실패: %s", name)
+            continue
 
-    logger.info("전체 저장 작업 종료: %d건", len(medicines))
+        if not medicines:
+            logger.warning("저장할 의약품 데이터가 없습니다: %s", name)
+            continue
+
+        for medicine in medicines:
+            save_medicine(medicine)
+
+        total += len(medicines)
+
+    logger.info("전체 저장 작업 종료: %d건", total)
 
 
 if __name__ == "__main__":

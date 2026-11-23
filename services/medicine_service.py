@@ -20,7 +20,7 @@ def search_medicines(keyword: str, page: int = 1, size: int = 10):
 
             cursor.execute(
                 """
-                SELECT item_seq, item_name
+                SELECT item_seq, item_name, entp_name, item_image
                 FROM medicines
                 WHERE item_name ILIKE %s
                 ORDER BY item_name
@@ -39,7 +39,9 @@ def search_medicines(keyword: str, page: int = 1, size: int = 10):
         "items": [
             {
                 "item_seq": row[0],
-                "item_name": row[1]
+                "item_name": row[1],
+                "entp_name": row[2],
+                "item_image": row[3]
             }
             for row in rows
         ]
@@ -51,7 +53,7 @@ def get_medicine_detail(item_seq: str):
         with connection.cursor() as cursor:
             cursor.execute(
                 """
-                SELECT item_seq, item_name, created_at, updated_at
+                SELECT item_seq, item_name, created_at, updated_at, entp_name, item_image
                 FROM medicines
                 WHERE item_seq = %s;
                 """,
@@ -87,6 +89,8 @@ def get_medicine_detail(item_seq: str):
         "item_name": medicine[1],
         "created_at": medicine[2],
         "updated_at": medicine[3],
+        "entp_name": medicine[4],
+        "item_image": medicine[5],
         "contents": [
             {
                 "content_id": row[0],
