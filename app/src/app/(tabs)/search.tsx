@@ -8,6 +8,7 @@ import { BarTitle, ErrorBox, Row, Screen, Spinner, T } from '../../components/ui
 import { useAsync } from '../../hooks/useAsync';
 import { useAppStore } from '../../store/AppStore';
 import { fonts, glass, radius, shadow, useTheme } from '../../theme/theme';
+import { editDistance, normalizeName } from '../../utils';
 
 const SUGGESTIONS = ['타이레놀', '게보린', '이트라코나졸', '심바스타틴'];
 
@@ -88,7 +89,7 @@ export default function SearchScreen() {
                 </View>
               </Row>
               {data.length === 0 ? (
-                <Guide text={`‘${query}’ 검색 결과가 없어요`} sub="약 이름을 정확히 입력했는지, 띄어쓰기를 빼고 다시 검색해 보세요." />
+                <NoResults query={query} onSearch={search} />
               ) : (
                 data.map((d) => <DrugCard key={d.id} drug={d} />)
               )}
@@ -109,6 +110,82 @@ function SectionHead({ title, action, onAction }: { title: string; action: strin
         <Text style={{ fontFamily: fonts.medium, fontSize: 13, color: c.text2 }}>{action}</Text>
       </Pressable>
     </Row>
+  );
+}
+
+/**
+ * 검색 결과가 없을 때: 오타일 수 있으니 비슷한 이름의 약을 제안하고, 추천 검색어를 보여준다.
+ * 검색어 앞 두 글자·뒤 두 글자로 다시 검색해서 철자가 가장 가까운 약을 고른다 (백엔드 검색 API 그대로 사용).
+ */
+function NoResults({ query, onSearch }: { query: string; onSearch: (q: string) => void }) {
+  const { c } = useTheme();
+  const q = normalizeName(query);
+  const maxDiff = Math.max(1, Math.floor(q.length / 3));
+
+  const similar = useAsync(
+    async () => {
+      const keys = [...new Set([q.slice(0, 2), q.slice(-2)])].filter((k) => k.length === 2);
+      const lists = await Promise.all(keys.map((k) => api.searchDrugs(k).catch(() => [])));
+      const seen = new Set<string>();
+      return lists
+        .flat()
+        .filter((d) => !seen.has(d.id) && seen.add(d.id))
+        .map((d) => {
+          const name = normalizeName(d.name);
+          // 이름 전체 또는 검색어 길이만큼의 앞부분과 비교 (예: '타이래놀' ↔ '타이레놀정500…'의 앞 4글자)
+          const diff = Math.min(editDistance(q, name), editDistance(q, name.slice(0, q.length)));
+          return { drug: d, diff };
+        })
+        .filter((x) => x.diff <= maxDiff)
+        .sort((a, b) => a.diff - b.diff)
+        .slice(0, 3)
+        .map((x) => x.drug);
+    },
+    [q],
+    q.length >= 2,
+  );
+
+  // 추천 검색어 중 철자가 비슷한 것 (예: '게보랜' → '게보린')
+  const keyword = SUGGESTIONS.find((s) => s !== q && editDistance(q, s) <= maxDiff);
+
+  return (
+    <View style={{ gap: 14 }}>
+      <Guide text={`‘${query}’ 검색 결과가 없어요`} sub="약 이름에 오타가 없는지, 띄어쓰기를 빼고 다시 검색해 보세요." />
+
+      {(similar.data?.length || keyword) ? (
+        <View style={{ gap: 10 }}>
+          <T v="h3">혹시 이 약을 찾으셨나요?</T>
+          {keyword && !similar.data?.length ? (
+            <Pressable
+              onPress={() => onSearch(keyword)}
+              style={({ pressed }) => [glass(c), { flexDirection: 'row', alignItems: 'center', gap: 8, alignSelf: 'flex-start', borderRadius: radius.pill, paddingVertical: 9, paddingHorizontal: 16, opacity: pressed ? 0.8 : 1 }]}
+            >
+              <Icon name="search" size={14} color={c.primaryStrong} />
+              <Text style={{ fontFamily: fonts.bold, fontSize: 14, color: c.text }}>‘{keyword}’(으)로 검색</Text>
+            </Pressable>
+          ) : null}
+          {similar.data?.map((d) => <DrugCard key={d.id} drug={d} />)}
+        </View>
+      ) : null}
+
+      <View style={{ gap: 10 }}>
+        <T v="h3">이런 약은 어때요?</T>
+        <Row wrap gap={8}>
+          {SUGGESTIONS.map((s) => (
+            <Pressable
+              key={s}
+              onPress={() => onSearch(s)}
+              style={({ pressed }) => [glass(c), { flexDirection: 'row', alignItems: 'center', gap: 6, borderRadius: radius.pill, paddingVertical: 9, paddingLeft: 10, paddingRight: 16, opacity: pressed ? 0.8 : 1 }, shadow(c, 0.4)]}
+            >
+              <View style={{ width: 22, height: 22, borderRadius: 11, backgroundColor: c.mint, alignItems: 'center', justifyContent: 'center' }}>
+                <Icon name="search" size={12} color={c.primaryStrong} />
+              </View>
+              <Text style={{ fontFamily: fonts.medium, fontSize: 14, color: c.text }}>{s}</Text>
+            </Pressable>
+          ))}
+        </Row>
+      </View>
+    </View>
   );
 }
 

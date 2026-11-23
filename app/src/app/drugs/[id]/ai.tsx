@@ -164,7 +164,7 @@ function Chat({ drug }: { drug: DrugDetail }) {
                       <Skeleton />
                     </Bubble>
                   ) : (
-                    <Answer drug={drug} response={m.response} />
+                    <Answer drug={drug} question={m.question} response={m.response} />
                   )}
                 </View>
               </View>
@@ -211,16 +211,55 @@ function Bubble({ children, muted }: { children: ReactNode; muted?: boolean }) {
   );
 }
 
-function Answer({ drug, response }: { drug: DrugDetail; response: AskResponse }) {
+/** 복용량을 바꾸거나 다른 약·음식과 함께 먹는 것에 관한 질문인지 (개인 판단이 필요한 질문) */
+const PERSONAL_QUESTION = /몇 ?(알|정|번|mg|밀리)|용량|복용량|더 먹|두 배|2배|늘려|줄여|끊어|중단|같이|함께|병용|다른 약|섞어|술|커피|자몽|임신|임산부|수유|어린이|아이|노인|간 ?질환|간에|간 기능|신장|콩팥/;
+
+/** 모든 답변 아래에 붙는 안내: 일반 정보와 개인별 복용 판단을 구분한다 */
+function PersonalNotice({ strong }: { strong: boolean }) {
+  const { c } = useTheme();
+  return (
+    <Row
+      gap={10}
+      style={{
+        alignItems: 'flex-start',
+        backgroundColor: strong ? c.warnSoft : c.surface2,
+        borderRadius: radius.md,
+        paddingVertical: 12,
+        paddingHorizontal: 14,
+      }}
+    >
+      <View style={{ marginTop: 1 }}>
+        <Icon name={strong ? 'alert' : 'info'} size={18} color={strong ? c.warn : c.muted} />
+      </View>
+      <View style={{ flex: 1, gap: 2 }}>
+        {strong ? (
+          <T v="small" style={{ fontFamily: fonts.bold }} color={c.text}>
+            내 상황에 맞는 판단은 의사·약사에게 확인하세요
+          </T>
+        ) : null}
+        <T v="small" color={c.text2}>
+          이 답변은 식약처 공식 정보를 바탕으로 한 일반 정보예요. 복용량을 바꾸거나 다른 약과 함께 먹어도 되는지는 나이·건강 상태·먹고 있는
+          약에 따라 달라질 수 있으니 꼭 의사 또는 약사에게 확인하세요.
+        </T>
+      </View>
+    </Row>
+  );
+}
+
+function Answer({ drug, question, response }: { drug: DrugDetail; question: string; response: AskResponse }) {
   const { c } = useTheme();
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const personal = PERSONAL_QUESTION.test(question);
 
   if (!response.answerable)
     return (
-      <Bubble muted>
-        <T color={c.text2}>{response.answer}</T>
-      </Bubble>
+      <>
+        <Bubble muted>
+          <T color={c.text2}>{response.answer}</T>
+        </Bubble>
+        {personal ? <PersonalNotice strong /> : null}
+      </>
     );
 
   const sectionTitle = drug.sections.find((s) => s.key === response.citations[0]?.sectionKey)?.title;
@@ -241,6 +280,7 @@ function Answer({ drug, response }: { drug: DrugDetail; response: AskResponse })
           </T>
         ) : null}
       </Bubble>
+      <PersonalNotice strong={personal} />
       {response.citations.length > 0 && (
         <View style={[glass(c), { borderRadius: radius.lg, overflow: 'hidden' }, shadow(c, 0.5)]}>
           <Pressable
