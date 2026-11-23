@@ -180,6 +180,11 @@ export function cleanAnswer(raw: string): string {
         .trim();
     })
     .filter(Boolean)
+    // 소제목이 있으면 첫 소제목 앞(인사말·도입 문장)은 모두 뺀다
+    .filter((_, i, all) => {
+      const first = all.findIndex((l) => l.startsWith('# '));
+      return first < 0 || i >= first;
+    })
     .join('\n');
 }
 
