@@ -65,7 +65,7 @@ export function Footer() {
         {/* 구분선 + 안내 + 저작권 */}
         <View style={{ height: 1, backgroundColor: c.line, marginTop: 16, marginBottom: 12 }} />
         <Text style={[small, { color: c.muted, fontSize: 11, lineHeight: 16, textAlign: 'center' }]}>
-          MEDI GUARD는 공식 의약품 정보의 이해를 돕는 보조 서비스이며, 의사·약사의 진료나 복약지도를 대신하지 않습니다.
+          {'MEDI GUARD는 공식 의약품 정보의 이해를 돕는 보조 서비스이며,\n의사·약사의 진료나 복약지도를 대신하지 않습니다.'}
         </Text>
         <Text style={[small, { color: c.muted, fontSize: 11, lineHeight: 16, textAlign: 'center', marginTop: 2 }]}>
           © 2026 MEDI GUARD · 상명대학교 팀 케로케로
