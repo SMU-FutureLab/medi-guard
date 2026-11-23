@@ -1,6 +1,6 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Pressable, Text, View } from 'react-native';
-import { api } from '../../api/client';
+import { api, SUGGESTIONS } from '../../api/client';
 import { Mascot, RoundButton } from '../../components/art';
 import { DrugCard, SearchBar } from '../../components/drug';
 import { Icon } from '../../components/Icon';
@@ -10,7 +10,6 @@ import { useAppStore } from '../../store/AppStore';
 import { fonts, glass, radius, shadow, useTheme } from '../../theme/theme';
 import { editDistance, normalizeName } from '../../utils';
 
-const SUGGESTIONS = ['타이레놀', '게보린', '이트라코나졸', '심바스타틴'];
 
 export default function SearchScreen() {
   const { c } = useTheme();

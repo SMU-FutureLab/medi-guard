@@ -1,4 +1,5 @@
 import { useRouter } from 'expo-router';
+import { SUGGESTIONS } from '../../api/client';
 import { Pressable, Text, View, useWindowDimensions } from 'react-native';
 import { GradientPanel, Mascot, RoundButton } from '../../components/art';
 import { SearchBar } from '../../components/drug';
@@ -8,7 +9,6 @@ import { Row, Screen, T } from '../../components/ui';
 import { useAppStore } from '../../store/AppStore';
 import { fonts, glass, radius, shadow, useTheme } from '../../theme/theme';
 
-const SUGGESTIONS = ['타이레놀', '게보린', '이트라코나졸', '심바스타틴'];
 
 export default function HomeScreen() {
   const { c } = useTheme();

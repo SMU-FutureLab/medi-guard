@@ -103,3 +103,8 @@ const realApi: MediGuardApi = {
 };
 
 export const api: MediGuardApi = USE_MOCK ? mockApi : realApi;
+
+/** 추천 검색어: 예시 데이터에 있는 약 / 실제 서버 DB에 있는 약 */
+export const SUGGESTIONS = USE_MOCK
+  ? ['타이레놀', '게보린', '이트라코나졸', '심바스타틴']
+  : ['타이레놀', '게보린', '베아제', '훼스탈'];
