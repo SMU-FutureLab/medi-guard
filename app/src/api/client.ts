@@ -1,3 +1,4 @@
+import { Platform } from 'react-native';
 import type {
   AskResponse,
   DrugDetail,
@@ -21,7 +22,11 @@ import { mockApi } from './mockApi';
 
 export { ApiError };
 export const USE_MOCK = (process.env.EXPO_PUBLIC_USE_MOCK ?? 'true') !== 'false';
-const BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL ?? '';
+/**
+ * 웹 개발 중에는 같은 주소('')로 부르고 개발 서버가 백엔드로 전달한다 (metro.config.js) → CORS 문제 없음.
+ * 휴대폰 앱은 CORS 제한이 없어서 백엔드 주소로 직접 부른다.
+ */
+const BASE_URL = Platform.OS === 'web' && __DEV__ ? '' : (process.env.EXPO_PUBLIC_API_BASE_URL ?? '');
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   let res: Response;
