@@ -34,7 +34,7 @@ export function Footer() {
   const router = useRouter();
 
   return (
-    <View style={{ marginTop: 36, backgroundColor: c.surface2 }}>
+    <View style={{ backgroundColor: c.surface2 }}>
       <View style={{ width: '100%', maxWidth: 640, alignSelf: 'center', paddingHorizontal: 24, paddingTop: 22, paddingBottom: 18 }}>
         {/* 로고 + 소개 */}
         <View style={{ gap: 6 }}>

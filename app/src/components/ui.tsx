@@ -83,6 +83,8 @@ export function Screen({
 }) {
   const { c } = useTheme();
   const insets = useSafeAreaInsets();
+  /** 스크롤 영역(화면에 보이는 부분)의 높이 */
+  const [viewH, setViewH] = useState(0);
   const inner = (
     <View style={[{ width: '100%', maxWidth: wide ? 1040 : 640, alignSelf: 'center', paddingHorizontal: 24, gap: 16 }, contentStyle]}>
       {children}
@@ -93,19 +95,22 @@ export function Screen({
       <BackgroundGlow />
       {header ? <TopBar below={tabs ? <TopTabs /> : undefined}>{header}</TopBar> : null}
       {scroll ? (
-        // 탭 화면은 내용 아래에 푸터를 붙이고, 내용이 짧아도 푸터가 화면 맨 아래에 오게 한다
+        // 탭 화면: 본문 영역을 최소 '화면 한 칸' 높이로 고정해서,
+        // 내용이 짧아도 푸터는 아래로 스크롤해야 보이게 한다
         <ScrollView
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={tabs ? { flexGrow: 1, paddingTop: 14, paddingBottom: insets.bottom } : { paddingTop: 14, paddingBottom: 40 + insets.bottom }}
+          onLayout={tabs ? (e) => setViewH(e.nativeEvent.layout.height) : undefined}
+          contentContainerStyle={tabs ? { paddingBottom: insets.bottom } : { paddingTop: 14, paddingBottom: 40 + insets.bottom }}
           keyboardShouldPersistTaps="handled"
         >
-          {inner}
           {tabs ? (
             <>
-              <View style={{ flex: 1 }} />
+              <View style={{ minHeight: viewH, paddingTop: 14, paddingBottom: 40 }}>{inner}</View>
               <Footer />
             </>
-          ) : null}
+          ) : (
+            inner
+          )}
         </ScrollView>
       ) : (
         inner
