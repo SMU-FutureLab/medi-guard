@@ -1,5 +1,5 @@
-// 본문 글꼴: Pretendard (assets/fonts, OFL 라이선스). 로고 글자만 Nunito.
-import { Nunito_800ExtraBold } from '@expo-google-fonts/nunito/800ExtraBold';
+// 본문 글꼴: Pretendard, 로고 글자: Nunito — 둘 다 assets/fonts 에 직접 넣어 둔다 (OFL 라이선스).
+// (node_modules 경로의 글꼴은 일부 배포 서비스가 업로드에서 빼 버려서 앱 폴더로 옮겼다)
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
@@ -26,7 +26,7 @@ export default function RootLayout() {
     'Pretendard-Medium': require('../../assets/fonts/Pretendard-Medium.otf'),
     'Pretendard-SemiBold': require('../../assets/fonts/Pretendard-SemiBold.otf'),
     'Pretendard-Bold': require('../../assets/fonts/Pretendard-Bold.otf'),
-    Nunito_800ExtraBold,
+    Nunito_800ExtraBold: require('../../assets/fonts/Nunito_800ExtraBold.ttf'),
   });
 
   useEffect(() => {
