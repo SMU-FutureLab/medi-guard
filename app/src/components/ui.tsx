@@ -10,6 +10,7 @@ import {
   ScrollView,
   Text,
   View,
+  useWindowDimensions,
   type StyleProp,
   type TextProps,
   type TextStyle,
@@ -83,8 +84,10 @@ export function Screen({
 }) {
   const { c } = useTheme();
   const insets = useSafeAreaInsets();
-  /** 스크롤 영역(화면에 보이는 부분)의 높이 */
-  const [viewH, setViewH] = useState(0);
+  /** 스크롤 영역(화면에 보이는 부분)의 높이: 측정값이 오면 그걸 쓰고, 안 오면 화면 높이 - 상단 바(로고 줄+탭 줄 약 96)로 계산 */
+  const [measuredH, setViewH] = useState(0);
+  const { height: windowH } = useWindowDimensions();
+  const viewH = measuredH > 0 ? measuredH : Math.max(0, windowH - insets.top - 96);
   const inner = (
     <View style={[{ width: '100%', maxWidth: wide ? 1040 : 640, alignSelf: 'center', paddingHorizontal: 24, gap: 16 }, contentStyle]}>
       {children}
@@ -96,22 +99,24 @@ export function Screen({
       {header ? <TopBar below={tabs ? <TopTabs /> : undefined}>{header}</TopBar> : null}
       {scroll ? (
         // 탭 화면: 본문 영역을 최소 '화면 한 칸' 높이로 고정해서,
-        // 내용이 짧아도 푸터는 아래로 스크롤해야 보이게 한다
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          onLayout={tabs ? (e) => setViewH(e.nativeEvent.layout.height) : undefined}
-          contentContainerStyle={tabs ? { paddingBottom: insets.bottom } : { paddingTop: 14, paddingBottom: 40 + insets.bottom }}
-          keyboardShouldPersistTaps="handled"
-        >
-          {tabs ? (
-            <>
-              <View style={{ minHeight: viewH, paddingTop: 14, paddingBottom: 40 }}>{inner}</View>
-              <Footer />
-            </>
-          ) : (
-            inner
-          )}
-        </ScrollView>
+        // 내용이 짧아도 푸터는 아래로 스크롤해야 보이게 한다.
+        // (보이는 영역 높이는 ScrollView가 아니라 바깥 View로 잰다 — 배포된 웹에서 ScrollView onLayout이 안 와서)
+        <View style={{ flex: 1 }} onLayout={tabs ? (e) => setViewH(e.nativeEvent.layout.height) : undefined}>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={tabs ? { paddingBottom: insets.bottom } : { paddingTop: 14, paddingBottom: 40 + insets.bottom }}
+            keyboardShouldPersistTaps="handled"
+          >
+            {tabs ? (
+              <>
+                <View style={{ minHeight: viewH, paddingTop: 14, paddingBottom: 40 }}>{inner}</View>
+                <Footer />
+              </>
+            ) : (
+              inner
+            )}
+          </ScrollView>
+        </View>
       ) : (
         inner
       )}
